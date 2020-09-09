@@ -38,7 +38,7 @@ Deberá desplegar una plataforma que cumpla con los siguientes requerimientos:
 ### Opcional
 * El servidor de base de datos **Centos 7 Database** usa persistencia en el almacenamiento (Glusterfs)
 * Se recomienda desplegar un servidor DHCP que asigne IPs automáticamente a los nodos de la red y emplear una herramienta de service discovery para actualizar dinámicamente la configuración del balanceador.
-* Los servidores web pueden hacen INSERT, UPDATE Y DROP de los datos en la base de datos.
+* Los servidores web pueden hacen INSERT, UPDATE Y DELETE de los datos en la base de datos.
 
 ### Actividades
 1. Documento README.md en formato markdown (10%):  
