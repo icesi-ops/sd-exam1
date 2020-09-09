@@ -13,7 +13,7 @@
 * Vagrant
 * Box del sistema operativo CentOS7
 * Repositorio Github
-* SaltStack
+* SaltStack, Chef, Puppet
 * NodeJS - Python - Go
 
 ### Descripción
@@ -25,7 +25,7 @@ Deberá desplegar una plataforma que cumpla con los siguientes requerimientos:
   * CentOS7 Webserver 1
   * CentOS7 Webserver 2
   * CentOS7 Database
-* La gestión de la configuración  se deberá realizar empleando la herramienta SaltStack de forma remota sobre las máquinas virtuales ya desplegadas con vagrant.
+* La gestión de la configuración  se deberá realizar de forma remota sobre las virtuales ya desplegadas con Vagrant, empleando una de las siguientes herramientas: SaltStack, Puppet o Chef.
 * El usuario desde la consola o navegador web realiza peticiones al balanceador **CentOS7 Load Balancer**
 * El **CentOS7 Load Balancer** deberá redireccionar las peticiones entrantes hacia uno de los servidores web **CentOS7 Webserver 1** y **CentOS7 Webserver 2**. Incluir un mensaje que indique el servidor que responde la petición.
 * Los servidores web deberán realizar peticiones para obtener información almacenada en la base de datos **CentOS7 Database**
