@@ -1,13 +1,52 @@
 <!DOCTYPE html>
+<html lang=”es”> 
 <html>
     <head>
         <!--Metadata goes here-->
         <meta charset="UTF-8"/>
-        <title>Node server</title>
+        <link rel="stylesheet" href="style.css">
+        <title>Books - Node server</title>
     </head>
     <body>
         <!--Content goes here-->
-        <h1>Hello form node server!</h1>
-        <p>This is gonna change soon.</p>
+        
+        <div class="header">
+            <h1>Books Database</h1>
+        </div>
+        
+        <div class="data">
+
+            <table class="database-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Genre</th>
+                    </tr>
+                </thead>
+    
+                <tbody>
+                    <tr>
+                        <td>Alice's Adventures in Wonderland</td>
+                        <td>Lewis Carol</td>
+                        <td>Fantasy</td>
+                    </tr>
+                    <tr>
+                        <td>Pride and Prejudice</td>
+                        <td>Jane Austen</td>
+                        <td>Novel</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+        </div>
+        
+        <div class="buttons">
+            <a href="add_book_form.html">
+                <input class="btn" type="button" name="" value="Add new book">
+            </a>
+        </div>
+        
+
     </body>
 </html>
