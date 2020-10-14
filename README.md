@@ -52,7 +52,7 @@ En nuestro caso, el **Salt master** fue la vm para poder tener como **Salt minio
 
 La rama baseConVagrant, indicaba lo aprendido en clase y que sería útil para el desarrollo del exámen.
 
-En la rama Vagrant_salt, en el primer intento/versión no funcional que se realizó. Este intento consistía en comprender y aplicar los términos y conceptos consultados. Además de aprovechar el ejemplo brindado por el demo. Sin embargo surgieron varias incognitas.
+En el primer intento/versión de la rama Vagrant_salt fue no funcional. Este intento consistía en comprender y aplicar los términos y conceptos consultados. Además de aprovechar el ejemplo brindado por el demo. Sin embargo surgieron varias incognitas.
 
 - ¿Debia algún archivo autogenerarse? 
 - ¿Las direcciones IP debian ser cambiadas manualmente?
