@@ -48,7 +48,7 @@ Referencía: https://www.imagescape.com/blog/2015/08/24/testing-saltstack-vagran
 
 Referencía: https://subscription.packtpub.com/book/virtualization_and_cloud/9781789138054/14/ch14lvl1sec68/provisioning-vagrant-with-salt
 
-En nuestro caso, el **Salt master** fue considerado el Load balancer para poder tener como **Salt minion** a los web server 1  y 2.
+En nuestro caso, el **Salt master** fue considerado  la vm como master para poder tener como **Salt minion** a los web server 1  y 2.
 
 La rama baseConVagrant, indicaba lo aprendido en clase y que sería útil para el desarrollo del exámen.
 
@@ -80,6 +80,14 @@ En el segundo intento, se encontró la ausencia de dos keys para minionlb y mini
 - Generar las llaves para cada uno de los daemons minion y master.
 - Modificar el archivo Vagrantfile de acuerdo a las necesidades.
 
+**Dificultades**
+
+- **Caso 1** Estructura según SaltStack --> Para nosotros SaltStack era una herramienta completamente nueva, lo que implicaba tener aprendizaje activo desde cero. Gracias al demo pudimos definir que los servidores web o web servers serían un minion pero no sabíamos si se podia determinar más de un master o si db y lb debian ser minion o master. Esto se resolvió a través de consultas.
+
+- **Caso 2** Como se mencionó anteriormente, no sabiamos que archivos debían autogenerarse ya que estabamos basados en el demo y este no nos especificaba que archivos debiamos realizar o modificar manualmente y cuales no. Tras leer la documentación oficial tanto de SaltStack como de Vagrant descrubimos que las key debían ser generadas y procedimos a hacerlo. También en un "debug" manual al comentar las dos últimas minion que habíamos se podía correr el VagrantFile ¿Por qué? porque habiamos usado las key que proveía el demo para los minion webserver 1 y 2, así que con estas no tenía ningún conflicto.
+
+
+
 
 ## Aprovisionamiento de servidores web ##
 
@@ -90,7 +98,7 @@ Información consultada:
 - https://www.digitalocean.com/community/tutorials/how-to-create-a-web-server-in-node-js-with-the-http-module-es
 - https://www.tutorialsteacher.com/nodejs/expressjs-web-application
 
-El procedimiento para aprovisionar los servidores web fue:
+El procedimiento nuestro para aprovisionar los servidores web fue:
 
 En la rama webserver, se tomó como base la primer versión de vagrant_salt y continuo a ello, se creo un directorio llamado webserver dónde se creo dos archivos:
 
@@ -110,7 +118,7 @@ También se añadió el archivo .html llamado add_book_form siendo este un formu
 
 En otra fase o adelanto, se realizo el archivo showTableApp.js el cual se encarga de leer los datos de la tabla desde un archivo json y los escribe al index.html para poder ser visualizados en el Frontend.
 
-**Procedimiento** 
+### Procedimiento
 
 - Instalar Node js
 - Instalar modulos necesarios, a parte de los de node. (Ejemplo: express, path, entre otros)
@@ -126,6 +134,22 @@ En otra fase o adelanto, se realizo el archivo showTableApp.js el cual se encarg
 -  **Caso 1** ¡No teniamos acceso a los html!---> En esta situación, aunque habían varios archivos sólo teníamos acceso al index.html. Esto se solucionó modificando una línea en el archivo server.js que define el espacio que puede ser utilizado por el servidor. Consideramos fue un error que llamamos "capa 8" puesto que se había colocado la ruta de un archivo y no la de un directorio.
 
 - **Caso 2** ¡Pruebas fallidas! ---> En este caso, gracias a la división de tareas aún no se tenía implementación de una base de datos y se instaló una "mini base de datos", pero al momento de trabajar con la real, el método fallo y tuvo que tener arreglos. Se cambio la forma en que añadia elementos a la tabla porque el json de prueba realizado y el json de la base de datos tienen estructuras distintas.
+
+
+## Aprovisionamiento de la base de datos ##
+
+Información consultada: 
+
+- https://carlosazaustre.es/como-crear-una-api-rest-usando-node-js
+- https://medium.com/@asfo/desarrollando-una-sencilla-api-rest-con-nodejs-y-express-cab0813f7e4b
+- https://code.tutsplus.com/es/articles/an-introduction-to-mongoose-for-mongodb-and-nodejs--cms-29527
+- https://developer.mozilla.org/es/docs/Learn/Server-side/Express_Nodejs/mongoose
+- https://riptutorial.com/es/mongoose
+
+### Procedimiento
+
+- Instalar gnupg
+- 
 
 
 
