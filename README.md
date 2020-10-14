@@ -50,9 +50,23 @@ Referencía: https://subscription.packtpub.com/book/virtualization_and_cloud/978
 
 En nuestro caso, el **Salt master** fue considerado el Load balancer para poder tener como **Salt minion** a los web server 1  y 2.
 
-En la rama Vagrant_salt, se considera el primer intento no funcional que se realizó. Este intento consistía en comprender y aplicar los términos y conceptos consultados. Además de aprovechar el ejemplo brindado por el demo. Sin embargo surgieron varias incognitas.
+En la rama Vagrant_salt, en el primer intento/versión no funcional que se realizó. Este intento consistía en comprender y aplicar los términos y conceptos consultados. Además de aprovechar el ejemplo brindado por el demo. Sin embargo surgieron varias incognitas.
 
 - ¿Debia algún archivo autogenerarse? 
 - ¿Las direcciones IP debian ser cambiadas manualmente?
 - ¿Cómo determinar que función cumplía el db? ¿Era un minion o un master?
 - Entre otros
+
+**Generar keys**
+
+Cómo anteriormente se mencionó, se tenia dudas sobre que archivos deberían autogenerarse. Tras consultar, se comprendió
+que las llaves de cada minion y master debían generarse por medio de un comando.
+
+Referencía: https://docs.saltstack.com/en/master/topics/tutorials/preseed_key.html
+
+En el segundo intento, se encontró la ausencia de dos keys para minionlb y miniondb. Por tanto, se procedió a su creación, logrando ejecutar efectivamente el Vagrantfile. Aquí habia quedado pendiente:
+
+- Indicar a db y los web server que instalar.
+- Configurar la db
+- Archivos del webserver.
+
