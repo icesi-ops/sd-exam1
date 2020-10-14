@@ -1,15 +1,15 @@
 # SISTEMAS DISTRIBUIDOS -  PARCIAL 1 #
 
-===
+
 
 ### Integrantes ###
 
- * Daniel Portillo
- * Jeferson Lerma
- * Juan Camilo Calvo
+ * Daniel Portillo - A00310452
+ * Jeferson Lerma - A00301456
+ * Juan Camilo Calvo - A00030140
 
 
-###Tecnologias usadas para nuestro desarrollo###
+### Tecnologias usadas para nuestro desarrollo ###
 
  * Vagrant
  * Sistema operativo bento/ubuntu-18.04/
@@ -72,7 +72,7 @@ Web Server 2
 
 ### Aprovisionamiento de los servidores Web ###
 
-**Fuente:** [Vagrantfile minions.](https://github.com/UtahDave/salt-vagrant-demo)
+**Fuente:** [Tutorias vagrantfile con SaltStack minions.](https://github.com/UtahDave/salt-vagrant-demo)
 
 Primero, empezamos instanciando los servidores en el VagrantFile:
 
