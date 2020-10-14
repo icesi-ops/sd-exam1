@@ -100,7 +100,7 @@ Información consultada:
 
 El procedimiento nuestro para aprovisionar los servidores web fue:
 
-En la rama webserver, se tomó como base la primer versión de vagrant_salt y continuo a ello, se creo un directorio llamado webserver dónde se creo dos archivos:
+En la rama webserver, se tomó como base la primer versión de vagrant_salt y continuo a ello, se creo un directorio llamado webserver dónde se añadieron dos archivos:
 
 - index.html
 - server.js
