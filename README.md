@@ -161,6 +161,7 @@ Información consultada:
 https://raw.githubusercontent.com/alejajessi/sd-exam1/images/images/errorMongo.jpeg
 
 Esto más que solución efectiva, fue solución práctica dado el tiempo decidimos implementar lo realizado por el compañero en otro computador.
+Resultado fallido.
 
 ## Tareas de integración ##
 
@@ -181,3 +182,5 @@ Orden de merge
 - webserver
 - loadBalancer
 - pruebaDB
+
+Resultado incompleto: Al ejecutar la parte de la base de datos, nos arrojaba algunos errores y los corregimos pero al final nos terminó corriendo en teoría bien, pero no instaló el webserver ni el db.
