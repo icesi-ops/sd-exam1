@@ -68,9 +68,7 @@ Referencía: https://docs.saltstack.com/en/master/topics/tutorials/preseed_key.h
 
 En el segundo intento, se encontró la ausencia de dos keys para minionlb y miniondb. Por tanto, se procedió a su creación, logrando ejecutar efectivamente el Vagrantfile. Aquí habia quedado pendiente:
 
-- Indicar a db y los web server que instalar.
-- Configurar la db
-- Archivos del webserver.
+Ahora en otra rama, se añadió el loadBalancer con las configuraciones necesarias.
 
 ### Procedimiento ###
 
@@ -175,9 +173,11 @@ En total tuvimos 4 ramas a parte de la master y la images.
 - **vagrant_salt** --> Rama con el VagrantFile modificado para aprovisionarlo con SaltStack incluyendo cnfiguración necesaria para los minion y master.
 - **webserver** --> Rama con la parte de los servidores web, aqui se incluyo la parte de json y html correspondiente.
 - **pruebaDB** --> Rama asignada para la configuración de la base de datos, en nuestro caso Mongo.
+- **loadBalancer** --> Rama dónde se añadió el archivo lb.
 
 Orden de merge
 - baseConVagrant
 - vagrant_salt
 - webserver
+- loadBalancer
 - pruebaDB
