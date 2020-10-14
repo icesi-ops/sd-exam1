@@ -84,7 +84,7 @@ En el segundo intento, se encontró la ausencia de dos keys para minionlb y mini
 
 - **Caso 1** Estructura según SaltStack --> Para nosotros SaltStack era una herramienta completamente nueva, lo que implicaba tener aprendizaje activo desde cero. Gracias al demo pudimos definir que los servidores web o web servers serían un minion pero no sabíamos si se podia determinar más de un master o si db y lb debian ser minion o master. Esto se resolvió a través de consultas.
 
-- **Caso 2** Como se mencionó anteriormente, no sabiamos que archivos debían autogenerarse ya que estabamos basados en el demo y este no nos especificaba que archivos debiamos realizar o modificar manualmente y cuales no. Tras leer la documentación oficial tanto de SaltStack como de Vagrant descrubimos que las key debían ser generadas y procedimos a hacerlo. También en un "debug" manual al comentar las dos últimas minion que habíamos se podía correr el VagrantFile ¿Por qué? porque habiamos usado las key que proveía el demo para los minion webserver 1 y 2, así que con estas no tenía ningún conflicto.
+- **Caso 2** Como se mencionó anteriormente, no sabiamos que archivos debían autogenerarse ya que estabamos basados en el demo y este no nos especificaba que archivos debiamos realizar o modificar manualmente y cuales no. Tras leer la documentación oficial tanto de SaltStack como de Vagrant descrubimos que las key debían ser generadas y procedimos a hacerlo. También en un "debug" manual al comentar las dos últimas minion que habíamos colocado(lb y db)se podía correr el VagrantFile ¿Por qué? porque habiamos usado las key que proveía el demo para los minion webserver 1 y 2, así que con estas no tenía ningún conflicto.
 
 
 
