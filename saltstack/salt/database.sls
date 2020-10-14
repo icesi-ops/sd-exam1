@@ -15,5 +15,11 @@ Obtener Configuracion:
 
 correr database:
   cmd.run:
-    - name: sudo systemctl start mongodb
+    - name: sudo systemctl restart mongodb
+
+Abrir puertos:
+  cmd.run:
+    - name: sudo iptables -A INPUT -p tcp --dport 27017 -j ACCEPT
+
+
 
