@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang=”es”> 
+<html>
+    <head>
+        <!--Metadata goes here-->
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" href="style.css">
+        <title>Books - Node server</title>
+    </head>
+    <body>
+        <!--Content goes here-->
+        
+        <div class="header">
+            <h1>Books Database</h1>
+        </div>
+        
+        <div class="data-displayer" data-url="/data">
+
+            <!-- Example
+            <table class="database-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Genre</th>
+                    </tr>
+                </thead>
+    
+                <tbody>
+                    <tr>
+                        <td>Alice's Adventures in Wonderland</td>
+                        <td>Lewis Carol</td>
+                        <td>Fantasy</td>
+                    </tr>
+                    <tr>
+                        <td>Pride and Prejudice</td>
+                        <td>Jane Austen</td>
+                        <td>Novel</td>
+                    </tr>
+                </tbody>
+            </table>
+            -->
+        </div>
+        
+        <div class="buttons">
+            <form action="/add" method="GET">
+                <input class="btn" type="submit" name="" value="Add new book">
+            </form>
+        </div>
+
+        <script src="showTableApp.js"></script>
+
+    </body>
+</html>
