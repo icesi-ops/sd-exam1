@@ -1,0 +1,22 @@
+mongodb:
+    pkg:
+      database:
+        version: 4.2.6.1
+        archive:
+          skip_verify: true
+        config:
+          # http://docs.mongodb.org/manual/reference/configuration-options
+          storage:
+            dbPath: /var/lib/mongodb/mongod
+          replication:
+            replSetName: "rs1"
+          sharding:
+            clusterRole: shardsvr
+          net:
+            bindIp: '0.0.0.0,::'
+            port: 27018
+        firewall:
+          ports:
+            - tcp/27017
+            - tcp/27018
+            - tcp/27019

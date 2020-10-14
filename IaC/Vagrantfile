@@ -1,0 +1,77 @@
+# -- mode: ruby --
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure("2") do |config|
+  ##LB
+    config.vm.define "lb" do |lb|
+     lb.vm.box = "centos/7"
+     lb.vm.hostname = "lb"
+     lb.vm.network "private_network", ip: "192.168.33.200"
+     lb.vm.provider "virtualbox" do |vb|
+      vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "lb"]
+     end
+    ####### File Share #######
+    lb.vm.synced_folder '../ConfigurationManagment/states', '/srv/salt'
+    lb.vm.synced_folder '../ConfigurationManagment/pillars', '/srv/pillar'  
+    lb.vm.synced_folder './Scripts', '/srv/Scripts' 
+    ##### APROVISIONAR INICIAL DEL LB #####  
+    lb.vm.provision "shell", path: "./Scripts/lb.sh"
+    ##### APROVISIONAMIENTO DEL LB##### 
+    lb.vm.provision :salt do |salt|
+      salt.masterless = true
+      salt.run_highstate = true
+      salt.verbose = true
+    end
+  end
+  ##DB
+   config.vm.define "db" do |db|
+    db.vm.box = "centos/7"
+    db.vm.hostname = "db"
+    db.vm.network "private_network", ip: "192.168.33.14"
+    db.vm.provider "virtualbox" do |vb|
+     vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "db"]
+    end
+    ####### File Share #######
+    db.vm.synced_folder '../ConfigurationManagment/states', '/srv/salt'
+    db.vm.synced_folder '../ConfigurationManagment/pillars', '/srv/pillar'  
+    db.vm.synced_folder './Scripts', '/srv/Scripts' 
+    ##### APROVISIONAR INICIALMENTE LA BASE DE DATOS ##### 
+    db.vm.provision "shell", path: "./Scripts/db.sh"
+    ##### APROVISIONAMIENTO DE LA BASE DE DATOS ##### 
+    db.vm.provision :salt do |salt|
+     salt.masterless = true
+     salt.run_highstate = true
+     salt.verbose = true
+    end
+    db.vm.provision "shell", inline: "echo Iam DB server"
+   end
+   config.ssh.insert_key = false
+   (1..2).each do |i|
+    config.vm.define "web-#{i}" do |web|
+      web.vm.box = "ubuntu/bionic64"
+      web.vm.hostname = "web-#{i}"
+      web.vm.network "private_network", ip: "192.168.33.1#{i}"
+      web.vm.provider "virtualbox" do |vb|
+       vb.customize ["modifyvm", :id, "--memory", "1024", "--cpus", "2", "--name", "web-#{i}"]
+      end
+     #  web.vm.provision "file", source: "./Scripts/web.sh", destination: "/srv/sc.sh"
+     
+     ####### File Share #######
+     web.vm.synced_folder '../ConfigurationManagment/states', '/srv/salt'
+     web.vm.synced_folder '../ConfigurationManagment/pillars', '/srv/pillar'  
+     web.vm.synced_folder './Scripts', '/srv/Scripts' 
+     ##### APROVISIONAR INICIAL DE LOS SERVIDORES #####  
+     web.vm.provision "shell", path: "./Scripts/web.sh"
+     ##### APROVISIONAMIENTO DE LOS SERVIDORES ##### 
+     web.vm.provision :salt do |salt|
+       salt.masterless = true
+       salt.run_highstate = true
+       salt.verbose = true
+     end
+   end
+  end
+end
