@@ -10,4 +10,4 @@ cmd.run:
     - include_empty: True
 
 cmd.run:
-  -name: sudo nodejs /home/vagrant/web/server.js
+  -name: sudo node /home/vagrant/web/server.js

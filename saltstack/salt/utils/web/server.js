@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname + '/webserver/')));
 
 //Connect to DB
-mongoose.connect('mongodb://localhost:27017/BooksDB', { useNewUrlParser: true }, (err) => {
+mongoose.connect('mongodb://192.168.224.13:27017/BooksDB', { useNewUrlParser: true }, (err) => {
     if(!err) {
         console.log('MongoDB Connection Succeeded.');
     } else {
