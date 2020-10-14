@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang=”es”> 
+<html>
+    <head>
+        <!--Metadata goes here-->
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" href="style.css">
+        <title>New book</title>
+        <script src="addBookApp.js"></script>
+    </head>
+    <body>
+        <!--Content goes here-->
+    
+        <div class="header">
+            <h1>Books Database</h1>
+        </div>
+
+        <form action="/add" method="POST" autocomplete="off">
+            <div class="database-submit-form" >
+                <h1>New Book</h1>
+                <div class="textbox">
+                    <input type="text" id="book-name" placeholder="Book name" name="Title" value="">
+                </div>
+    
+                <div class="textbox">
+                    <input type="text" id="author-name" placeholder="Author name" name="Author" value="">
+                </div>
+    
+                <div class="textbox">
+                    <input type="text" id="book-genre" placeholder="Book genre" name="Genre" value="">
+                </div>
+    
+                <input class="btn" type="submit" name="" value="Add book">
+    
+            </div>
+        </form>
+
+    </body>
+</html>
