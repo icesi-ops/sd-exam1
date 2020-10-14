@@ -50,6 +50,8 @@ Referencía: https://subscription.packtpub.com/book/virtualization_and_cloud/978
 
 En nuestro caso, el **Salt master** fue considerado el Load balancer para poder tener como **Salt minion** a los web server 1  y 2.
 
+La rama baseConVagrant, indicaba lo aprendido en clase y que sería útil para el desarrollo del exámen.
+
 En la rama Vagrant_salt, en el primer intento/versión no funcional que se realizó. Este intento consistía en comprender y aplicar los términos y conceptos consultados. Además de aprovechar el ejemplo brindado por el demo. Sin embargo surgieron varias incognitas.
 
 - ¿Debia algún archivo autogenerarse? 
@@ -69,4 +71,62 @@ En el segundo intento, se encontró la ausencia de dos keys para minionlb y mini
 - Indicar a db y los web server que instalar.
 - Configurar la db
 - Archivos del webserver.
+
+### Procedimiento ###
+
+- Instalar Vagrant y SaltStack.
+- Definir master y minion a usar.
+- Definir configuración de master y minion.
+- Generar las llaves para cada uno de los daemons minion y master.
+- Modificar el archivo Vagrantfile de acuerdo a las necesidades.
+
+
+## Aprovisionamiento de servidores web ##
+
+Información consultada:
+
+- https://codeburst.io/build-a-weather-website-in-30-minutes-with-node-js-express-openweather-a317f904897b
+- https://youtu.be/VZBaahkZk5M?list=PLty0cFLf07jX4NuX99u3lZT4xEELJoaqc
+- https://www.digitalocean.com/community/tutorials/how-to-create-a-web-server-in-node-js-with-the-http-module-es
+- https://www.tutorialsteacher.com/nodejs/expressjs-web-application
+
+El procedimiento para aprovisionar los servidores web fue:
+
+En la rama webserver, se tomó como base la primer versión de vagrant_salt y continuo a ello, se creo un directorio llamado webserver dónde se creo dos archivos:
+
+- index.html
+- server.js
+
+Dando como resultado la siguiente visualización. (Tenga en cuenta que esta fue la primer prueba, y era básica)
+
+https://raw.githubusercontent.com/alejajessi/sd-exam1/images/images/webbasic.png
+
+Luego se hizo otro adelanto, este consistió en la realización de un html más avanzado y alcanzando el objetivo de este exámen. Este html debía mostrar la tabla:
+
+https://raw.githubusercontent.com/alejajessi/sd-exam1/images/images/tabla.png
+(Se creo un archivo plus llamado styles para que el html tuviera mejor presentación a la anterior)
+
+También se añadió el archivo .html llamado add_book_form siendo este un formulario para añadir libros.
+
+En otra fase o adelanto, se realizo el archivo showTableApp.js el cual se encarga de leer los datos de la tabla desde un archivo json y los escribe al index.html para poder ser visualizados en el Frontend.
+
+**Procedimiento** 
+
+- Instalar Node js
+- Instalar modulos necesarios, a parte de los de node. (Ejemplo: express, path, entre otros)
+- Crear un servidor básico 
+- Crear el formulario para tener orden al momento de ingresar datos.
+- Crear un archivo style para generar estetica en el html ***nota*** no se coloco en el mismo html por buenas prácticas.
+- Crear un archivo para lectura de datos y asignación en el html principal (index.html en nuestro caso)
+- ***En nuestro caso modificamos en un commit el archivo server.js para comprobar el funcionamiento, mientras se realizaba la unión con la base de datos***
+- Conectar con la base de datos
+
+**Dificultades**
+
+-  **Caso 1** ¡No teniamos acceso a los html!---> En esta situación, aunque habían varios archivos sólo teníamos acceso al index.html. Esto se solucionó modificando una línea en el archivo server.js que define el espacio que puede ser utilizado por el servidor. Consideramos fue un error que llamamos "capa 8" puesto que se había colocado la ruta de un archivo y no la de un directorio.
+
+- **Caso 2** ¡Pruebas fallidas! ---> En este caso, gracias a la división de tareas aún no se tenía implementación de una base de datos y se instaló una "mini base de datos", pero al momento de trabajar con la real, el método fallo y tuvo que tener arreglos. Se cambio la forma en que añadia elementos a la tabla porque el json de prueba realizado y el json de la base de datos tienen estructuras distintas.
+
+
+
 
