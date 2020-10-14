@@ -152,7 +152,7 @@ Información consultada:
 - Descargar la llave de instalación de mongodb
 - Descargar el repositorio de instalación de mongo
 - Actualizar los repositorios
-- Instalar mongo
+- Instalar mongo --> Referencía: https://docs.mongodb.com/manual/installation/
 - Configurar IP y puerto en el archivo mongod.conf
 - Correr servicio
 
@@ -160,8 +160,24 @@ Información consultada:
 
 - Según nuestra metodología de trabajo, el compañero que tenía asignada la implementación de mongo tenía problemas ya que no dispone originalmente de un sistema operativo con distribucción Linux y en Windows con maquinas virtuales le generaba varios errores como el siguiente: 
 
+https://raw.githubusercontent.com/alejajessi/sd-exam1/images/images/errorMongo.jpeg
 
+Esto más que solución efectiva, fue solución práctica dado el tiempo decidimos implementar lo realizado por el compañero en otro computador.
 
+## Tareas de integración ##
 
+Aprovechando la herramienta **git** decidimos trabajar en un formato con branches a través de reviews por los compañeros del equipo, por eso era necesario los pull request.
 
+En total tuvimos 4 ramas a parte de la master y la images.
+- **master** --> Rama principal dónde se "mergeaba" o unía lo que estaba bueno y funcional de las otras branches o ramas.
+- **images** --> Rama dónde se adjunto las imagenes para este README.
+- **baseConVagrant** --> Rama inicial/base con lo aprendido en clase sin incluir el tema de Ansible ya que se solicitaba implementar otra herramienta como Puppet, Chef o en nuestro caso SaltStack.
+- **vagrant_salt** --> Rama con el VagrantFile modificado para aprovisionarlo con SaltStack incluyendo cnfiguración necesaria para los minion y master.
+- **webserver** --> Rama con la parte de los servidores web, aqui se incluyo la parte de json y html correspondiente.
+- **pruebaDB** --> Rama asignada para la configuración de la base de datos, en nuestro caso Mongo.
 
+Orden de merge
+- baseConVagrant
+- vagrant_salt
+- webserver
+- pruebaDB
