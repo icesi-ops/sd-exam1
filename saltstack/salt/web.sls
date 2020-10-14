@@ -1,4 +1,4 @@
-/home/vagrant/installWebServer.sh
+/home/vagrant/installWebServer.sh:
   file.managed:
     - source: salt://utils/web/installWebServer.sh
 cmd.run:
