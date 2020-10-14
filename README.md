@@ -149,7 +149,18 @@ Información consultada:
 ### Procedimiento
 
 - Instalar gnupg
-- 
+- Descargar la llave de instalación de mongodb
+- Descargar el repositorio de instalación de mongo
+- Actualizar los repositorios
+- Instalar mongo
+- Configurar IP y puerto en el archivo mongod.conf
+- Correr servicio
+
+**Dificultades**
+
+- Según nuestra metodología de trabajo, el compañero que tenía asignada la implementación de mongo tenía problemas ya que no dispone originalmente de un sistema operativo con distribucción Linux y en Windows con maquinas virtuales le generaba varios errores como el siguiente: 
+
+
 
 
 
