@@ -6,6 +6,7 @@
         <meta charset="UTF-8"/>
         <link rel="stylesheet" href="style.css">
         <title>New book</title>
+        <script src="addBookApp.js"></script>
     </head>
     <body>
         <!--Content goes here-->
@@ -14,23 +15,25 @@
             <h1>Books Database</h1>
         </div>
 
-        <div class="database-submit-form">
-            <h1>New Book</h1>
-            <div class="textbox">
-                <input type="text" placeholder="Book name" name="" value="">
+        <form action="/add" method="POST" autocomplete="off">
+            <div class="database-submit-form" >
+                <h1>New Book</h1>
+                <div class="textbox">
+                    <input type="text" id="book-name" placeholder="Book name" name="Title" value="">
+                </div>
+    
+                <div class="textbox">
+                    <input type="text" id="author-name" placeholder="Author name" name="Author" value="">
+                </div>
+    
+                <div class="textbox">
+                    <input type="text" id="book-genre" placeholder="Book genre" name="Genre" value="">
+                </div>
+    
+                <input class="btn" type="submit" name="" value="Add book">
+    
             </div>
-
-            <div class="textbox">
-                <input type="text" placeholder="Author's name" name="" value="">
-            </div>
-
-            <div class="textbox">
-                <input type="text" placeholder="Book genre" name="" value="">
-            </div>
-
-            <input class="btn" type="button" name="" value="Add book">
-
-        </div>
+        </form>
 
     </body>
 </html>

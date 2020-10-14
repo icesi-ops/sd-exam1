@@ -14,8 +14,9 @@
             <h1>Books Database</h1>
         </div>
         
-        <div class="data">
+        <div class="data-displayer" data-url="/data">
 
+            <!-- Example
             <table class="database-table">
                 <thead>
                     <tr>
@@ -38,15 +39,16 @@
                     </tr>
                 </tbody>
             </table>
-            
+            -->
         </div>
         
         <div class="buttons">
-            <a href="add_book_form.html">
-                <input class="btn" type="button" name="" value="Add new book">
-            </a>
+            <form action="/add" method="GET">
+                <input class="btn" type="submit" name="" value="Add new book">
+            </form>
         </div>
-        
+
+        <script src="showTableApp.js"></script>
 
     </body>
 </html>

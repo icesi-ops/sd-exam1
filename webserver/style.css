@@ -17,13 +17,13 @@ body{
   color: rgb(255, 249, 242);
 }
 
-.data{
+.data-displayer{
   position: relative;
   min-height: 450px;
   /*border: 1px solid rgb(105, 67, 33);*/
 }
 
-.data .database-table{
+.database-table{
   position: absolute;
   top: 50%;
   left: 50%;
@@ -37,24 +37,24 @@ body{
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
-.data .database-table thead tr{
+.database-table thead tr{
   background-color: saddlebrown;
   color: white;
   text-align: left;
   font-weight: bold;
 }
 
-.data .database-table th, .database-table td{
+.database-table th, .database-table td{
   padding: 12px 15px;
 }
 
-.data .database-table tbody tr{
+.database-table tbody tr{
   border-bottom: 1px solid burlywood;
   text-align: left;
   color: rgb(75, 46, 21);
 }
 
-.data .database-table tbody tr:last-of-type{
+.database-table tbody tr:last-of-type{
   border-bottom: 2px solid saddlebrown;
 }
 
