@@ -48,7 +48,7 @@ Referencía: https://www.imagescape.com/blog/2015/08/24/testing-saltstack-vagran
 
 Referencía: https://subscription.packtpub.com/book/virtualization_and_cloud/9781789138054/14/ch14lvl1sec68/provisioning-vagrant-with-salt
 
-En nuestro caso, el **Salt master** fue considerado  la vm como master para poder tener como **Salt minion** a los web server 1  y 2.
+En nuestro caso, el **Salt master** fue la vm para poder tener como **Salt minion** a los web server 1  y 2.
 
 La rama baseConVagrant, indicaba lo aprendido en clase y que sería útil para el desarrollo del exámen.
 
