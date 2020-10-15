@@ -1,11 +1,13 @@
-/home/vagrant/installWebServer.sh:
+file:
   file.managed:
+    - name: /home/vagrant/installWebServer.sh
     - source: salt://utils/web/installWebServer.sh
 cmd.run:
   - name: sudo sh /home/vagrant/installWebServer.sh
 
-/home/vagrant/web:
+webfile:
   file.recurse:
+    - name: /home/vagrant/web
     - source: salt://utils/web
     - include_empty: True
 
