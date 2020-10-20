@@ -2,8 +2,9 @@ file:
   file.managed:
     - name: /home/vagrant/installWebServer.sh
     - source: salt://utils/web/installWebServer.sh
-cmd.run:
-  - name: sudo sh /home/vagrant/installWebServer.sh
+Run script:
+  cmd.run:
+    - name: sudo sh /home/vagrant/installWebServer.sh
 
 webfile:
   file.recurse:
@@ -11,5 +12,6 @@ webfile:
     - source: salt://utils/web
     - include_empty: True
 
-cmd.run:
-  -name: sudo node /home/vagrant/web/server.js
+Run script:
+  cmd.run:
+    -name: sudo node /home/vagrant/web/server.js

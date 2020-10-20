@@ -13,4 +13,4 @@ base:
 
   'minionlb':
     - common
-    - lb
+    - web

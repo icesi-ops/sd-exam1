@@ -6,7 +6,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   os = "bento/ubuntu-20.04"
-  ip = "192.168.224"
+  n_ip = "192.168.50"
 
   config.vm.define :master, primary: true do |master_config|
     master_config.vm.provider "virtualbox" do |vb|
@@ -17,7 +17,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     
     master_config.vm.box = "#{os}"
     master_config.vm.host_name = 'saltmaster.local'
-    master_config.vm.network "private_network", ip: "#{ip}.10"
+    master_config.vm.network "private_network", ip: "#{n_ip}.10"
     master_config.vm.synced_folder "saltstack/salt/", "/srv/salt"
     master_config.vm.synced_folder "saltstack/pillar/", "/srv/pillar"
 
@@ -28,10 +28,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       salt.minion_key = "saltstack/keys/master_minion.pem"
       salt.minion_pub = "saltstack/keys/master_minion.pub"
       salt.seed_master = {
-                          "web-1" => "saltstack/keys/minion1.pub",
-                          "web-2" => "saltstack/keys/minion2.pub",
-			  "db" => "saltstack/keys/miniondb.pub",
-			  "lb" => "saltstack/keys/minionlb.pub"
+                          "minion1" => "saltstack/keys/minion1.pub",
+                          "minion2" => "saltstack/keys/minion2.pub",
+			  "miniondb" => "saltstack/keys/miniondb.pub",
+			  "minionlb" => "saltstack/keys/minionlb.pub"
                          }
 
       salt.install_type = "stable"
@@ -45,10 +45,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 
   [
-    ["minion1",    "#{ip}.11",    "512",    os ],
-    ["minion2",    "#{ip}.12",    "512",    os ],
-    ["miniondb",   "#{ip}.13",     "512",    os ],
-    ["minionlb",   "#{ip}.14",     "512",    os ]
+    ["minion1",    "#{n_ip}.11",    "512",    os ],
+    ["minion2",    "#{n_ip}.12",    "512",    os ],
+    ["miniondb",   "#{n_ip}.13",     "512",    os ],
+    ["minionlb",   "#{n_ip}.14",     "512",    os ]
   ].each do |vmname,ip,mem,os|
     config.vm.define "#{vmname}" do |minion_config|
       minion_config.vm.provider "virtualbox" do |vb|
