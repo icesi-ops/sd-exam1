@@ -121,3 +121,7 @@ dist
 /pkg/
 /spec/reports/
 /spec/examples.txt
+
+
+##Vagrant ##
+.vagrant/
