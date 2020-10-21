@@ -44,6 +44,7 @@ El parcial debe realizarse en los grupos asignados. La evaluación sera en forma
 4. Documentación de las tareas de integración (10%). Evidencias de la integración, escalamiento y persistencia de datos (10%).
 5. El informe debe publicarse en un repositorio de github el cual debe ser un fork de https://github.com/icesi-ops/sd-exam2 y para la entrega deberá hacer un Pull Request (PR) al upstream (10%). Tenga en cuenta que el repositorio debe contener todos los archivos necesarios para el aprovisionamiento.
 6. Documente algunos de los problemas encontrados y las acciones efectuadas para su solución al aprovisionar la infraestructura y aplicaciones (10%).
+7. Sustentación TÉCNICA (15%)
 
 ### References
 * https://www.draw.io
