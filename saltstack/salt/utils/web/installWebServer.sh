@@ -9,4 +9,4 @@ sudo apt-get install -y nodejs
 
 #Installing node modules
 sudo npm i --save express body-parser path -y
-sudo npm i --save mongoose -y
+sudo npm install --save mongoose -y
