@@ -2,8 +2,8 @@ file:
   file.managed:
     - name: /home/vagrant/installWebServer.sh
     - source: salt://utils/web/installWebServer.sh
-Run script:
-  cmd.run:
+run script:
+   cmd.run:
     - name: sudo sh /home/vagrant/installWebServer.sh
 
 webfile:
@@ -12,6 +12,6 @@ webfile:
     - source: salt://utils/web
     - include_empty: True
 
-Run script:
+run script1:
   cmd.run:
-    -name: sudo node /home/vagrant/web/server.js
+    - name: sudo node /home/vagrant/web/server.js

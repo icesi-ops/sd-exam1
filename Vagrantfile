@@ -45,10 +45,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 
   [
+    ["minionlb",   "#{n_ip}.14",     "512",    os ],
     ["minion1",    "#{n_ip}.11",    "512",    os ],
     ["minion2",    "#{n_ip}.12",    "512",    os ],
-    ["miniondb",   "#{n_ip}.13",     "512",    os ],
-    ["minionlb",   "#{n_ip}.14",     "512",    os ]
+    ["miniondb",   "#{n_ip}.13",     "512",    os ]
   ].each do |vmname,ip,mem,os|
     config.vm.define "#{vmname}" do |minion_config|
       minion_config.vm.provider "virtualbox" do |vb|

@@ -17,8 +17,3 @@ install haproxy:
 haproxy:
   cmd.run:
     - name: sudo systemctl restart haproxy
-
-Run script:
-  cmd.run:
-    -name: sudo node /home/vagrant/web/server.js
-
