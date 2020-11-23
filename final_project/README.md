@@ -3,7 +3,7 @@
 **Universidad ICESI**  
 **Curso:** Sistemas Distribuidos  
 **Docente:** Joan S. Garcìa D.  
-**Tema:** Automatización de infraestructura (Docker)  
+**Tema:** Kubernetes
 **Correo:** joan.garcia1 at correo.icesi.edu.co
 
 ### **Objective:**
