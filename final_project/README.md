@@ -47,8 +47,8 @@ After you're done, test this out in a clean environment from scratch, since we w
 
 ## Definition of done:
 - 2 or more pods are running. 
-- I can reach the pods througth public IP  
-- I can change the version of the image and the pipeline deploy the new version automatically.  
+- I can reach the pods throught public IP  
+- I can make changes in the code app and the pipeline deploy the new version automatically.  
 
 ## Acceptance criteria:  
 
