@@ -50,7 +50,7 @@ After you're done, test this out in a clean environment from scratch, since we w
 - I can reach the pods throught public IP  
 - I can make changes in the code app and the pipeline deploy the new version automatically.  
 
-## Acceptance criteria:  
+## Judging criteria: 
 
 • Correctness. Does it do what we asked?  
 • Simplicity. Does the design match the task?  
