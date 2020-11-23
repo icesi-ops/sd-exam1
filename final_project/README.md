@@ -22,7 +22,7 @@ This test should demonstrate the creation of a simple service and the automation
 - Create a Helm chart for the application that:  
 • Defines a deployment 2 or more pods  
 • Defines a health check on the deployment that makes sure /health is responding with a 200  
-• Defines a kubernetes service using ClusterIP  
+• Defines a kubernetes service using NodePort  
 • Defines a kubernetes ingress to allow traffic on to the pods 
 
 - Create a script (either a standalone script or using Make, Rake, etc..) that automates building and deploying the application to a k8s cluster.
