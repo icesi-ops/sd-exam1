@@ -14,7 +14,7 @@
 * Box del sistema operativo CentOS7
 * Repositorio Github
 * Ansible
-* NodeJS - Python - Go
+* NodeJS - Python - Go - Kotlin
 * Nginx
 * Glusterfs
 
