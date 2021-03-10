@@ -1,0 +1,22 @@
+---
+- hosts: webservers
+  become: true
+  vars_files:
+    - vars/main.yml
+  tasks:
+    - name: Install release-gluster
+      yum: 
+        name:
+          - centos-release-gluster
+          - glusterfs-server
+          - xfsprogs
+    - name: Start gluster services
+      service: name=gluster state=restarted enabled=yes
+    - name: create gluster data dir
+      file:
+        path: "{{gluster_data_dir}}"
+        state: directory
+    - name: Mount gluster 
+      shell: mkfs.xfs /dev/sdb1 && mount /dev/sdb1 /gluster/data/
+    - name: config nodes
+      shell: echo "192.168.33.11 web-1" >> /etc/hosts && echo "192.168.33.12 web-2" >> /etc/hosts
