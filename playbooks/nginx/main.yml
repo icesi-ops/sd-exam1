@@ -1,0 +1,64 @@
+---
+- hosts: lb
+  become: true
+  vars_files:
+    - vars/main.yml
+  pre_tasks:
+    - name: Ensure epel repository exists
+      yum: name=epel-release
+    - name: Install openssl dependencies
+      yum: 
+        name:
+          - openssl-devel
+    - name: Turn on firewalld
+      service: name=firewalld state=started enabled=yes
+    - name: install pip
+      yum: name=python-pip state=latest
+    - name: upgrade pip
+      shell: pip install --upgrade "pip < 21.0"
+    - name: Install pip3 depden
+      pip:
+        name: pyopenssl
+    - name: Print vars
+      debug:
+        msg: "{{ item.value }}"
+      loop: "{{ lookup('dict', hostvars) }}"
+      when: "'web-' in item.key"
+
+  tasks:
+    - import_tasks: tasks/self-signed-cert.yml
+    - name: Install nginx 
+      yum:
+        name:
+          - nginx
+    - name: Enable firewall
+      shell: "firewall-cmd --permanent --add-service={http,https}"
+    - name: Start firewall rule
+      shell: "firewall-cmd --reload"
+    - name: Ensure docroot exists
+      file:
+        path: "{{nginx_docroot}}"
+        state: directory
+    - name: Copy html file
+      copy: 
+        src: files/index.html
+        dest: "{{nginx_docroot}}/index.html"
+        mode: 0755
+    - name: Run python server
+      shell: "(python -m SimpleHTTPServer 8083 >/dev/null 2>&1 &)"
+      async: 10
+      poll: 0
+      args:
+        chdir: "{{ nginx_docroot }}"
+    - name: Nginx configuration server
+      template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        mode: 0644
+    - name: Restart nginx
+      service: name=nginx state=restarted enabled=yes
+    - name: COnfigure SO to allow to nginx make the proxyredirect
+      shell: setsebool httpd_can_network_connect on -P
+
+
+
