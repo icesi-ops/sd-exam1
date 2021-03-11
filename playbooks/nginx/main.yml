@@ -1,5 +1,5 @@
 ---
-- hosts: proxyserver
+- hosts: lb
   become: true
   vars_files:
     - vars/main.yml
@@ -19,7 +19,6 @@
     - name: Install pip3 depden
       pip:
         name: pyopenssl
-
   tasks:
     - import_tasks: tasks/self-signed-cert.yml
     - name: Install nginx 
@@ -49,6 +48,3 @@
       service: name=nginx state=restarted enabled=yes
     - name: COnfigure SO to allow to nginx make the proxyredirect
       shell: setsebool httpd_can_network_connect on -P
-
-
-
