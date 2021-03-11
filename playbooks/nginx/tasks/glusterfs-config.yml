@@ -2,9 +2,13 @@
 - hosts: webservers
   become: true
   vars_files:
-    - vars/main.yml
+    - ../vars/main.yml
   tasks:
-    - name: Install release-gluster
+    - name: Install fedora
+      yum: 
+        name:
+          - https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm 
+    - name: Install centos-release-gluster
       yum: 
         name:
           - centos-release-gluster

@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: proxyserver
   become: true
   vars_files:
     - vars/main.yml
@@ -34,11 +34,6 @@
       file:
         path: "{{nginx_docroot}}"
         state: directory
-    - name: Copy html file
-      copy: 
-        src: files/index.html
-        dest: "{{nginx_docroot}}/index.html"
-        mode: 0755
     - name: Run python server
       shell: "(python -m SimpleHTTPServer 8083 >/dev/null 2>&1 &)"
       async: 10

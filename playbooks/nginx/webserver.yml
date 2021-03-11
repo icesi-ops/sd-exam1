@@ -1,6 +1,8 @@
 ---
-- hosts: all
+- hosts: webservers
   become: true
+  vars:
+    - MyMessage: "Welcome to Ansible world!"
   pre_tasks:
     - name: Ensure epel repository exists
       yum: name=epel-release
@@ -41,3 +43,6 @@
       service: name=nginx state=restarted enabled=yes
     - name: COnfigure SO to allow to nginx make the proxyredirect
       shell: setsebool httpd_can_network_connect on -P
+    - name: "know hostname"
+      shell: "echo $HOSTNAME"
+      register: print_hostname
