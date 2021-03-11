@@ -1,0 +1,22 @@
+---
+- hosts: database
+  become: true
+  tasks:
+          - name: "Copy MongoDB Repo"
+            copy:
+                    src: repo/mongodb-org-4.4.repo
+                    dest: /etc/yum.repos.d
+                    owner: root
+                    group: wheel
+                    mode: '0644'
+
+          - name: "Install MongoDB"
+            yum:
+                    name: mongodb-org
+                    state: present
+          - name: "Start MongoDB"
+            service:
+                    name: mongod
+                    state: started
+                    enabled: yes
+

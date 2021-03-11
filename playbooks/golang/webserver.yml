@@ -1,3 +1,16 @@
 ---
+- hosts: servers
+  become: true
+  tasks:
+          - name: "Install Epel-Release to install Go"
+            yum:
+                    name: epel-release
+                    state: present
+                    
+          - name: "Install Go"
+            yum:
+                    name: golang
+                    state: present
 
-
+          - name: "Verify Go has been installed"
+            shell: "go version"

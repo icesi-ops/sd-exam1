@@ -22,18 +22,31 @@ Vagrant.configure("2") do |config|
 	(1..2).each do |i|
 	 config.vm.define "web-#{i}" do |web|
 	    web.vm.box = "centos/7"
-            web.vm.hostname = "web-#{i}"
-           	 web.vm.network "private_network", ip: "192.168.33.1#{i}"
-     	    web.vm.provider "virtualbox" do |vb|
-              vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "web-#{i}"]
-	    end
-
+        web.vm.hostname = "web-#{i}"
+        web.vm.network "private_network", ip: "192.168.33.1#{i}"
+     	web.vm.provider "virtualbox" do |vb|
+        	vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "web-#{i}"]
+		end
 	    web.vm.provision "ansible" do |ansible|
-             ansible.playbook = "playbooks/golang/webserver.yml"
-             ansible.groups = {
-             "webservers" => ["web-#{i}"]
-             }
-	     end	
-         end
-	end    
+        	ansible.playbook = "playbooks/golang/webserver.yml"
+            ansible.groups = {
+             "servers" => ["web-#{i}"]
+            }
+        	end
+		end
+	end
+
+	config.vm.define "db" do |db|
+		db.vm.box = "centos/7"
+		db.vm.hostname = "db"
+		db.vm.provider "virtualbox" do |vb|
+		  vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "db"]
+		end
+		db.vm.provision "ansible" do |ansible|
+		  ansible.playbook = "playbooks/database/database.yml"
+		  ansible.groups = {
+			"database" => ["db"]
+		  }
+		end
+	end
 end
