@@ -4,16 +4,16 @@
   vars_files:
     - ../vars/main.yml
   tasks:
-    - name: Install fedora
-      yum: 
-        name:
-          - https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm 
-    - name: Install centos-release-gluster
-      yum: 
-        name:
-          - centos-release-gluster
-          - glusterfs-server
-          - xfsprogs
+    - name: Create gluster volume
+      gluster.gluster.gluster_volume:
+        state: present
+        name: brick1
+        bricks: /bricks/brick1/g1
+        rebalance: yes
+        cluster:
+          - 192.168.33.11
+          - 192.168.33.12
+        run_once: true
     - name: Start gluster services
       service: name=gluster state=restarted enabled=yes
     - name: create gluster data dir

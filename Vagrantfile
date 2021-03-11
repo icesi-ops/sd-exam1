@@ -34,10 +34,11 @@ Vagrant.configure("2") do |config|
       # do configuration ... 
       web.vm.provision "ansible" do |ansible|
        ansible.playbook = "playbooks/nginx/webserver.yml"
-       ansible.playbook = "playbooks/nginx/tasks/glusterfs-config.yml"
        ansible.groups = {
          "webservers" => ["web-#{i}"]
        }
+       web.vm.provision "shell", path: "scripts/glusterfs.sh"
+       web.vm.provision "shell", path: "scripts/configuration.sh"
       end
     end
    end
@@ -53,6 +54,7 @@ Vagrant.configure("2") do |config|
      end
     vb.customize ['storageattach', :id,  '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', masterbrick]
     end
+    db.vm.provision "shell", path: "scripts/configuration.sh"
   end
    
 end

@@ -1,8 +1,8 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,windows,ansible,vagrant,kotlin,vim,visualstudio,androidstudio,intellij,python,java
 
-./brick1.vdi
-./brick2.vdi
-./brick3.vdi
+brick1.vdi
+brick2.vdi
+masterbrick.vdi
 
 ### Ansible ###
 *.retry
