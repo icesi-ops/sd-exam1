@@ -12,5 +12,5 @@
                     name: golang
                     state: present
 
-          - name: "Verify Go has been installed"
-            shell: "go version"
+          - name: "Install MongoDB Driver"
+            shell: "go get go.mongodb.org/mongo-driver/mongo"
