@@ -13,4 +13,12 @@
                     state: present
 
           - name: "Install MongoDB Driver"
-            shell: "go get go.mongodb.org/mongo-driver/mongo"
+            shell: "go get go.mongodb.org/mongo-driver"
+            
+          - name: Copy go file 
+            copy:
+                   src: frontend/main/main.go
+                   dest: /home/vagrant/main.go
+
+          - name: "Run web service"
+            shell: "go run main.go"

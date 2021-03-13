@@ -20,3 +20,12 @@
                     state: started
                     enabled: yes
 
+          - name: MongoDB configuration 
+            template:
+                   src: templates/mongodb.conf.j2
+                   dest: /etc/mongod.conf
+                   mode: 0644
+          - name: Restart mongodb
+            service: name=mongod state=restarted enabled=yes
+
+
