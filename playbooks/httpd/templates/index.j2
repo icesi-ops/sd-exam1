@@ -1,0 +1,26 @@
+!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Universidad Icesi</title>
+  </head>
+  <body>
+    <h1>Hello from {{print_hostname.stdout}}!</h1>
+    <table>
+      <tr>
+       <th>Hostname</th>
+       <th>Direccion IPv4</th>
+       <th>Arquitectura</th>
+       <th>Fecha </th>
+       <th>Sistema Operativo</th>
+      </tr>
+      <tr>
+       <td>{{ ansible_hostname }}</td>
+       <td>{{ ansible_default_ipv4.address  }}</td>
+       <td>{{ ansible_architecture  }}</td>
+       <td>{{ ansible_date_time.date  }}</td>
+       <td>{{ ansible_distribution  }}
+      </tr>
+   </table>
+  </body>
+</html>

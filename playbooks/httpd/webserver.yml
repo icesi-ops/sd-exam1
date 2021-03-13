@@ -1,0 +1,22 @@
+---
+- hosts: webserver
+  become: true
+  tasks:
+    - name: "install httpd"
+      yum:
+        name: httpd
+    - name: "Know hostname"
+      shell: "echo $HOSTNAME"
+      register: print_hostname
+    - name: "COnfigure httpd"
+      template:
+        src: templates/index.j2
+        dest: /var/www/html/index.html
+        owner: root
+        group: wheel
+        mode: "0644"
+    - name: "Start httpd"
+      service:
+        name: httpd
+        state: restarted
+        enabled: yes
