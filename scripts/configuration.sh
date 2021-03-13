@@ -1,3 +1,3 @@
-echo "192.168.33.100	masterbrick" >> /etc/hosts
-echo "192.168.33.11	brick1" >> /etc/hosts
-echo "192.168.33.12	brick2" >> /etc/hosts
+echo "192.168.33.100	db" >> /etc/hosts
+echo "192.168.33.11	web-1" >> /etc/hosts
+echo "192.168.33.12	web-2" >> /etc/hosts

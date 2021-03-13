@@ -8,21 +8,18 @@ http {
    keepalive_timeout	65;
 
     #Server pool
-    upstream myapp1 {
-        server 192.168.33.12;
-        server 192.168.33.13;
+    upstream webservers {
+        server 192.168.33.11:80;
+        server 192.168.33.12:80;
     }
 
     # HTTPS Test server configuration.
     # Redirect HTTP traffic to HTTPS.
     server {
         listen 80 default_server;
-        
+        server_name _;
         index index.html;
-        location / {
-            proxy_pass https://myapp1;
-        }
-        
+        return 301 http://webservers/$host$request_uri;
     }
 
     # Proxy HTTPS traffic using a self-signed certificate.
@@ -35,9 +32,9 @@ http {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-            proxy_pass          http://localhost:8083;
-            proxy_read_timeout  90s;
-            proxy_redirect      http://localhost:8083 {{ server_hostname }};
+            proxy_pass          http://webservers;
+            proxy_read_timeout  90;
+            proxy_redirect      http://webservers {{ server_hostname }};
         }
 
         ssl_certificate {{ certificate_dir }}/{{ server_hostname }}/fullchain.pem;
