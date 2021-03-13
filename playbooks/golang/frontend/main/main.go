@@ -36,7 +36,7 @@ func main() {
 
 func handler(w http.ResponseWriter, r *http.Request) {
 
-    fmt.Fprint(w, "Lista de archivos \n",getFiles())
+    fmt.Fprint(w, "Lista de archivos: \n ", "Hola")
 }
 
 func loadPage(title string) (*Page, error) {
