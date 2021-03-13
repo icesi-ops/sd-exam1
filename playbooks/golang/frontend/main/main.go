@@ -137,7 +137,7 @@ func getFiles() File{
 }
 
 /*First, before any content is displayed to the user, the web page retrieves information from the store's database.
-//Then, the template for that store web page is loaded by the shopping cart software.
+Then, the template for that store web page is loaded by the shopping cart software.
 Finally, the database information obtained in step one is inserted into the template loaded in step two. The resulting HTML code and page content is then rendered in the user's web browser.
-
+*/
 

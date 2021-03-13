@@ -13,7 +13,10 @@
                     state: present
 
           - name: "Install MongoDB Driver"
-            shell: "go get go.mongodb.org/mongo-driver"
+            shell: "go get go.mongodb.org/mongo-driver/mongo"
+            
+          - name: "Install MongoDB Driver"
+            shell: "go get go.mongodb.org/mongo-driver/bson"
             
           - name: Copy go file 
             copy:
