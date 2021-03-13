@@ -27,7 +27,7 @@ type Page struct {
 func main() {
     connectToMongo()
     http.HandleFunc("/", handler)
-    log.Fatal(http.ListenAndServe(":8080", nil))
+    log.Fatal(http.ListenAndServe(":80", nil))
     /*http.HandleFunc("/view/", viewHandler)
     http.HandleFunc("/edit/", editHandler)
     http.HandleFunc("/save/", saveHandler)
@@ -35,9 +35,8 @@ func main() {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-    var files string
-    files = getFiles()   
-    fmt.Fprintf(w, "Lista de archivos %f", files)
+
+    fmt.Fprint(w, "Lista de archivos \n",getFiles())
 }
 
 func loadPage(title string) (*Page, error) {
@@ -116,24 +115,47 @@ func insertFile(name string){
 }
 
 
-func getFiles() File{
+func getFiles() string{
     clientOptions := options.Client().ApplyURI("mongodb://192.168.33.100:27017")
     client, err := mongo.Connect(context.TODO(), clientOptions)
     collection := client.Database("mongo").Collection("files")
+// Pass these options to the Find method
+findOptions := options.Find()
 
-    var files File
+// Here's an array in which you can store the decoded documents
+var results []*File
 
+// Passing bson.D{{}} as the filter matches all documents in the collection
+cur, err := collection.Find(context.TODO(), bson.D{{}}, findOptions)
+if err != nil {
+    log.Fatal(err)
+}
 
-    response, err := collection.Find(context.TODO(), bson.M{}).Decode(&files)
+// Finding multiple documents returns a cursor
+// Iterating through the cursor allows us to decode documents one at a time
+for cur.Next(context.TODO()) {
+    
+    // create a value into which the single document can be decoded
+    var elem File
+    err := cur.Decode(&elem)
     if err != nil {
         log.Fatal(err)
     }
 
-    if err = response.All(context.TODO(), &files); err != nil {
-        log.Fatal(err)
-    }
+    results = append(results, &elem)
+}
 
-    return files
+if err := cur.Err(); err != nil {
+    log.Fatal(err)
+}
+
+// Close the cursor once finished
+cur.Close(context.TODO())
+
+fmt.Printf("Found multiple documents (array of pointers): %+v\n", results)
+
+return "hola"
+
 }
 
 /*First, before any content is displayed to the user, the web page retrieves information from the store's database.

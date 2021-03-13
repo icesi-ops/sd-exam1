@@ -1,5 +1,21 @@
 Vagrant.configure("2") do |config|
 
+
+	config.vm.define "db" do |db|
+		db.vm.box = "centos/7"
+		db.vm.hostname = "db"
+		db.vm.network "private_network", ip: "192.168.33.100"
+		db.vm.provider "virtualbox" do |vb|
+		  vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "db"]
+		end
+		db.vm.provision "ansible" do |ansible|
+		  ansible.playbook = "playbooks/database/database.yml"
+		  ansible.groups = {
+			"database" => ["db"]
+		  }
+		end
+	end
+
 	config.vm.define "nginx" do |nginx|
 	    nginx.vm.box = "centos/7"
 	    nginx.vm.hostname = "nginx"
@@ -34,21 +50,6 @@ Vagrant.configure("2") do |config|
              "servers" => ["web-#{i}"]
             }
         	end
-		end
-	end
-
-	config.vm.define "db" do |db|
-		db.vm.box = "centos/7"
-		db.vm.hostname = "db"
-		db.vm.network "private_network", ip: "192.168.33.100"
-		db.vm.provider "virtualbox" do |vb|
-		  vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "db"]
-		end
-		db.vm.provision "ansible" do |ansible|
-		  ansible.playbook = "playbooks/database/database.yml"
-		  ansible.groups = {
-			"database" => ["db"]
-		  }
 		end
 	end
 end

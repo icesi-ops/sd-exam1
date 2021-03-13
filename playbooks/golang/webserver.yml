@@ -18,10 +18,18 @@
           - name: "Install MongoDB Driver"
             shell: "go get go.mongodb.org/mongo-driver/bson"
             
-          - name: Copy go file 
+          - name: "Copy go file"
             copy:
                    src: frontend/main/main.go
                    dest: /home/vagrant/main.go
+                   owner: root
+                   group: wheel
+                   mode: '0644'
+
+          - name: "Install lsof to debug"
+            yum:
+                    name: lsof
+                    state: present
 
           - name: "Run web service"
-            shell: "go run main.go"
+            shell: "nohup go run main.go &"
