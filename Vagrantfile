@@ -33,8 +33,6 @@ Vagrant.configure('2') do |config|
         unless File.exist?("./brick#{i}.vdi")
           vb.customize ['createhd', '--filename', "./brick#{i}.vdi",
                         '--variant', 'Fixed', '--size', 2 * 1024]
-          web.vm.provision 'shell', path: 'scripts/glusterfs.sh'
-          web.vm.provision 'shell', path: 'scripts/configuration.sh'
         end
         vb.customize ['storageattach', :id, '--storagectl', 'IDE',
                       '--port', 1, '--device', 0, '--type', 'hdd',
@@ -42,20 +40,13 @@ Vagrant.configure('2') do |config|
       end
       # do configuration ...
       web.vm.provision 'ansible' do |ansible|
-        ansible.playbook = 'playbooks/nginx/webserver.yml'
+        ansible.playbook = 'playbooks/http/main.yml'
         ansible.groups = {
           'webservers' => ["web-#{i}"]
         }
-        if i == 1
-          ansible.extra_vars = {
-            hostname: "web-1"
-        }
-        else
-          ansible.extra_vars = {
-            hostname: "web-2"
-          }
-        end
       end
+      web.vm.provision 'shell', path: 'scripts/glusterfs.sh'
+      web.vm.provision 'shell', path: 'scripts/configuration.sh'
     end
   end
 
@@ -71,9 +62,12 @@ Vagrant.configure('2') do |config|
         vb.customize ['storageattach', :id,  '--storagectl', 'IDE',
                       '--port', 1, '--device', 0, '--type', 'hdd',
                       '--medium', masterbrick]
-        db.vm.provision 'shell', path: 'scripts/glusterfs.sh'
-        db.vm.provision 'shell', path: 'scripts/configuration.sh'
       end
     end
+    db.vm.provision 'ansible' do |ansible|
+      ansible.playbook = 'playbooks/db/main.yml'
+    end
+    db.vm.provision 'shell', path: 'scripts/glusterfs.sh'
+    db.vm.provision 'shell', path: 'scripts/configuration.sh'
   end
 end

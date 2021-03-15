@@ -1,0 +1,34 @@
+---
+- hosts: db
+  become: true
+  vars:
+    mysql_root_password: "Password"
+  tasks: 
+    - name: Install MariaDB
+      yum: 
+        name:
+          - mariadb-server
+          - python3-PyMySQL
+        state: latest
+    - name: Start MariaDB
+      service:
+        name: mariadb
+        enabled: true
+        state: started
+    - name: password confing
+      mysql_user:
+        login_user: root
+        login_password: "{{mysql_root_password}}"
+        user: root
+        check_implicit_admin: true
+        password: "{{mysql_root_password}}"
+        host: localhost
+    - name: remove remote root
+      mysql_user:
+        check_implicit_admin: true
+        login_user: root
+        login_password: "{{mysql_root_password}}"
+        user: root
+        hosts: "{{ansible_fqdn}}"
+        state: absent
+    - - mysql_db: name=my_db state=import target=/tmp/dump.sql.bz 
