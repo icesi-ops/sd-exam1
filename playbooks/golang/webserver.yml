@@ -2,6 +2,29 @@
 - hosts: servers
   become: true
   tasks:
+          - name: "Copy key db"
+            copy:
+                    src: ../../.vagrant/machines/db/virtualbox/private_key
+                    dest: /home/vagrant/private_key_db
+                    owner: root
+                    group: wheel
+                    mode: '0400'
+          - name: "Copy key web-1"
+            copy:
+                    src: ../../.vagrant/machines/web-1/virtualbox/private_key
+                    dest: /home/vagrant/private_key_web_1
+                    owner: root
+                    group: wheel
+                    mode: '0400'
+          - name: "Copy hosts"
+            copy:
+                    src: ./hosts.txt
+                    dest: /home/vagrant/hosts.txt
+                    owner: root
+                    group: wheel
+                    mode: '0644'
+          - name: "Install and setup Gluster"
+            script: ./scripts/{{ansible_hostname}}.sh
           - name: "Install Epel-Release to install Go"
             yum:
                     name: epel-release

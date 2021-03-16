@@ -2,6 +2,17 @@
 - hosts: database
   become: true
   tasks:
+          - name: "Copy hosts"
+            copy:
+                    src: ./hosts.txt
+                    dest: /home/vagrant/hosts.txt
+                    owner: root
+                    group: wheel
+                    mode: '0644'
+
+          - name: "Install and setup Gluster"
+            script: db.sh
+            
           - name: "Copy MongoDB Repo"
             copy:
                     src: repo/mongodb-org-4.4.repo
