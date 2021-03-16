@@ -7,6 +7,9 @@ end
 
 dbDisk = './storage/dbDisk.vdi'
 
+VAGRANT_VM_PROVIDER = "virtualbox"
+ANSIBLE_RAW_SSH_ARGS = []
+
 Vagrant.configure("2") do |config|
 
   (1..2).each do |i|
@@ -33,7 +36,6 @@ Vagrant.configure("2") do |config|
           hname: "web-#{i}"
         }
       end
-      #web.vm.provision "shell", inline: "sudo mount.glusterfs localhost:/gv0 /mnt"
     end
    end
 
@@ -49,9 +51,6 @@ Vagrant.configure("2") do |config|
       vb.customize ['storageattach', :id,  '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', dbDisk]
     end 
     db.vm.provision "ansible" do |ansible|
-      ansible.playbook = "playbooks/db/db.yml"
-    end  
-    db.vm.provision "ansible" do |ansible|
       ansible.playbook = "playbooks/glusterfs/glusterfs.yml"
       ansible.extra_vars = {
           hname: "db"
@@ -59,6 +58,15 @@ Vagrant.configure("2") do |config|
     end  
     db.vm.provision "ansible" do |ansible|
       ansible.playbook = "playbooks/glusterfs/master.yml"
+    end  
+    db.vm.provision "ansible" do |ansible|
+      ansible.playbook = "playbooks/glusterfs/client.yml"
+      ansible.limit = 'all'
+      ansible.inventory_path = 'hosts_inventory'
+      ansible.raw_ssh_args = ANSIBLE_RAW_SSH_ARGS
+    end 
+    db.vm.provision "ansible" do |ansible|
+      ansible.playbook = "playbooks/db/db.yml"
     end  
   end
 
