@@ -1,7 +1,4 @@
 ---
 - hosts: webservers
   become: true
-  tasks:
-   - name: "Install httpd"
-     yum:
-       name: httpd
+  

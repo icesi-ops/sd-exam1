@@ -1,3 +1,30 @@
 ---
-- hosts: glusterfs
+- hosts: all
   become: true
+  vars_files:
+    - vars/variables.yml
+  pre_tasks:
+    - name: create partition
+      parted:
+        device: /dev/sdb
+        number: 1
+        state: present
+    - name: create filesystem
+      filesystem:
+        fstype: xfs
+        dev: /dev/sdb1
+    - name: Create a directory if it does not exist
+      file:
+        path: /gluster/data
+        state: directory
+        mode: '0755'
+    - import_tasks: tasks/install-gluster.yml
+  tasks:
+    - name: mount filesystem
+      mount:
+        path: /gluster/data
+        src: /dev/sdb1
+        fstype: xfs
+        state: mounted
+    - name: Set /etc/hosts using template
+      action: template dest=/etc/hosts src=templates/hosts.j2 owner=root group=root

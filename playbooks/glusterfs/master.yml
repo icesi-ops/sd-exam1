@@ -1,0 +1,14 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: create gluster volume
+      gluster_volume:
+        state: present
+        name: gv0
+        bricks: /gluster/data/gv0
+        replicas: 3
+        cluster: ["node1", "node2", "master"]
+      run_once: true
+    - name: Start Gluster volume
+      gluster_volume: name=gv0 state=started
