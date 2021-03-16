@@ -8,9 +8,9 @@
   pre_tasks:
     - name: Ensure epel repository exists
       yum: name=epel-release
-    - name: Install JDK
+    - name: Install JRE
       yum: name=java-1.8.0-openjdk
-    - name: Insyall JRE 
+    - name: Insyall JDK
       yum: name=java-1.8.0-openjdk-devel
   tasks:
     - name: Get Host name
@@ -21,13 +21,18 @@
         path: "{{nginx_docroot}}"
         state: directory
     - name: Copy html file
-      copy: 
+      copy:
         src: templates/index.j2
         dest: "{{nginx_docroot}}/index.html"
         mode: 0755
-    - name: Run python server
-      shell: "(python -m SimpleHTTPServer 8083 >/dev/null 2>&1 &)"
-      async: 10
-      poll: 0
-      args:
-        chdir: "{{ nginx_docroot }}"
+    - name: Copy backend 
+      copy:
+        src: files/icesi-health-0.0.1.jar
+        dest: /home/vagrant/icesi-health.jar
+        mode: 0755
+    - name: make backend dir
+      file:
+        path: /opt/backend
+        state: directory
+    - name: run Ktor server
+      shell: nohup java -jar /home/vagrant/icesi-health.jar -host=127.0.0.1 -port=8083 &

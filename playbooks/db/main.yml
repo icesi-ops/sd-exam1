@@ -3,12 +3,15 @@
   become: true
   vars:
     mysql_root_password: "Password"
-  tasks: 
-    - name: Install MariaDB
-      yum: 
+  tasks:
+    - name: Install MariaDB and dependencies
+      yum:
         name:
+          - mysql-devel
+          - gcc
+          - python-devel
+          - MySQL-python
           - mariadb-server
-          - python3-PyMySQL
         state: latest
     - name: Start MariaDB
       service:
@@ -23,12 +26,14 @@
         check_implicit_admin: true
         password: "{{mysql_root_password}}"
         host: localhost
-    - name: remove remote root
-      mysql_user:
-        check_implicit_admin: true
-        login_user: root
+    - name: copy file
+      copy:
+        src: files/p1db.sql
+        dest: /tmp/
+    - name: Import MariaDB
+      mysql_db:
+        state: import
+        name: icesihealth
         login_password: "{{mysql_root_password}}"
-        user: root
-        hosts: "{{ansible_fqdn}}"
-        state: absent
-    - - mysql_db: name=my_db state=import target=/tmp/dump.sql.bz 
+        target: /tmp/p1db.sql
+
