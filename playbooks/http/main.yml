@@ -1,0 +1,38 @@
+---
+- hosts: webservers
+  become: true
+  vars_files:
+    - vars/main.yml
+  vars:
+    variable: "print_hostname"
+  pre_tasks:
+    - name: Ensure epel repository exists
+      yum: name=epel-release
+    - name: Install JRE
+      yum: name=java-1.8.0-openjdk
+    - name: Insyall JDK
+      yum: name=java-1.8.0-openjdk-devel
+  tasks:
+    - name: Get Host name
+      shell: "echo $HOSTNAME"
+      register: print_hostname
+    - name: Ensure docroot exists
+      file:
+        path: "{{nginx_docroot}}"
+        state: directory
+    - name: Copy html file
+      copy:
+        src: templates/index.j2
+        dest: "{{nginx_docroot}}/index.html"
+        mode: 0755
+    - name: Copy backend 
+      copy:
+        src: files/icesi-health-0.0.1.jar
+        dest: /home/vagrant/icesi-health.jar
+        mode: 0755
+    - name: make backend dir
+      file:
+        path: /opt/backend
+        state: directory
+    - name: run Ktor server
+      shell: nohup java -jar /home/vagrant/icesi-health.jar -host=127.0.0.1 -port=8083 &

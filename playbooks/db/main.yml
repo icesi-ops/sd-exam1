@@ -1,0 +1,39 @@
+---
+- hosts: db
+  become: true
+  vars:
+    mysql_root_password: "Password"
+  tasks:
+    - name: Install MariaDB and dependencies
+      yum:
+        name:
+          - mysql-devel
+          - gcc
+          - python-devel
+          - MySQL-python
+          - mariadb-server
+        state: latest
+    - name: Start MariaDB
+      service:
+        name: mariadb
+        enabled: true
+        state: started
+    - name: password confing
+      mysql_user:
+        login_user: root
+        login_password: "{{mysql_root_password}}"
+        user: root
+        check_implicit_admin: true
+        password: "{{mysql_root_password}}"
+        host: localhost
+    - name: copy file
+      copy:
+        src: files/p1db.sql
+        dest: /tmp/
+    - name: Import MariaDB
+      mysql_db:
+        state: import
+        name: icesihealth
+        login_password: "{{mysql_root_password}}"
+        target: /tmp/p1db.sql
+
