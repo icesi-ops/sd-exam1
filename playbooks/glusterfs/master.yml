@@ -1,14 +1,16 @@
 ---
-- hosts: all
+- hosts: db
   become: true
+  vars_files:
+    - vars/variables.yml
   tasks:
     - name: create gluster volume
       gluster_volume:
         state: present
-        name: gv0
-        bricks: /gluster/data/gv0
+        name: "{{ volumeName }}"
+        bricks: "{{ fsMount }}/{{ volumeName }}"
         replicas: 3
         cluster: ["node1", "node2", "master"]
       run_once: true
     - name: Start Gluster volume
-      gluster_volume: name=gv0 state=started
+      gluster_volume: name={{ volumeName }} state=started

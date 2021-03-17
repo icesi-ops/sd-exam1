@@ -1,3 +1,6 @@
 master: "192.168.33.50"
 node1: "192.168.33.11"
 node2: "192.168.33.12"
+fsMount: "/gluster/data"
+volumeName: "gv0"
+sharedFolder: "/mnt/shared"
