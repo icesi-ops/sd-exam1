@@ -17,9 +17,7 @@ upstream webservers {
 # Redirect HTTP traffic to HTTPS
 server {
     listen 80;
-    location / {
-        proxy_pass http://webservers;
-    }
+    return 301 https://$host$request_uri;
 }
 
 # Proxy HTTPS traffic using a self-signed certificate.

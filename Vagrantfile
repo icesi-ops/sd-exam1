@@ -38,6 +38,7 @@ Vagrant.configure("2") do |config|
 	config.vm.define "database" do |database|
           database.vm.box = "centos/7"
           database.vm.hostname = "db"
+          database.vm.synced_folder "./data", "/vagrant", type: "nfs"
           database.vm.network "private_network", ip: "192.168.33.100"
           database.vm.provision "shell", inline: "echo Iam DB server"
         end
