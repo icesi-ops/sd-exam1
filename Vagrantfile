@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
 	      vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "lb"]
 	   end
            loadbalancer.vm.provision "ansible" do |ansible|
-	      ansible.playbook = "playbooks/haproxy/loadbalancer.yml"
+	     ansible.playbook = "playbooks/nginx/main.yml"
 	      ansible.extra_vars = {
 	         "web_servers" => [
                    {"name": "webserver-1", "ip":"192.168.33.11"},
