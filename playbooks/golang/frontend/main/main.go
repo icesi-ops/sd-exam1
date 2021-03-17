@@ -31,8 +31,9 @@ type Page struct {
 func main() {
 	connectToMongo()
 	//http.HandleFunc("/view/", handler)
-	setupRoutes()
+
 	http.HandleFunc("/", handler)
+	http.HandleFunc("/files", uploader)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 	/*http.HandleFunc("/edit/", editHandler)
 	  http.HandleFunc("/save/", saveHandler)
@@ -182,11 +183,6 @@ func uploader(w http.ResponseWriter, r *http.Request) {
 	io.Copy(f, file)
 
 	fmt.Fprintf(w, "Cargado con éxito")
-
-}
-
-func setupRoutes() {
-	http.HandleFunc("/files", uploader)
 
 }
 
