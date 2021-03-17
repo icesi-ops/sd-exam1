@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"html/template"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -28,34 +29,85 @@ type Page struct {
 	Body  []byte
 }
 
+type tp struct {
+	Title string
+	Body  []string
+}
+
 func main() {
 	connectToMongo()
-	//http.HandleFunc("/view/", handler)
+	http.HandleFunc("/", uploadHandler)
 
-	http.HandleFunc("/", handler)
-	http.HandleFunc("/files", uploader)
-	log.Fatal(http.ListenAndServe(":8080", nil))
-	/*http.HandleFunc("/edit/", editHandler)
-	  http.HandleFunc("/save/", saveHandler)
-	  log.Fatal(http.ListenAndServe(":8080", nil))*/
-
+	log.Fatal(http.ListenAndServe(":80", nil))
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "index.html")
-	//var files = getFiles()
-	//fmt.Fprintf(w, "Lista de archivos %+q", files)
-	//fmt.Printf("Lista de archivos: %+q\n", files)
-
-}
-
-func loadPage(title string) (*Page, error) {
-	filename := title + ".txt"
-	body, err := ioutil.ReadFile(filename)
-	if err != nil {
-		return nil, err
+func uploadHandler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "GET":
+		display(w, "upload", nil)
+	case "POST":
+		uploadFile(w, r)
 	}
-	return &Page{Title: title, Body: body}, nil
+}
+
+func getNames() []string {
+	var files = getFiles()
+	names := make([]string, len(files))
+
+	for i := 0; i < len(files); i++ {
+		names[i] = (files[i].Nombre) + "." + (files[i].Tipo)
+	}
+
+	return names
+}
+
+// Display the named template
+func display(w http.ResponseWriter, page string, data interface{}) {
+	var files = getNames()
+
+	as := tp{Title: "Saved files: ", Body: files}
+	t := template.Must(template.ParseFiles("upload.html"))
+	t.Execute(w, as)
+}
+
+func uploadFile(w http.ResponseWriter, r *http.Request) {
+	// Maximum upload of 10 MB files
+	//10 << multiplicar 10 *2, 20 veces
+	r.ParseMultipartForm(10 << 20)
+
+	// Get handler for filename, size and headers
+	file, handler, err := r.FormFile("myFile")
+	if err != nil {
+		fmt.Println("Error Retrieving the File")
+		fmt.Println(err)
+		return
+	}
+
+	defer file.Close()
+	fmt.Printf("Uploaded File: %+v\n", handler.Filename)
+	fmt.Printf("File Size: %+v\n", handler.Size)
+	fmt.Printf("MIME Header: %+v\n", handler.Header)
+
+	// Create file
+	dst, err := os.Create("/mnt/glusterfs/" + handler.Filename)
+	defer dst.Close()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Copy the uploaded file to the created file on the filesystem
+	if _, err := io.Copy(dst, file); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	insertFile(handler.Filename)
+
+	http.Redirect(w, r, "https://192.168.33.200", http.StatusSeeOther)
+
+	//display(w, "upload", nil)
+
 }
 
 func connectToMongo() {
@@ -72,47 +124,16 @@ func connectToMongo() {
 		log.Fatal(err)
 	}
 
-	//insertFile("test")
-}
-
-func (p *Page) save() error {
-	filename := p.Title + ".txt"
-	return ioutil.WriteFile(filename, p.Body, 0600)
-}
-
-func editHandler(w http.ResponseWriter, r *http.Request) {
-	title := r.URL.Path[len("/edit/"):]
-	p, err := loadPage(title)
-	if err != nil {
-		p = &Page{Title: title}
-	}
-	renderTemplate(w, "edit", p)
-}
-
-func viewHandler(w http.ResponseWriter, r *http.Request) {
-	title := r.URL.Path[len("/view/"):]
-	p, _ := loadPage(title)
-	renderTemplate(w, "view", p)
-}
-
-func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
-	t, _ := template.ParseFiles(tmpl + ".html")
-	t.Execute(w, p)
-}
-
-func saveHandler(w http.ResponseWriter, r *http.Request) {
-	title := r.URL.Path[len("/save/"):]
-	body := r.FormValue("body")
-	p := &Page{Title: title, Body: []byte(body)}
-	p.save()
-	http.Redirect(w, r, "/view/"+title, http.StatusFound)
 }
 
 func insertFile(name string) {
 	clientOptions := options.Client().ApplyURI("mongodb://192.168.33.100:27017")
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	collection := client.Database("mongo").Collection("files")
-	newFile := File{"asdasdasd", name, "home/mongo", ".dll"}
+
+	split := strings.Split(name, ".")
+
+	newFile := File{uuid.New().String(), split[0], "/home/vagrant/", split[1]}
 	insertResult, err := collection.InsertOne(context.TODO(), newFile)
 
 	if err != nil {
@@ -164,29 +185,3 @@ func getFiles() []*File {
 	return results
 
 }
-
-func uploader(w http.ResponseWriter, r *http.Request) {
-
-	r.ParseMultipartForm(2000)
-
-	file, fileinfo, err := r.FormFile("archivo")
-
-	f, err := os.OpenFile("./filesTest/"+fileinfo.Filename, os.O_WRONLY|os.O_CREATE, 0666)
-
-	if err != nil {
-
-		log.Fatal(err)
-		return
-	}
-	defer f.Close()
-
-	io.Copy(f, file)
-
-	fmt.Fprintf(w, "Cargado con éxito")
-
-}
-
-/*First, before any content is displayed to the user, the web page retrieves information from the store's database.
-Then, the template for that store web page is loaded by the shopping cart software.
-Finally, the database information obtained in step one is inserted into the template loaded in step two. The resulting HTML code and page content is then rendered in the user's web browser.
-*/

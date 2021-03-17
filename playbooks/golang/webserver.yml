@@ -25,6 +25,7 @@
                     mode: '0644'
           - name: "Install and setup Gluster"
             script: ./scripts/{{ansible_hostname}}.sh
+            
           - name: "Install Epel-Release to install Go"
             yum:
                     name: epel-release
@@ -38,8 +39,11 @@
           - name: "Install MongoDB Driver"
             shell: "go get go.mongodb.org/mongo-driver/mongo"
             
-          - name: "Install MongoDB Driver"
+          - name: "Install MongoDB Driver bson"
             shell: "go get go.mongodb.org/mongo-driver/bson"
+            
+          - name: "Install UUID package"
+            shell: "go get github.com/google/uuid"
             
           - name: "Copy go file"
             copy:
@@ -48,6 +52,17 @@
                    owner: root
                    group: wheel
                    mode: '0644'
+
+          - name: "know ip"
+            shell: "ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | cut -f1  -d'/'"
+            register: print_ip
+                   
+          - name: "Configure html template"
+            template:
+                  src: templates/upload.j2
+                  dest: /home/vagrant/upload.html
+                  owner: root
+                  group: wheel                   
 
           - name: "Install lsof to debug"
             yum:
