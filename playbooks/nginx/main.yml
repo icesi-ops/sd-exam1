@@ -27,6 +27,8 @@
           - nginx
     - name: Enable firewall
       shell: "firewall-cmd --permanent --add-service={http,https}"
+    - name: Firewall rule
+      shell: "sudo firewall-cmd --zone=public --add-port=8083/tcp"
     - name: Start firewall rule
       shell: "firewall-cmd --reload"
     - name: Ensure docroot exists
