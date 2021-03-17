@@ -1,58 +1,12 @@
 ---
 - hosts: webservers
   become: true
-  tasks:
-    - name: Install yum utils
-      yum:
-        name: yum-utils
-        state: latest
-
-    - name: Install device-mapper-persistent-data
-      yum:
-        name: device-mapper-persistent-data
-        state: latest
-
-    - name: Install lvm2
-      yum:
-        name: lvm2
-        state: latest
-
-    - name: Add Docker repo
-      get_url:
-        url: https://download.docker.com/linux/centos/docker-ce.repo
-        dest: /etc/yum.repos.d/docer-ce.repo
-
-    - name: Enable Docker Edge repo
-      ini_file:
-        dest: /etc/yum.repos.d/docer-ce.repo
-        section: 'docker-ce-edge'
-        option: enabled
-        value: 0
-
-    - name: Enable Docker Test repo
-      ini_file:
-        dest: /etc/yum.repos.d/docer-ce.repo
-        section: 'docker-ce-test'
-        option: enabled
-        value: 0
-
-    - name: Install Docker
-      package:
-        name: docker-ce
-        state: latest
-
-    - name: Start Docker service
-      service:
-        name: docker
-        state: started
-        enabled: yes
-
-    - name: Add user vagrant to docker group
-      user:
-        name: vagrant
-        groups: docker
-        append: yes
-    
-    - name: Run docker back container
-      shell: docker run -d -p 3000:3000 zeronetdev/sd-exam-1-back
-      run_once: true
+  vars_files:
+    - ../vars/variables.yml
+  pre_tasks:
+    - import_tasks: tasks/docker.yml
+  tasks:  
+    - name: Stop docker back container
+      shell: docker stop back || true
+    - name: Start docker back continer
+      shell: docker run --name back -d -p 3000:3000 -v {{sharedFolder}}:{{sharedFolder}} --restart unless-stopped zeronetdev/sd-exam-1-back

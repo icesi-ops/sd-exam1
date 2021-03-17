@@ -2,7 +2,7 @@
 - hosts: db
   become: true
   vars_files:
-    - vars/variables.yml
+    - ../vars/variables.yml
   tasks:
     - name: create gluster volume
       gluster_volume:

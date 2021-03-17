@@ -25,12 +25,6 @@ Vagrant.configure("2") do |config|
         vb.customize ['storageattach', :id,  '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', webDisk(i)]
       end
       web.vm.provision "ansible" do |ansible|
-        ansible.playbook = "playbooks/webserver/webserver.yml"
-        ansible.groups = {
-          "webservers" => ["web-#{i}"]
-        }
-      end
-      web.vm.provision "ansible" do |ansible|
         ansible.playbook = "playbooks/glusterfs/glusterfs.yml"
         ansible.extra_vars = {
           hname: "web-#{i}"
@@ -68,6 +62,11 @@ Vagrant.configure("2") do |config|
     db.vm.provision "ansible" do |ansible|
       ansible.playbook = "playbooks/db/db.yml"
     end  
+    db.vm.provision "ansible" do |ansible|
+      ansible.playbook = "playbooks/webserver/webserver.yml"
+      ansible.limit = 'all'
+      ansible.inventory_path = 'hosts_inventory'
+    end
   end
 
   config.vm.define "lb" do |lb|
