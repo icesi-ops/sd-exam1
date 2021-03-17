@@ -18,7 +18,7 @@
         name: mariadb
         enabled: true
         state: started
-    - name: password confing
+    - name: Mysql user confing
       mysql_user:
         login_user: root
         login_password: "{{mysql_root_password}}"

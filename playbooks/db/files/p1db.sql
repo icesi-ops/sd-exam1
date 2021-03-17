@@ -1,7 +1,6 @@
-CREATE DATABASE icesihealth; 
 -- MySQL dump 10.17  Distrib 10.3.25-MariaDB, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: icesihealth
+-- Host: 192.168.33.100   Database: icesihealth
 -- ------------------------------------------------------
 -- Server version	10.3.25-MariaDB-0ubuntu0.20.04.1
 
@@ -16,6 +15,8 @@ CREATE DATABASE icesihealth;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+CREATE USER 'dbuser'@'%' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON * . * TO 'dbuser'@'%'; 
 --
 -- Table structure for table `files`
 --
