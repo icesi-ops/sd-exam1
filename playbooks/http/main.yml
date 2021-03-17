@@ -16,6 +16,10 @@
     - name: Get Host name
       shell: "echo $HOSTNAME"
       register: print_hostname
+    - name: Install nginx 
+      yum:
+        name:
+          - nginx
     - name: Ensure docroot exists
       file:
         path: "{{nginx_docroot}}"
@@ -30,9 +34,22 @@
         src: files/icesi-health-0.0.1.jar
         dest: /home/vagrant/icesi-health.jar
         mode: 0755
+    - name: Ensure docroot exists
+      file:
+        path: "{{nginx_docroot}}"
+        state: directory
+    - name: Nginx configuration server
+      template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        mode: 0644
+    - name: Restart nginx
+      service: name=nginx state=restarted enabled=yes
+    - name: COnfigure SO to allow to nginx make the proxyredirect
+      shell: setsebool httpd_can_network_connect on -P
     - name: make backend dir
       file:
         path: /opt/backend
         state: directory
     - name: run Ktor server
-      shell: nohup java -jar /home/vagrant/icesi-health.jar -host=127.0.0.1 -port=8083 &
+      shell: nohup java -jar /home/vagrant/icesi-health.jar -host=127.0.0.2 -port=8083 &
