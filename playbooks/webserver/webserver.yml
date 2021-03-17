@@ -52,3 +52,7 @@
         name: vagrant
         groups: docker
         append: yes
+    
+    - name: Run docker back container
+      shell: docker run -d -p 3000:3000 zeronetdev/sd-exam-1-back
+      run_once: true

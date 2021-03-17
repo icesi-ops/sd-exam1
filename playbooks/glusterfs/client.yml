@@ -12,3 +12,4 @@
   tasks:
     - name: Start Gluster volume
       shell: mount.glusterfs localhost:/{{ volumeName }} {{ sharedFolder }}
+      run_once: true
