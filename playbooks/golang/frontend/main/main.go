@@ -18,15 +18,15 @@ import (
 
 // You will be using this Trainer type later in the program
 type File struct {
-    Id string
-    Nombre  string
-    Path string
-    Tipo string
+	Id     string
+	Nombre string
+	Path   string
+	Tipo   string
 }
 
 type Page struct {
-    Title string
-    Body  []byte
+	Title string
+	Body  []byte
 }
 
 type tp struct {
@@ -114,19 +114,19 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
     
 }
 
-func connectToMongo(){
-    clientOptions := options.Client().ApplyURI("mongodb://192.168.33.100:27017")
-    client, err := mongo.Connect(context.TODO(), clientOptions)
+func connectToMongo() {
+	clientOptions := options.Client().ApplyURI("mongodb://192.168.33.100:27017")
+	client, err := mongo.Connect(context.TODO(), clientOptions)
 
-    if err != nil {
-        log.Fatal(err)
-    }
+	if err != nil {
+		log.Fatal(err)
+	}
 
-    err = client.Ping(context.TODO(), nil)
+	err = client.Ping(context.TODO(), nil)
 
-    if err != nil {
-        log.Fatal(err)
-    }
+	if err != nil {
+		log.Fatal(err)
+	}
 
 }
 
@@ -151,44 +151,70 @@ func insertFile(name string){
  
  }
 
-func getFiles() []*File{
-    clientOptions := options.Client().ApplyURI("mongodb://192.168.33.100:27017")
-    client, err := mongo.Connect(context.TODO(), clientOptions)
-    collection := client.Database("mongo").Collection("files")
- 
-    // Pass these options to the Find method
-    findOptions := options.Find()
-    
-    // Here's an array in which you can store the decoded documents
-    var results []*File
-    
-    // Passing bson.D{{}} as the filter matches all documents in the collection
-    cur, err := collection.Find(context.TODO(), bson.D{{}}, findOptions)
-    if err != nil {
-        log.Fatal(err)
-    }
-    
-    // Finding multiple documents returns a cursor
-    // Iterating through the cursor allows us to decode documents one at a time
-    for cur.Next(context.TODO()) {
-        
-        // create a value into which the single document can be decoded
-        var elem File
-        err := cur.Decode(&elem)
-        if err != nil {
-            log.Fatal(err)
-        }
-    
-        results = append(results, &elem)
-    }
-    
-    if err := cur.Err(); err != nil {
-        log.Fatal(err)
-    }
-    
-    // Close the cursor once finished
-    cur.Close(context.TODO())
-    
-    return results
- 
+func getFiles() []*File {
+	clientOptions := options.Client().ApplyURI("mongodb://192.168.33.100:27017")
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+	collection := client.Database("mongo").Collection("files")
+
+	// Pass these options to the Find method
+	findOptions := options.Find()
+
+	// Here's an array in which you can store the decoded documents
+	var results []*File
+
+	// Passing bson.D{{}} as the filter matches all documents in the collection
+	cur, err := collection.Find(context.TODO(), bson.D{{}}, findOptions)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Finding multiple documents returns a cursor
+	// Iterating through the cursor allows us to decode documents one at a time
+	for cur.Next(context.TODO()) {
+
+		// create a value into which the single document can be decoded
+		var elem File
+		err := cur.Decode(&elem)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		results = append(results, &elem)
+	}
+
+	if err := cur.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	// Close the cursor once finished
+	cur.Close(context.TODO())
+
+	return results
+
+}
+
+func uploader(w http.ResponseWriter, r *http.Request) {
+
+	r.ParseMultipartForm(2000)
+
+	file, fileinfo, err := r.FormFile("archivo")
+
+	f, err := os.OpenFile("./filesTest/"+fileinfo.Filename, os.O_WRONLY|os.O_CREATE, 0666)
+
+	if err != nil {
+
+		log.Fatal(err)
+		return
+	}
+	defer f.Close()
+
+	io.Copy(f, file)
+
+	fmt.Fprintf(w, "Cargado con éxito")
+
+}
+
+func setupRoutes() {
+	http.HandleFunc("/files", uploader)
+
 }
