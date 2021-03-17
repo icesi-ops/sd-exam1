@@ -1,6 +1,14 @@
 ---
 - hosts: all
   become: true
+  vars_files:
+    - vars/variables.yml
+  pre_tasks:
+    - name: Create a directory if it does not exist
+      file:
+        path: "{{ sharedFolder }}"
+        state: directory
+        mode: '0755'
   tasks:
     - name: Start Gluster volume
-      shell: mount.glusterfs localhost:/gv0 /mnt
+      shell: mount.glusterfs localhost:/{{ volumeName }} {{ sharedFolder }}

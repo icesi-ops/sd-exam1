@@ -15,14 +15,23 @@
         dev: /dev/sdb1
     - name: Create a directory if it does not exist
       file:
-        path: /gluster/data
+        path: "{{ fsMount }}"
         state: directory
         mode: '0755'
-    - import_tasks: tasks/install-gluster.yml
+    - name: Install glusterfs
+      yum:
+        name:
+          - "{{ item }}"
+      with_items:
+        - centos-release-gluster
+        - glusterfs-server
+        - xfsprogs
+    - name: Ensure the GlusterFS service is running (CentOS)
+      service: name=glusterd state=started
   tasks:
     - name: mount filesystem
       mount:
-        path: /gluster/data
+        path: "{{ fsMount }}"
         src: /dev/sdb1
         fstype: xfs
         state: mounted

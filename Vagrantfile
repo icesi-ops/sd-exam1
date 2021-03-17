@@ -58,12 +58,12 @@ Vagrant.configure("2") do |config|
     end  
     db.vm.provision "ansible" do |ansible|
       ansible.playbook = "playbooks/glusterfs/master.yml"
+      ansible.inventory_path = 'hosts_inventory'
     end  
     db.vm.provision "ansible" do |ansible|
       ansible.playbook = "playbooks/glusterfs/client.yml"
       ansible.limit = 'all'
       ansible.inventory_path = 'hosts_inventory'
-      ansible.raw_ssh_args = ANSIBLE_RAW_SSH_ARGS
     end 
     db.vm.provision "ansible" do |ansible|
       ansible.playbook = "playbooks/db/db.yml"
