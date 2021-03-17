@@ -4,9 +4,11 @@ import (
 	"context"
 	"fmt"
 	"html/template"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -29,7 +31,7 @@ type Page struct {
 func main() {
 	connectToMongo()
 	//http.HandleFunc("/view/", handler)
-	http.HandleFunc("/upload", uploadFile)
+	setupRoutes()
 	http.HandleFunc("/", handler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 	/*http.HandleFunc("/edit/", editHandler)
@@ -39,9 +41,11 @@ func main() {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	var files = getFiles()
-	fmt.Fprintf(w, "Lista de archivos %+q", files)
+	http.ServeFile(w, r, "index.html")
+	//var files = getFiles()
+	//fmt.Fprintf(w, "Lista de archivos %+q", files)
 	//fmt.Printf("Lista de archivos: %+q\n", files)
+
 }
 
 func loadPage(title string) (*Page, error) {
@@ -160,44 +164,30 @@ func getFiles() []*File {
 
 }
 
-func uploadFile(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("File Upload Endpoint Hit")
+func uploader(w http.ResponseWriter, r *http.Request) {
 
-	// Parse our multipart form, 10 << 20 specifies a maximum
-	// upload of 10 MB files.
-	r.ParseMultipartForm(10 << 20)
-	// FormFile returns the first file for the given key `myFile`
-	// it also returns the FileHeader so we can get the Filename,
-	// the Header and the size of the file
-	file, handler, err := r.FormFile("myFile")
+	r.ParseMultipartForm(2000)
+
+	file, fileinfo, err := r.FormFile("archivo")
+
+	f, err := os.OpenFile("./filesTest/"+fileinfo.Filename, os.O_WRONLY|os.O_CREATE, 0666)
+
 	if err != nil {
-		fmt.Println("Error Retrieving the File")
-		fmt.Println(err)
+
+		log.Fatal(err)
 		return
 	}
-	defer file.Close()
-	fmt.Printf("Uploaded File: %+v\n", handler.Filename)
-	fmt.Printf("File Size: %+v\n", handler.Size)
-	fmt.Printf("MIME Header: %+v\n", handler.Header)
+	defer f.Close()
 
-	// Create a temporary file within our temp-images directory that follows
-	// a particular naming pattern
-	tempFile, err := ioutil.TempFile("temp-images", "upload-*.png")
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer tempFile.Close()
+	io.Copy(f, file)
 
-	// read all of the contents of our uploaded file into a
-	// byte array
-	fileBytes, err := ioutil.ReadAll(file)
-	if err != nil {
-		fmt.Println(err)
-	}
-	// write this byte array to our temporary file
-	tempFile.Write(fileBytes)
-	// return that we have successfully uploaded our file!
-	fmt.Fprintf(w, "Successfully Uploaded File\n")
+	fmt.Fprintf(w, "Cargado con éxito")
+
+}
+
+func setupRoutes() {
+	http.HandleFunc("/files", uploader)
+
 }
 
 /*First, before any content is displayed to the user, the web page retrieves information from the store's database.

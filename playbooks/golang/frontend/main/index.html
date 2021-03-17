@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,11 +8,13 @@
   </head>
   <body>
     <form
+      
+      action="/files"
+      method="POST"
       enctype="multipart/form-data"
-      action="http://localhost:8080/upload"
-      method="post"
+    
     >
-      <input type="file" name="myFile" />
+      <input type="file" name="archivo" />
       <input type="submit" value="upload" />
     </form>
   </body>
