@@ -106,6 +106,107 @@ finally we mount the file system and load the hosts file
       action: template dest=/etc/hosts src=templates/hosts.j2 owner=root group=root
 ```
 
+
+
+```yaml
+- hosts: db
+  become: true
+  vars_files:
+    - ../vars/variables.yml
+  tasks:
+    - name: create gluster volume
+      gluster_volume:
+        state: present
+        name: "{{ volumeName }}"
+        bricks: "{{ fsMount }}/{{ volumeName }}"
+        replicas: 3
+        cluster: ["node1", "node2", "master"]
+      run_once: true
+    - name: Start Gluster volume
+      gluster_volume: name={{ volumeName }} state=started
+```
+
+Luego de tener instalado gluster en los hosts es necesario tener los siguientes tres archivos client.yml, glusterfs.ym y master.yml
+
+```yaml
+---
+- hosts: all
+  become: true
+  vars_files:
+    - ../vars/variables.yml
+  pre_tasks:
+    - name: Create a directory if it does not exist
+      file:
+        path: "{{ sharedFolder }}"
+        state: directory
+        mode: '0755'
+  tasks:
+    - name: Start Gluster volume
+      shell: mount.glusterfs localhost:/{{ volumeName }} {{ sharedFolder }}
+      run_once: true
+```
+
+
+En el pretask lo que hacemos es crear el sharedFolder, un directorio con permisos 755 para poder ejecutar la tarea o task, que consiste en iniciar gluster y montar los volúmenes ya definidos
+Por otro lado el archivo master.yml solo se ejecuta en los hosts de tipo db y lo que hace es crear un volumen de gluster, con tres repicas y posteriormente iniciar ese volumen de gluster.
+
+```yaml
+- hosts: db
+  become: true
+  vars_files:
+    - ../vars/variables.yml
+  tasks:
+    - name: create gluster volume
+      gluster_volume:
+        state: present
+        name: "{{ volumeName }}"
+        bricks: "{{ fsMount }}/{{ volumeName }}"
+        replicas: 3
+        cluster: ["node1", "node2", "master"]
+      run_once: true
+    - name: Start Gluster volume
+      gluster_volume: name={{ volumeName }} state=started
+```
+
+Para ejecutar los Playbooks de Ansible es necesario tener el siguiente archivo:
+Variables.yml
+
+```yaml
+master: "192.168.33.50"
+node1: "192.168.33.11"
+node2: "192.168.33.12"
+fsMount: "/gluster/data"
+volumeName: "gv0"
+sharedFolder: "/mnt/shared"
+```
+
+Este archivo contiene un conjunto de variables que ansible va a usar para 1, conectarse a las diferentes máquinas aprovisionadas con Vagrant, 2, las variables necesarias para crear el conjunto de volúmenes de gluster
+
+
+Luego de tener constituidas el host de base de datos, gracias a vagrant, ansible se encarga, con el playbook db, de, 1 Crear un directorio que va a ser la carpeta compartida entre los host db y 2, de crear con Docker un contenedor con la ultima imagen de mongodb, y con la carpeta compartida creada anteriormente
+
+```yaml
+---
+- hosts: db
+  become: true
+  vars_files:
+    - ../vars/variables.yml
+  pre_tasks:
+    - name: Create a directory if it does not exist
+      file:
+        path: "{{sharedFolder}}/db"
+        state: directory
+        mode: '0755'
+  tasks:  
+    - name: Stop docker db container
+      shell: docker stop db || true
+    - name: remove docker db container
+      shell: docker rm db || true
+    - name: Start docker back continer
+      shell: docker run -d --name db -v {{sharedFolder}}/db:/data/db -p 27017:27017 mongo:latest
+```
+
+
 ### Vagrant file
 
 first we need to create two things:
