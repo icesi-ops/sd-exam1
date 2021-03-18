@@ -1,5 +1,6 @@
 import express from 'express'
 import {Request, Response} from 'express'
+import { File } from '../src/models/file'
 
 import Busboy from "busboy";
 import * as path from "path";
@@ -15,19 +16,24 @@ const storage: string = env.get('STORAGE').required().asString()
 
 const router = express.Router()
 
-router.get('/api/files', (req: Request, res: Response) => {
-    return res.send([])
+router.get('/api/files', async (_req: Request, res: Response) => {
+    return res.send(await File.find({}))
 })
 
-router.post('/api/upload', (req: Request, res: Response) => {
+router.post('/api/upload', async (req: Request, res: Response) => {
     const busboy = new Busboy({ headers: req.headers });
 
-    busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
+    await busboy.on("file", async (_fieldname, file, filename, _encoding, _mimetype) => {
 
+        const fl = File.build({
+            name: filename,
+            path: path.join(storage, filename),
+            type: filename.split('.').pop() || ''
+        })
         // path to file upload
         const saveTo = path.join(storage, filename);
-
         file.pipe(fs.createWriteStream(saveTo));
+        await fl.save()
     });
 
     busboy.on("finish", function () {
@@ -36,7 +42,7 @@ router.post('/api/upload', (req: Request, res: Response) => {
     req.pipe(busboy);
 })
 
-router.get('/api/availableStorage', async (req: Request, res: Response) => {
+router.get('/api/availableStorage', async (_req: Request, res: Response) => {
     try {
         const result: [any] = await real_df()
         const df = result.filter(item => item.mount === "/mnt/shared")[0]
