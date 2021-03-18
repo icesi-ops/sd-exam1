@@ -21,7 +21,9 @@ body{
       <section class="h1">
         <h1>SD-Exam1 -  Jair Aguirre, Nelson Lopez, Juan Velez</h1>
         <p>Web server: {{print_ip.stdout}} </p>
-        <p>Storage: {{storage_cap.stdout}} </p>
+        {% raw %}
+        <p>Storage: {{.Storage}} </p>
+        {% endraw %}
       </section>
 
 
@@ -42,7 +44,6 @@ body{
       <div class="alma">
         <h1> File list</h1>
       {% raw %}
-        <p>Available:</p>
         <p>{{ range $i := .Body}}{{$i}}<br/>{{end}}</p>
       {% endraw %}
 

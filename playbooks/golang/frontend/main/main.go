@@ -9,7 +9,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
-
+    "os/exec"
+    "bytes"
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -31,10 +32,13 @@ type Page struct {
 
 type tp struct {
 	Title string
+    Storage string
 	Body  []string
 }
 
 func main() {
+
+
 	connectToMongo()
 	http.HandleFunc("/", uploadHandler)
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
@@ -64,9 +68,22 @@ func getNames() []string {
 
 // Display the named template
 func display(w http.ResponseWriter, page string, data interface{}) {
+
+    var err, out, err2 = getStorage("df -h | grep gfs | awk '{print $4}'")
+
+    if err != nil {
+		fmt.Println("Error in command")
+		fmt.Println(err)
+	}
+    if err2 != "" {
+		fmt.Println("Error executing command")
+		fmt.Println(err2)
+	}
+
 	var files = getNames()
 
-	as := tp{Title: "Saved files: ", Body: files}
+
+	as := tp{Title: "Saved files: ", Storage: out, Body: files}
 	t := template.Must(template.ParseFiles("upload.html"))
 	t.Execute(w, as)
 }
@@ -107,7 +124,6 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, "https://192.168.33.200", http.StatusSeeOther)
 
-	//display(w, "upload", nil)
 
 }
 
@@ -185,4 +201,14 @@ func getFiles() []*File {
 
 	return results
 
+}
+
+func getStorage(command string) (error, string, string) {
+    var stdout bytes.Buffer
+    var stderr bytes.Buffer
+    cmd := exec.Command("bash", "-c", command)
+    cmd.Stdout = &stdout
+    cmd.Stderr = &stderr
+    err := cmd.Run()
+    return err, stdout.String(), stderr.String()
 }
