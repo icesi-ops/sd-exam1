@@ -37,9 +37,13 @@ router.post('/api/upload', (req: Request, res: Response) => {
 })
 
 router.get('/api/availableStorage', async (req: Request, res: Response) => {
-    const result: [any] = await real_df()
-    const available = result.filter(item => item.filesystem === "localhost:/gv0")[0].available
-    return res.send(available)
+    try {
+        const result: [any] = await real_df()
+        const df = result.filter(item => item.mount === "/mnt/shared")[0]
+        return res.status(200).send(JSON.stringify(df.available))
+    } catch (error) {
+        console.log(error)
+    }
 })
 
 export { router as apiRouter }
