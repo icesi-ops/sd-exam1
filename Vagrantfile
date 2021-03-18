@@ -1,14 +1,14 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# creación de los discos brick1 y brick2 son para los web servers
+# creacion de los discos brick1 y brick2 son para los web servers
 # masterbrick es para la db.
 brick1 = './brick1.vdi'
 brick2 = './brick2.vdi'
 masterbrick = './masterbrick.vdi'
 
 Vagrant.configure('2') do |config|
-  # creación del load balancer con nginx
+  # creacion del load balancer con nginx
   config.vm.define 'lb' do |lb|
     lb.vm.box = 'centos/7'
     lb.vm.hostname = 'sistemasdistribuidos'
@@ -21,7 +21,7 @@ Vagrant.configure('2') do |config|
     end
   end
 
-  # creación de las maquinas web-1 y web-2
+  # creacion de las maquinas web-1 y web-2
   config.ssh.insert_key = false
   (1..2).each do |i|
     config.vm.define "web-#{i}" do |web|
@@ -46,8 +46,6 @@ Vagrant.configure('2') do |config|
           'webservers' => ["web-#{i}"]
         }
       end
-      # web.vm.provision 'shell', path: 'scripts/glusterfs.sh'
-      # web.vm.provision 'shell', path: 'scripts/configuration.sh'
     end
   end
 
@@ -68,7 +66,5 @@ Vagrant.configure('2') do |config|
     db.vm.provision 'ansible' do |ansible|
       ansible.playbook = 'playbooks/db/main.yml'
     end
-    # db.vm.provision 'shell', path: 'scripts/glusterfs.sh'
-    # db.vm.provision 'shell', path: 'scripts/configuration.sh'
   end
 end

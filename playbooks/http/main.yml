@@ -3,6 +3,7 @@
   become: true
   vars_files:
     - vars/main.yml
+    - ../glusterfs/vars/main.yml
   vars:
     variable: "print_hostname"
   pre_tasks:
@@ -12,8 +13,6 @@
           - epel-release
           - java-1.8.0-openjdk
           - java-1.8.0-openjdk-devel
-          - centos-release-gluster
-          - xfsprogs
     - name: Get Host name
       shell: "echo $HOSTNAME"
       register: hostname

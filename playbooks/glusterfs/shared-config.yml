@@ -1,8 +1,8 @@
 ---
-- name: Create shared folder 
+- name: Shared GlusterFs Configuration | Create shared folder 
   file:
-    path: /data/shared
+    path: "{{gluster_share}}"
     state: directory
     mode: '0755'
 - name: Strat Gluster volumen 
-  shell: mount.glusterfs localhost:/glustervolume /data/shared
+  shell: mount.glusterfs localhost:/"{{gluster_name}}" "{{gluster_share}}"

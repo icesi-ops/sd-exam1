@@ -1,13 +1,14 @@
 ---
-- name: create glusterfs volume 
+- name: Master Node Configuration | create glusterfs volume 
   gluster_volume:
     state: present
-    name: glustervolume
-    bricks: /gluster/data/glustervolume
+    name: "{{gluster_name}}"
+    bricks: "{{gluster_dir}}/{{gluster_name}}"
     replicas: 3
     cluster: ["node1", "node2", "master"]
+    force: true
   run_once: true
 - name: Start Gluster volume
   gluster_volume:
-    name: glustervolume
+    name: "{{gluster_name}}"
     state: started

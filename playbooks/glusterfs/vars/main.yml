@@ -1,0 +1,3 @@
+gluster_dir: /gluster/data
+gluster_name: glustervolume
+gluster_share: /data/shared

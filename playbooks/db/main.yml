@@ -1,6 +1,8 @@
 ---
 - hosts: db
   become: true
+  vars_files:
+    - ../glusterfs/vars/main.yml
   vars:
     mysql_root_password: "Password"
   pre_tasks:
