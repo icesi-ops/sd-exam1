@@ -1,4 +1,4 @@
-var baseurl= "http://192.168.33.200";
+var baseurl= "https://192.168.33.200";
         
             function loadFiles(){
                 var xmlhttp= new XMLHttpRequest();
