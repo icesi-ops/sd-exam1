@@ -4,37 +4,37 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
-    <link rel="stylesheet"  href="playbooks/golang/frontend/css/style.css">
+    <title>Bucket</title>
+    <link rel="stylesheet"  href="./css/style.css">
 
   </head>
   
   <body>
    <style>
 body{
-   background-image: url(playbooks/golang/frontend/image/fondo.jpg);
+   background-image: url(./image/fondo.jpg);
 }
 
    </style>
     <header>
 
       <section class="h1">
-        <h1>SD-Exam1</h1>
+        <h1>SD-Exam1 -  Jair Aguirre, Nelson Lopez, Juan Velez</h1>
         <p>Web server: {{print_ip.stdout}} </p>
         <p>Storage: {{storage_cap.stdout}} </p>
       </section>
 
 
       <section class="conte">
-         <h1> Upload file</h1>
+         <h1>Storage Drive</h1>
       </section>
 
       <div class="wrapper">
         
   
-        <form action="/files" method="POST" enctype="multipart/form-data">
+        <form action="http://{{print_ip.stdout}}/" method="POST" enctype="multipart/form-data">
 
-          <input type="file" name="myfile">
+          <input type="file" name="myFile">
           <input type="submit" value="Upload">
         </form>
       
@@ -42,6 +42,7 @@ body{
       <div class="alma">
         <h1> File list</h1>
       {% raw %}
+        <p>Available:</p>
         <p>{{ range $i := .Body}}{{$i}}<br/>{{end}}</p>
       {% endraw %}
 

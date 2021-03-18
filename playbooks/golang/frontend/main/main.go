@@ -37,9 +37,8 @@ type tp struct {
 func main() {
 	connectToMongo()
 	http.HandleFunc("/", uploadHandler)
-
-	//http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
-	//http.Handle("/image/", http.StripPrefix("/image/", http.FileServer(http.Dir("image"))))
+	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
+	http.Handle("/image/", http.StripPrefix("/image/", http.FileServer(http.Dir("image"))))
 	log.Fatal(http.ListenAndServe(":80", nil))
 }
 
