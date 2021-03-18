@@ -1,0 +1,13 @@
+---
+- name: create glusterfs volume 
+  gluster_volume:
+    state: present
+    name: glustervolume
+    bricks: /gluster/data/glustervolume
+    replicas: 3
+    cluster: ["node1", "node2", "master"]
+  run_once: true
+- name: Start Gluster volume
+  gluster_volume:
+    name: glustervolume
+    state: started

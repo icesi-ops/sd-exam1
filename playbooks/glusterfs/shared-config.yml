@@ -1,0 +1,8 @@
+---
+- name: Create shared folder 
+  file:
+    path: /data/shared
+    state: directory
+    mode: '0755'
+- name: Strat Gluster volumen 
+  shell: mount.glusterfs localhost:/glustervolume /data/shared

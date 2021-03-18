@@ -6,17 +6,20 @@
   vars:
     variable: "print_hostname"
   pre_tasks:
-    - name: Ensure epel repository exists
-      yum: name=epel-release
-    - name: Install JRE
-      yum: name=java-1.8.0-openjdk
-    - name: Insyall JDK
-      yum: name=java-1.8.0-openjdk-devel
-  tasks:
+    - name: Install all dependencies
+      yum:
+        name:
+          - epel-release
+          - java-1.8.0-openjdk
+          - java-1.8.0-openjdk-devel
+          - centos-release-gluster
+          - xfsprogs
     - name: Get Host name
       shell: "echo $HOSTNAME"
-      register: print_hostname
-    - name: Install nginx 
+      register: hostname
+  tasks:
+    - import_tasks: ../glusterfs/glusterfs-config.yml
+    - name: Install Nginx
       yum:
         name:
           - nginx

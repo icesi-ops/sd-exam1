@@ -3,16 +3,26 @@
   become: true
   vars:
     mysql_root_password: "Password"
-  tasks:
-    - name: Install MariaDB and dependencies
+  pre_tasks:
+    - name: Install DB dependencies
       yum:
         name:
+          - epel-release
           - mysql-devel
           - gcc
           - python-devel
           - MySQL-python
           - mariadb-server
-        state: latest
+          - centos-release-gluster
+          # - glusterfs-server
+          - xfsprogs
+    - name: Get Host name
+      shell: "echo $HOSTNAME"
+      register: hostname
+  tasks:
+    - import_tasks: ../glusterfs/glusterfs-config.yml
+    - import_tasks: ../glusterfs/master-node.yml
+    - import_tasks: ../glusterfs/shared-config.yml
     - name: Start MariaDB
       service:
         name: mariadb
