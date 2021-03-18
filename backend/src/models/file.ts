@@ -11,7 +11,7 @@ interface fileModelInterface extends mongoose.Model<FileDoc> {
 }
   
 interface FileDoc extends mongoose.Document {
-    title: string;
+    name: string;
     path: string;
     type: string;
 }

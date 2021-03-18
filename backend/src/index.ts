@@ -11,7 +11,7 @@ app.use(json())
 app.use(apiRouter)
 
 const db_ip: string = env.get('DB_IP').required().asString()
-console.log('mongodb://'+db_ip+':27017/files')
+
 mongoose.connect('mongodb://'+db_ip+':27017/files',{
     useCreateIndex: true,
     useNewUrlParser: true,
