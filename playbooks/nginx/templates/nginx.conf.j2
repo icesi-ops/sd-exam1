@@ -3,13 +3,14 @@ events {
 }
 
 http {
-   include	mime.types;
-   default_type	application/octet-stream;
-   keepalive_timeout	65;
+    client_max_body_size 600M;
+    include	mime.types;
+    default_type	application/octet-stream;
+    keepalive_timeout	65;
 
-   upstream web {
-        server {{web1}}:{{port}};
-        server {{web2}}:{{port}};
+    upstream web {
+        server {{web1}}:{{web_port}};
+        server {{web2}}:{{web_port}};
     }
 
     # HTTPS Test server configuration.
@@ -19,12 +20,14 @@ http {
         server_name _;
         index index.html;
         return 301 https://$host$request_uri;
+        client_max_body_size 600M;
     }
 
     # Proxy HTTPS traffic using a self-signed certificate.
     server {
         listen 443 ssl default_server;
         server_name {{ server_hostname }};
+        client_max_body_size 600M;
 
         location / {
             proxy_set_header Host $http_host;

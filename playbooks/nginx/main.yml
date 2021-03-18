@@ -19,11 +19,6 @@
     - name: Install pip3 depden
       pip:
         name: pyopenssl
-    - name: Print vars
-      debug:
-        msg: "{{ item.value }}"
-      loop: "{{ lookup('dict', hostvars) }}"
-      when: "'web-' in item.key"
 
   tasks:
     - import_tasks: tasks/self-signed-cert.yml
