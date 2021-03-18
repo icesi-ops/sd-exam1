@@ -4,21 +4,53 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>{{print_ip.stdout}}</title>
+    <title>Document</title>
+    <link rel="stylesheet"  href="playbooks/golang/frontend/css/style.css">
+
   </head>
+  
   <body>
-    <form
-      enctype="multipart/form-data"
-      action="http://{{print_ip.stdout}}/"
-      method="post"
-    >
-      <input type="file" name="myFile" />
-      <input type="submit" value="Upload" />
-    </form>
+   <style>
+body{
+   background-image: url(playbooks/golang/frontend/image/fondo.jpg);
+}
+
+   </style>
+    <header>
+
+      <section class="h1">
+        <h1>SD-Exam1</h1>
+        <p>Web server: {{print_ip.stdout}} </p>
+        <p>Storage: {{storage_cap.stdout}} </p>
+      </section>
+
+
+      <section class="conte">
+         <h1> Upload file</h1>
+      </section>
+
+      <div class="wrapper">
+        
+  
+        <form action="/files" method="POST" enctype="multipart/form-data">
+
+          <input type="file" name="myfile">
+          <input type="submit" value="Upload">
+        </form>
+      
+      </div>
+      <div class="alma">
+        <h1> File list</h1>
+      {% raw %}
+        <p>{{ range $i := .Body}}{{$i}}<br/>{{end}}</p>
+      {% endraw %}
+
+      </div>
+
+    </header>
+    
+  
+  
   </body>
 
-{% raw %}
-  <h1>{{ .Title}}</h1>
-  <h1>{{ range $i := .Body}}{{$i}}<br/>{{end}}</h1>
-{% endraw %}
 </html>
