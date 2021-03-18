@@ -1,3 +1,18 @@
 ---
 - hosts: db
   become: true
+  vars_files:
+    - ../vars/variables.yml
+  pre_tasks:
+    - name: Create a directory if it does not exist
+      file:
+        path: "{{sharedFolder}}/db"
+        state: directory
+        mode: '0755'
+  tasks:  
+    - name: Stop docker db container
+      shell: docker stop db || true
+    - name: remove docker db container
+      shell: docker rm db || true
+    - name: Start docker back continer
+      shell: docker run -d --name db -v {{sharedFolder}}/db:/data/db -p 27017:27017 mongo:latest

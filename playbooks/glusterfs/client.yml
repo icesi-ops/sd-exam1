@@ -10,6 +10,10 @@
         state: directory
         mode: '0755'
   tasks:
-    - name: Start Gluster volume
-      shell: mount.glusterfs localhost:/{{ volumeName }} {{ sharedFolder }}
-      run_once: true
+  - name: Ensure Gluster volume is mounted.
+    mount:
+      name: "{{ volumeName }}"
+      src: "localhost:/{{ volumeName }}"
+      fstype: glusterfs
+      opts: "defaults,_netdev"
+      state: mounted
