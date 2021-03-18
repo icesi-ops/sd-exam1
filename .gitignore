@@ -2,6 +2,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/vagrant,ansible
 # Edit at https://www.toptal.com/developers/gitignore?templates=vagrant,ansible
 
+### Visual Studio ###
+.vscode/
+
 ### Ansible ###
 *.retry
 
