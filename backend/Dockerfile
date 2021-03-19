@@ -11,8 +11,8 @@ RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 WORKDIR /home/node/app
 COPY --from=builder /app/build public/
 COPY package*.json ./
-USER node
+USER root
 RUN npm install
-COPY --chown=node:node . .
+COPY --chown=root:root . .
 EXPOSE 3000
 CMD [ "npm", "start" ]
