@@ -1,18 +1,18 @@
-FROM node:alpine as builder
+FROM node:14-alpine as builder
 WORKDIR /app
-COPY ../front/package.json .
-COPY ../front/yarn.lock .
+COPY frontend/package.json .
+COPY frontend/yarn.lock .
 RUN yarn
-COPY ../front/ .
+COPY frontend/ .
 RUN yarn build
 
 FROM node:14-alpine
 RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 WORKDIR /home/node/app
-COPY --from=builder /app/build public/
 COPY package*.json ./
 USER root
 RUN npm install
+COPY --from=builder /app/build src/build/
 COPY --chown=root:root . .
 EXPOSE 3000
 CMD [ "npm", "start" ]
