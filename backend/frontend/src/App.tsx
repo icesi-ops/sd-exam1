@@ -33,11 +33,17 @@ interface File {
   type: string;
 }
 
-export default class App extends Component<any, {
-  files:  [File] | [],
-  storage: string,
-  loading: boolean,
-}> {
+// https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript
+function formatBytes(a: any,b=2){if(0===a)return"0 Bytes";const c=0>b?0:b,d=Math.floor(Math.log(a)/Math.log(1024));return parseFloat((a/Math.pow(1024,d)).toFixed(c))+" "+["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"][d]}
+
+export default class App extends Component<
+  any,
+  {
+    files: [File] | [];
+    storage: string;
+    loading: boolean;
+  }
+> {
   host = window.HOST || "test";
 
   handleFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +66,9 @@ export default class App extends Component<any, {
   };
 
   update = async () => {
-    const files: [File] = await (await fetch("http://" + window.LB + "/api/files")).json();
+    const files: [File] = await (
+      await fetch("http://" + window.LB + "/api/files")
+    ).json();
     const storage: string = await (
       await fetch("http://" + window.LB + "/api/availableStorage")
     ).json();
@@ -91,8 +99,7 @@ export default class App extends Component<any, {
           <AppBar position="static">
             <Toolbar variant="dense">
               <Typography variant="h6" color="inherit">
-                Files - {this.host} is glad to host you - avaible storage ={" "}
-                {this.state.storage}
+                Files - {this.host} is glad to host you - avaible storage = {formatBytes(this.state.storage)}
               </Typography>
             </Toolbar>
           </AppBar>
@@ -131,19 +138,22 @@ export default class App extends Component<any, {
           >
             <TableHead>
               <TableRow>
+                <TableCell>Name</TableCell>
                 <TableCell>ID</TableCell>
-                <TableCell align="right">Name</TableCell>
-                <TableCell align="right">Type</TableCell>
-                <TableCell align="right">Path</TableCell>
+                <TableCell>Type</TableCell>
+                <TableCell>Path</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {this.state.files.map((row: File) => (
                 <TableRow key={row.id}>
-                  <TableCell component="th" scope="row"> {row.id} </TableCell>
-                  <TableCell align="right">{row.name}</TableCell>
-                  <TableCell align="right">{row.type}</TableCell>
-                  <TableCell align="right">{row.path}</TableCell>
+                  <TableCell component="th" scope="row">
+                    {" "}
+                    {row.name}{" "}
+                  </TableCell>
+                  <TableCell>{row.id}</TableCell>
+                  <TableCell>{row.type}</TableCell>
+                  <TableCell>{row.path}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
