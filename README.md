@@ -7,7 +7,7 @@
 
 ## Gluster Configuration
 
-### Firs we create a folder to save the playbook
+### First we created a folder to save the playbook
 ```bash
 # Create ansible playbooks folder
 mkdir ./playbooks
@@ -17,12 +17,12 @@ mkdir ./playbooks/glusterfs
 mkdir ./playbooks/glusterfs/vars
 mkdir ./playbooks/glusterfs/templates
 ```
-### then create the glusterfs variables file 🧾 
-Open the file whit any editor (in this example  I use VSCode)
+### Then create the glusterfs variables file 🧾 
+Open the file with any editor (in this example  I use VSCode)
 ``` bash
 code ./playbooks/glusterfs/vars/variables.yml
 ```
-here we storage the ips of the master node (database), their workers  (web-servers) and the mount folder for the sdb1 filesystem
+Here we storage the IPs of the master node (database), its workers  (web-servers) and the mount folder for the sdb1 filesystem
 ```yaml
 master: "192.168.33.50"
 node1: "192.168.33.11"
@@ -31,13 +31,13 @@ fsMount: "/gluster/data"
 volumeName: "gv0"
 sharedFolder: "/mnt/shared"
 ```
-### Now we need to set up the /etc/hosts file whit the nodes hostnames
+### Now we need to set up the /etc/hosts file with the nodes hostnames
 We need to create a templeate to generate this file
-Open the file whit any editor (in this example  I use VSCode)
+Open the file whith any editor (in this example  I use VSCode)
 ``` bash
 code ./playbooks/glusterfs/templates/hosts.j2
 ```
-we need to define hname in vagrant file, we will do this later
+We need to define hname in vagrant file, we will do this later
 ```jinja
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
@@ -46,14 +46,14 @@ we need to define hname in vagrant file, we will do this later
 {{ node1 }}	node1
 {{ node2 }}	node2
 ``` 
-### Now we are ready to instal and configure gluster in all the nodes (includig master)
+### Now we are ready to install and configure gluster in all the nodes (includig master)
 
 First we need to create the glusterfs yaml file
-Open the file whit any editor (in this example  I use VSCode)
+Open the file with any editor (in this example  I use VSCode)
 ``` bash
 code ./playbooks/glusterfs/glusterfs.yml
 ```
-first we create the partition and filesystem as pretasks
+First we created the partition and filesystem as pretasks
 ```yaml
 ---
 - hosts: all
@@ -77,7 +77,7 @@ first we create the partition and filesystem as pretasks
         mode: '0755'
 ```
 
-then we install all the glusterfs packages using yum and start the service
+Then we installed all the glusterfs packages using yum and started the service
 
 ```yaml
     - name: Install glusterfs
@@ -92,7 +92,7 @@ then we install all the glusterfs packages using yum and start the service
       service: name=glusterd state=started
 ```
 
-finally we mount the file system and load the hosts file
+Finally we mounted the file system and loaded the hosts file
 
 ```yaml
   tasks:
@@ -126,7 +126,7 @@ finally we mount the file system and load the hosts file
       gluster_volume: name={{ volumeName }} state=started
 ```
 
-Luego de tener instalado gluster en los hosts es necesario tener los siguientes tres archivos client.yml, glusterfs.ym y master.yml
+Then after having installed gluster in the hosts the following files are necessary: client.yml, glusterfs.ym and master.yml
 
 ```yaml
 ---
@@ -146,9 +146,8 @@ Luego de tener instalado gluster en los hosts es necesario tener los siguientes 
       run_once: true
 ```
 
-
-En el pretask lo que hacemos es crear el sharedFolder, un directorio con permisos 755 para poder ejecutar la tarea o task, que consiste en iniciar gluster y montar los volúmenes ya definidos
-Por otro lado el archivo master.yml solo se ejecuta en los hosts de tipo db y lo que hace es crear un volumen de gluster, con tres repicas y posteriormente iniciar ese volumen de gluster.
+In the pretask the sharedFolder is created, a directory with 755 permissions for it to execute the tasks, which consists in start the gluster and mount the defined volumes.
+On the other hand, the master.yml file is executed on the db type hosts, creating a gluster volume, with 3 copies of it, and then, execute that gluster volume
 
 ```yaml
 - hosts: db
@@ -167,8 +166,7 @@ Por otro lado el archivo master.yml solo se ejecuta en los hosts de tipo db y lo
     - name: Start Gluster volume
       gluster_volume: name={{ volumeName }} state=started
 ```
-
-Para ejecutar los Playbooks de Ansible es necesario tener el siguiente archivo:
+To be able to run the Ansible playbooks the following file is necessary:
 Variables.yml
 
 ```yaml
@@ -179,11 +177,15 @@ fsMount: "/gluster/data"
 volumeName: "gv0"
 sharedFolder: "/mnt/shared"
 ```
+This file contains a set of variables which Ansible will use for:
+1. Be able to reach those machines provisioned with Vagrant
+2. The variables needed in order to create the set of gluster volumes 
 
-Este archivo contiene un conjunto de variables que ansible va a usar para 1, conectarse a las diferentes máquinas aprovisionadas con Vagrant, 2, las variables necesarias para crear el conjunto de volúmenes de gluster
 
+Then, Vagrant is in charge (using the playbook db) of:
+1. Create a directory which will be the shared folder between the db host
+2. Create, using docker, a container with the last mongodb image, and the shared folder  
 
-Luego de tener constituidas el host de base de datos, gracias a vagrant, ansible se encarga, con el playbook db, de, 1 Crear un directorio que va a ser la carpeta compartida entre los host db y 2, de crear con Docker un contenedor con la ultima imagen de mongodb, y con la carpeta compartida creada anteriormente
 
 ```yaml
 ---
@@ -209,9 +211,9 @@ Luego de tener constituidas el host de base de datos, gracias a vagrant, ansible
 
 ### Vagrant file
 
-first we need to create two things:
-- a function that gives disk name for webservers
-- the path of db disks
+First we need to create two things:
+- A function that gives disk names for webservers
+- The path of the db disks
 
 ```ruby
 def webDisk(num)
@@ -244,7 +246,7 @@ web.vm.provision "ansible" do |ansible|
 end
 ```
 
-now in the db block we need to do the sabe above
+now in the db block we need to do the same above
 ```ruby
 db.vm.provider "virtualbox" do |vb|
     vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "db"]
@@ -260,5 +262,5 @@ db.vm.provision "ansible" do |ansible|
     }
 end  
 ```
-P
+
 
