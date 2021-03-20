@@ -30,21 +30,6 @@
       shell: "firewall-cmd --permanent --add-service={http,https}"
     - name: Start firewall rule
       shell: "firewall-cmd --reload"
-    - name: Ensure docroot exists
-      file:
-        path: "{{nginx_docroot}}"
-        state: directory
-    - name: Copy html file
-      copy: 
-        src: files/index.html
-        dest: "{{nginx_docroot}}/index.html"
-        mode: 0755
-    - name: Run python server
-      shell: "(python -m SimpleHTTPServer 8083 >/dev/null 2>&1 &)"
-      async: 10
-      poll: 0
-      args:
-        chdir: "{{ nginx_docroot }}"
     - name: Nginx configuration server
       template:
         src: templates/nginx.conf.j2
@@ -52,7 +37,7 @@
         mode: 0644
     - name: Restart nginx
       service: name=nginx state=restarted enabled=yes
-    - name: COnfigure SO to allow to nginx make the proxyredirect
+    - name: Configure SO to allow to nginx make the proxyredirect
       shell: setsebool httpd_can_network_connect on -P
 
 

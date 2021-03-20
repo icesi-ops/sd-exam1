@@ -17,4 +17,4 @@
     - name: pull back continer
       shell : docker pull zeronetdev/sd-exam-1-back
     - name: Start docker back continer
-      shell: docker run --name back -d -p 3000:3000 -v {{sharedFolder}}:{{sharedFolder}} -e STORAGE={{sharedFolder}}/data -e DB_IP={{master}} zeronetdev/sd-exam-1-back
+      shell: docker run --name back -d -p 3000:3000 -v {{sharedFolder}}:{{sharedFolder}} -e STORAGE={{sharedFolder}}/data -e DB_IP={{master}} -e HOST=$HOSTNAME -e LB={{lb}} zeronetdev/sd-exam-1-back

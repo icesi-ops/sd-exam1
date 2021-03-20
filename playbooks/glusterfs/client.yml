@@ -12,8 +12,8 @@
   tasks:
   - name: Ensure Gluster volume is mounted.
     mount:
-      name: "{{ volumeName }}"
       src: "localhost:/{{ volumeName }}"
+      path: "{{ sharedFolder }}"
       fstype: glusterfs
       opts: "defaults,_netdev"
       state: mounted

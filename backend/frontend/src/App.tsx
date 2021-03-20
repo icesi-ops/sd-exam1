@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import { FileSelector } from "./components/upload";
 
-import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -17,8 +15,6 @@ import {
   TableHead,
   TableRow,
 } from "@material-ui/core";
-import classes from "*.module.css";
-
 declare global {
   interface Window {
     HOST: string;
@@ -34,7 +30,16 @@ interface File {
 }
 
 // https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript
-function formatBytes(a: any,b=2){if(0===a)return"0 Bytes";const c=0>b?0:b,d=Math.floor(Math.log(a)/Math.log(1024));return parseFloat((a/Math.pow(1024,d)).toFixed(c))+" "+["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"][d]}
+function formatBytes(a: number, b = 2) {
+  if (0 === a) return "0 Bytes";
+  const c = 0 > b ? 0 : b,
+    d = Math.floor(Math.log(a) / Math.log(1024));
+  return (
+    parseFloat((a / Math.pow(1024, d)).toFixed(c)) +
+    " " +
+    ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"][d]
+  );
+}
 
 export default class App extends Component<
   any,
@@ -56,7 +61,7 @@ export default class App extends Component<
     formData.append("myFile", files[0]);
 
     const r = await (
-      await fetch("http://" + window.LB + "/api/upload", {
+      await fetch("https://" + window.LB + "/api/upload", {
         method: "POST",
         body: formData,
       })
@@ -67,10 +72,10 @@ export default class App extends Component<
 
   update = async () => {
     const files: [File] = await (
-      await fetch("http://" + window.LB + "/api/files")
+      await fetch("https://" + window.LB + "/api/files")
     ).json();
     const storage: string = await (
-      await fetch("http://" + window.LB + "/api/availableStorage")
+      await fetch("https://" + window.LB + "/api/availableStorage")
     ).json();
     this.setState({
       files,
@@ -98,8 +103,11 @@ export default class App extends Component<
         <div style={{ flexGrow: 1 }}>
           <AppBar position="static">
             <Toolbar variant="dense">
+              <Typography variant="h6" color="inherit" style={{ flexGrow: 1 }}>
+                Files - {this.host} is glad to host you
+              </Typography>
               <Typography variant="h6" color="inherit">
-                Files - {this.host} is glad to host you - avaible storage = {formatBytes(this.state.storage)}
+                Avaible storage = {formatBytes(Number.parseInt(this.state.storage) * 1024)}
               </Typography>
             </Toolbar>
           </AppBar>
