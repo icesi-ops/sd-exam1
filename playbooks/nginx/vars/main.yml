@@ -4,4 +4,4 @@ nginx_docroot: /usr/share/nginx/html
 pip_install_packages: ['pyopenssl']
 web1: "192.168.33.11"
 web2: "192.168.33.12"
-port: "3000"
+web_port: "3000"

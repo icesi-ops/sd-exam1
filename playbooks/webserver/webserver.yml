@@ -4,9 +4,17 @@
   vars_files:
     - ../vars/variables.yml
   pre_tasks:
-    - import_tasks: tasks/docker.yml
+    - name: Create a directory if it does not exist
+      file:
+        path: "{{sharedFolder}}/data"
+        state: directory
+        mode: '0755'
   tasks:  
     - name: Stop docker back container
       shell: docker stop back || true
+    - name: remove docker back continer
+      shell: docker rm back || true
+    - name: pull back continer
+      shell : docker pull zeronetdev/sd-exam-1-back
     - name: Start docker back continer
-      shell: docker run --name back -d -p 3000:3000 -v {{sharedFolder}}:{{sharedFolder}} --restart unless-stopped zeronetdev/sd-exam-1-back
+      shell: docker run --name back -d -p 3000:3000 -v {{sharedFolder}}:{{sharedFolder}} -e STORAGE={{sharedFolder}}/data -e DB_IP={{master}} -e HOST=$HOSTNAME -e LB={{lb}} zeronetdev/sd-exam-1-back

@@ -60,6 +60,11 @@ Vagrant.configure("2") do |config|
       ansible.inventory_path = 'hosts_inventory'
     end 
     db.vm.provision "ansible" do |ansible|
+      ansible.playbook = "playbooks/docker/docker.yml"
+      ansible.limit = 'all'
+      ansible.inventory_path = 'hosts_inventory'
+    end
+    db.vm.provision "ansible" do |ansible|
       ansible.playbook = "playbooks/db/db.yml"
     end  
     db.vm.provision "ansible" do |ansible|
