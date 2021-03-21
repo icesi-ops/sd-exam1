@@ -1,83 +1,125 @@
-<html>
-    <head>
-        <script>
-            var baseurl= "https://192.168.33.200";
-        
-            function loadFiles(){
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-                var xmlhttp= new XMLHttpRequest();
-                xmlhttp.open("GET",baseurl + "/",true);
-                xmlhttp.onreadystatechange = function() {
-                    if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
-                        console.log(xmlhttp.responseText);
-                        var files= xmlhttp.responseText;
-                        var tbltop = `<table>
-			                          <tr><th>Id</th><th>Name</th><th>Path</th><th>Type</th></tr>`;
-                        var main = "";
-                        for(i = 0; i <files.length; i++){
-                            main += "<tr><td>"+files[i].id+"</td><td>"+files[i].name+"</td></td>"+files[i].path+"</td><td>"+files[i].type+"</td></tr>";  
-                        } 
-                        var tblbottom = "</table>";
-                        var tbl= tbltop + main + tblbottom;
-                        document.getElementById("information").innerHTML = tbl;
-                    }
-                };
-                xmlhttp.send(); 
-            }
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 
-            function loadStorage(){
-                var xmlhttp= new XMLHttpRequest();
-                xmlhttp.open("GET",baseurl + "/avstorage",true);
-                xmlhttp.onreadystatechange = function() {
-                    if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
-                        var files= xmlhttp.responseText;
-                        document.getElementById("storage").innerHTML = files;
-                    }
-                };
-                xmlhttp.send(); 
-            }
+  </head>
 
-            function selectedFile(){
-                var fileSelected=document.getElementById("myfile");
-                var file= fileSelected.files[0];
+  <h1 align=center> Welcom to  {{print_hostname.stdout}}</h1>
+    
 
-            }
-
-            function uploadFile(){
-               // var fileSelected=document.getElementById("myfile");
-                //var file= fileSelected.files[0];
-                //var fd = new FormData();
-                //fd.append(file.name,file.fi);
-                //var xmlhttp= new XMLHttpRequest();
-                //xmlhttp.open("POST",baseurl + "/uploads",true);
-                //xmlhttp.send(fd);
-            }
-
-            window.onload = function(){
-                loadFiles();
-                loadStorage();
-                selectedFile();
-               uploadFile();
-            }
-
-
-        </script>
-    </head>
     <body>
-        <div id="information"> </div>
-        <div id="storage"> </div>
-        <div id="wrap">
-            <div class="field">
-                <ul class="options">
-
-                    <li>
-                        <input type="file" id="myfile" name="myfile" class="rm-input" onchange="selectedFile();"/>
-                    </li>
-
-                    <li>
-                        <input type="button" value="Subir Archivo" onClick="uploadFile()" class="rm-button"/>
-                    </li>
-                </ul>
+      <div class="container my-5 text-center">
+          <button class="btn btn-danger w-100" onclick="loadFiles()"> List files </button>
+          <button class="btn btn-danger w-70" onclick="loadAvstorage()">Look at storage</button>
+          <div class="mt-5" id="avstorage">
+            <p> </p>
             </div>
-    </body>
+
+          <div class="mt-5" >
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Path</th>
+                    <th scope="col">Type</th>
+                  </tr>
+                </thead>
+                  <tbody id="contenido">
+
+                  </tbody>
+            </table>
+           </div>
+
+        
+
+     </div>
+
+            <form method="POST" id="form" enctype="multipart/form-data">
+            <input type="file" name="files[]" multiple  class="btn btn-danger w-50" />
+            <input type="submit" class="btn btn-danger w-80" value="Upload File" name="submit" onclick="loadFiles()" />
+            </form>
+
+    <script>
+        const url= "https://192.168.33.200"
+        var contenido= document.querySelector("#contenido")
+        var avstorage= document.querySelector("#avstorage")
+
+        function loadFiles(){
+
+            fetch(url)
+           .then(res => res.json())
+           .then(data => {
+              tableFiles(data)
+            })
+        }
+
+        function tableFiles(data){
+          contenido.innerHTML= '' 
+
+            for(let valor of data){
+
+             contenido.innerHTML += `
+
+              <tr>
+               <th scope="row">${valor.id}</th>
+               <td>${valor.name}</td>
+               <td>${valor.path}</td>
+               <td>${valor.type}</td>
+               </tr>
+
+               `
+            }
+
+        }
+
+
+        function loadAvstorage(){
+
+
+         fetch(url + "/avstorage")
+         .then(res => res.text())
+         .then(data => {
+         console.log(data)
+         avstorage.innerHTML= `${data}`
+
+          })
+        }
+
+
+
+        const form = document.querySelector('form')
+        form.addEventListener('submit', (e) => {
+        e.preventDefault()
+        
+        const files = document.querySelector('[type=file]').files
+        const formData = new FormData()
+
+        for (let i = 0; i < files.length; i++) {
+            let file    = files[i]
+
+           formData.append('originalFileName', file)
+        }
+        console.log(formData.get(name));
+        
+
+        fetch(url +"/uploads", {
+           method: 'POST',
+            body: formData,
+        })
+        .then((response) => {
+            console.log(response)
+        })
+       
+    })
+
+    </script>
+
+  </body>
 </html>
