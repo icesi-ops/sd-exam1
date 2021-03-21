@@ -7,9 +7,6 @@ end
 
 dbDisk = './storage/dbDisk.vdi'
 
-VAGRANT_VM_PROVIDER = "virtualbox"
-ANSIBLE_RAW_SSH_ARGS = []
-
 Vagrant.configure("2") do |config|
 
   (1..2).each do |i|

@@ -14,5 +14,5 @@
       shell: docker stop db || true
     - name: remove docker db container
       shell: docker rm db || true
-    - name: Start docker back continer
-      shell: docker run -d --name db -v {{sharedFolder}}/db:/data/db -p 27017:27017 mongo:latest
+    - name: Start docker db continer
+      shell: docker run -d --name db -v {{sharedFolder}}/db:/data/db -p 27017:27017 mongo:4.4.4
