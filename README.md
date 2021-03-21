@@ -18,7 +18,7 @@ In the figure  1 we show the network infraestructure for this system.
 
 ## General Information
 
-The following information specify name of machines, description of same, ip address, and operating system 
+The following information specifies name of machine, it's description, ip address, and operating system 
 
 ```textile
 lb    : Loandbalancer    | ip: 192.168.33.200 | os: centos 7
