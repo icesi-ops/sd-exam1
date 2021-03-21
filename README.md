@@ -34,7 +34,7 @@ Firts we create the Loandbalancer with vagrant
   end
 ```
 
-This machine was configure, with ansible with the file `playbooks/nginx/main.yml`, in this file we install openssl and dependencies, see bellow 
+This machine was configure, with ansible in the file `playbooks/nginx/main.yml`, this file we install openssl and dependencies, see bellow 
 
 ```yaml
 [...]
@@ -63,7 +63,7 @@ In the same file we call the task to make the self certifificated in: `playbooks
 TODO: put content here... 
 ```
 
-Then we install Nginx and copy configuration from `playbooks/nginx/templates/nginx.conf.j2`, redirect http trafic to https trafic, and (of course) configure the loadbalancer between webservers (by default the nginx use round‑robin algorith).
+Then we install Nginx and copy configuration from `playbooks/nginx/templates/nginx.conf.j2`, this config redirect http trafic to https trafic, and (of course) configure the loadbalancer between webservers (by default the nginx use round‑robin algorith).
 
 ```yaml
   tasks:
@@ -105,19 +105,42 @@ http {
    default_type	application/octet-stream;
    keepalive_timeout	65;
 
+    upstream web {
+        server 192.168.33.11:80;
+        server 192.168.33.12:80;
+    }
+
     # HTTPS Test server configuration.
     # Redirect HTTP traffic to HTTPS.
     server {
         listen 80 default_server;
         server_name _;
+        index index.html;
+        return 301 https://$host$request_uri;
+    }
+
+    # Proxy HTTPS traffic using a self-signed certificate.
+    server {
+        listen 443 ssl default_server;
+        server_name {{ server_hostname }};
         add_header Access-Control-Allow-Origin *;
         add_header Access-Control-Allow-Methods "GET,HEAD,PUT,PATCH,POST,DELETE";
-        index index.html;   
+
+        location / {
+            proxy_set_header Host $http_host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_pass          http://web;
+            proxy_read_timeout  90s;
+            proxy_redirect      http://web {{ server_hostname }};
+        }
+
+        ssl_certificate {{ certificate_dir }}/{{ server_hostname }}/fullchain.pem;
+        ssl_certificate_key {{ certificate_dir }}/{{ server_hostname }}/privkey.pem;
     }
 }
 ```
-
-
 
 ## Web Servers
 
