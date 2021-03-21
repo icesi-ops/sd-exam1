@@ -374,103 +374,65 @@ db.vm.provision "ansible" do |ansible|
   ansible.inventory_path = 'hosts_inventory'
 end
 ```
-
-
-To be able to run the Ansible playbooks the following file is necessary:
-Variables.yml
-
+### For the load balencer the following main.yml is needed
 ```yml
-master: "192.168.33.50"
-node1: "192.168.33.11"
-node2: "192.168.33.12"
-fsMount: "/gluster/data"
-volumeName: "gv0"
-sharedFolder: "/mnt/shared"
-```
-This file contains a set of variables which Ansible will use for:
-1. Be able to reach those machines provisioned with Vagrant
-2. The variables needed in order to create the set of gluster volumes 
-
-
-Then, Vagrant is in charge (using the playbook db) of:
-1. Create a directory which will be the shared folder between the db host
-2. Create, using docker, a container with the last mongodb image, and the shared folder  
-
-
-```yaml
----
-- hosts: db
+- hosts: lb
   become: true
   vars_files:
-    - ../vars/variables.yml
+    - vars/main.yml
   pre_tasks:
-    - name: Create a directory if it does not exist
-      file:
-        path: "{{sharedFolder}}/db"
-        state: directory
-        mode: '0755'
-  tasks:  
-    - name: Stop docker db container
-      shell: docker stop db || true
-    - name: remove docker db container
-      shell: docker rm db || true
-    - name: Start docker back continer
-      shell: docker run -d --name db -v {{sharedFolder}}/db:/data/db -p 27017:27017 mongo:latest
+    - name: Ensure epel repository exists
+      yum: name=epel-release
+    - name: Install openssl dependencies
+      yum: 
+        name:
+          - openssl-devel
+    - name: Turn on firewalld
+      service: name=firewalld state=started enabled=yes
+    - name: install pip
+      yum: name=python-pip state=latest
+    - name: upgrade pip
+      shell: pip install --upgrade "pip < 21.0"
+    - name: Install pip3 depden
+      pip:
+        name: pyopenssl
+
+  tasks:
+    - import_tasks: tasks/self-signed-cert.yml
+    - name: Install nginx 
+      yum:
+        name:
+          - nginx
+    - name: Enable firewall
+      shell: "firewall-cmd --permanent --add-service={http,https}"
+    - name: Start firewall rule
+      shell: "firewall-cmd --reload"
+    - name: Nginx configuration server
+      template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        mode: 0644
+    - name: Restart nginx
+      service: name=nginx state=restarted enabled=yes
+    - name: Configure SO to allow to nginx make the proxyredirect
+      shell: setsebool httpd_can_network_connect on -P
 ```
-
-
-### Vagrant file
-
-First we need to create two things:
-- A function that gives disk names for webservers
-- The path of the db disks
+### Next this playbook is mounted onto the load balancer as shown below
 
 ```ruby
-def webDisk(num)
-  return "./storage/Disk#{num}.vdi"
-end
-
-dbDisk = './storage/dbDisk.vdi'
-```
-
-then on the web servers block we need to create and atach the storage
-
-```ruby
-web.vm.provider "virtualbox" do |vb|
-    vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "web-#{i}"]
-    unless File.exist?(webDisk(i))
-        vb.customize ['createhd', '--filename', webDisk(i), '--variant', 'Fixed', '--size', 2 * 1024]
-    end
-    vb.customize ['storageattach', :id,  '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', webDisk(i)]
-end
-```
-
-then we add the playbook and pass the hname variable
-
-```ruby
-web.vm.provision "ansible" do |ansible|
-    ansible.playbook = "playbooks/glusterfs/glusterfs.yml"
-    ansible.extra_vars = {
-        hname: "web-#{i}"
-    }
-end
-```
-
-now in the db block we need to do the same above
-```ruby
-db.vm.provider "virtualbox" do |vb|
-    vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "db"]
-    unless File.exist?(dbDisk)
-    vb.customize ['createhd', '--filename', dbDisk, '--variant', 'Fixed', '--size', 2 * 1024]
-    end
-    vb.customize ['storageattach', :id,  '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', dbDisk]
-end 
-db.vm.provision "ansible" do |ansible|
-    ansible.playbook = "playbooks/glusterfs/glusterfs.yml"
-    ansible.extra_vars = {
-        hname: "db"
-    }
+lb.vm.provision "ansible" do |ansible|
+  ansible.playbook = "playbooks/nginx/main.yml"
+  ansible.extra_vars = {
+      "web_servers" => [
+      {"name": "web-1","ip":"192.168.33.11"},
+      {"name": "web-2","ip":"192.168.33.12"}
+      ] 
+  }
 end  
 ```
+
+
+
+
 
 
