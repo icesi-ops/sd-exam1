@@ -11,10 +11,23 @@ ___
 
 ## THE SYSTEM
 
+In the figure  1 we show the network infraestructure to this system.
+
 ![](sources/parcial1-distribuidos.png)
 **Figure 1.** -  System architecture
 
-## Reverse proxy
+## General Information
+
+The next information specify name of machines, description of same, ip address, and operative system 
+
+```textile
+lb    : Loandbalancer    | ip: 192.168.33.200 | os: centos 7
+web-1 : web server one   | ip: 192.168.33.11  | os: centos 7
+web-2 : web server two   | ip: 192.168.33.12  | os: centos 7
+db    : Data base server | ip: 192.168.33.100 | os: centos 7
+```
+
+## Loadbalancer
 
 #### Vagrantfile
 
@@ -60,12 +73,33 @@ This machine was configure, with ansible in the file `playbooks/nginx/main.yml`,
 In the same file we call the task to make the self certifificated in: `playbooks/nginx/tasks/self-signed-cert.yml`
 
 ```yaml
-TODO: put content here... 
+---
+- name: Ensure directory exists for self-signed certs
+  file:
+    path: "{{ certificate_dir }}/{{ server_hostname }}"
+    state: directory
+
+- name: Generate Private key
+  openssl_privatekey:
+    path: "{{ certificate_dir }}/{{server_hostname}}/privkey.pem"
+- name: Generate CSR
+  openssl_csr:
+    path: "{{ certificate_dir}}/{{server_hostname}}.csr"
+    privatekey_path: "{{certificate_dir}}/{{server_hostname}}/privkey.pem"
+    common_name: "{{ server_hostname }}"
+
+- name: Generate self signeed certificate
+  openssl_certificate:
+    path: "{{certificate_dir}}/{{server_hostname}}/fullchain.pem"
+    privatekey_path: "{{ certificate_dir}}/{{server_hostname}}/privkey.pem"
+    csr_path: "{{certificate_dir}}/{{server_hostname}}.csr"
+    provider: selfsigned
 ```
 
-Then we install Nginx and copy configuration from `playbooks/nginx/templates/nginx.conf.j2`, this config redirect http trafic to https trafic, and (of course) configure the loadbalancer between webservers (by default the nginx use round‑robin algorith).
+Then we install Nginx and copy configuration from `playbooks/nginx/templates/nginx.conf.j2`, this config redirect http trafic to https trafic, and (of course) configure the loadbalancer between webservers (by default the nginx use round‑robin algorith). We show in more details this configuration bellow.
 
 ```yaml
+  [...]
   tasks:
     - import_tasks: tasks/self-signed-cert.yml
     - name: Install nginx 
@@ -93,33 +127,37 @@ Then we install Nginx and copy configuration from `playbooks/nginx/templates/ngi
       shell: setsebool httpd_can_network_connect on -P
 ```
 
-The file `nginx.conf.j2` have this content: 
+The file `playbooks/nginx/tamplates/nginx.conf.j2` have the configurations to loadbalancer. The [upstream module]([Module ngx_http_upstream_module](https://nginx.org/en/docs/http/ngx_http_upstream_module.html)) in nginx is used to specifie the group of web servers.
 
 ```jinja2
 events {
-   worker_connections	1024;
+   worker_connections    1024;
 }
 
 http {
-   include	mime.types;
-   default_type	application/octet-stream;
-   keepalive_timeout	65;
+   include    mime.types;
+   default_type    application/octet-stream;
+   keepalive_timeout    65;
 
     upstream web {
         server 192.168.33.11:80;
         server 192.168.33.12:80;
     }
+}
+[...]
+```
 
-    # HTTPS Test server configuration.
-    # Redirect HTTP traffic to HTTPS.
-    server {
+This part of the configuration redirect the trafict from http (network trafict from the port 80) to the https protocol. This configuration file is also responsible for make the proxy configuration (to redirect from loadbalancer to webservers) and ssl encryption/decryption, to this tasks, we used the [ssl module]([Module ngx_http_ssl_module](https://nginx.org/en/docs/http/ngx_http_ssl_module.html)) and  [reverse proxy module]([Module ngx_http_proxy_module](https://nginx.org/en/docs/http/ngx_http_proxy_module.html)).
+
+```jinja2
+   [...]
+   erver {
         listen 80 default_server;
         server_name _;
         index index.html;
         return 301 https://$host$request_uri;
     }
-
-    # Proxy HTTPS traffic using a self-signed certificate.
+   
     server {
         listen 443 ssl default_server;
         server_name {{ server_hostname }};
@@ -139,7 +177,16 @@ http {
         ssl_certificate {{ certificate_dir }}/{{ server_hostname }}/fullchain.pem;
         ssl_certificate_key {{ certificate_dir }}/{{ server_hostname }}/privkey.pem;
     }
-}
+
+```
+
+**NOTE:** the ansible variables for this configs are in the file: `playbooks/nginx/vars/main.yml` see content to it bellow: 
+
+```yaml
+certificate_dir: /etc/ssl/private
+server_hostname: sistemasdistribuidos
+nginx_docroot: /usr/share/nginx/html
+pip_install_packages: ['pyopenssl']
 ```
 
 ## Web Servers
