@@ -34,7 +34,7 @@ Firts we create the Loandbalancer with vagrant
   end
 ```
 
-This machine was configure, with ansible with the file `playbooks/nginx/main.yml` see bellow, in this file we install openssl and dependencies, see bellow 
+This machine was configure, with ansible with the file `playbooks/nginx/main.yml`, in this file we install openssl and dependencies, see bellow 
 
 ```yaml
 [...]
