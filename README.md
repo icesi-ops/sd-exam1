@@ -11,14 +11,14 @@ ___
 
 ## THE SYSTEM
 
-In the figure  1 we show the network infraestructure to this system.
+In the figure  1 we show the network infraestructure for this system.
 
 ![](sources/parcial1-distribuidos.png)
 **Figure 1.** -  System architecture
 
 ## General Information
 
-The next information specify name of machines, description of same, ip address, and operative system 
+The following information specify name of machines, description of same, ip address, and operating system 
 
 ```textile
 lb    : Loandbalancer    | ip: 192.168.33.200 | os: centos 7
@@ -47,7 +47,7 @@ Firts we create the Loandbalancer with vagrant
   end
 ```
 
-This machine was configure, with ansible in the file `playbooks/nginx/main.yml`, this file we install openssl and dependencies, see bellow 
+This machine was configured, with ansible in the file `playbooks/nginx/main.yml`, this file we install openssl and dependencies, see bellow 
 
 ```yaml
 [...]
@@ -127,7 +127,7 @@ Then we install Nginx and copy configuration from `playbooks/nginx/templates/ngi
       shell: setsebool httpd_can_network_connect on -P
 ```
 
-The file `playbooks/nginx/tamplates/nginx.conf.j2` have the configurations to loadbalancer. The [upstream module](https://nginx.org/en/docs/http/ngx_http_upstream_module.html) in nginx is used to specifie the group of web servers.
+The file `playbooks/nginx/tamplates/nginx.conf.j2` has the configurations to loadbalancer. The [upstream module](https://nginx.org/en/docs/http/ngx_http_upstream_module.html) in nginx is used to specifie the group of web servers.
 
 ```jinja2
 events {
@@ -147,7 +147,7 @@ http {
 [...]
 ```
 
-This part of the configuration redirect the trafict from http (network trafict from the port 80) to the https protocol. This configuration file is also responsible for make the proxy configuration (to redirect from loadbalancer to webservers) and ssl encryption/decryption, to this tasks, we used the [ssl module](https://nginx.org/en/docs/http/ngx_http_ssl_module.html) and  [reverse proxy module](https://nginx.org/en/docs/http/ngx_http_proxy_module.html).
+This part of the configuration redirect the trafict from http (network trafict from the port 80) to the https protocol. This configuration file is also responsible of making the proxy configuration (to redirect from loadbalancer to webservers) and ssl encryption/decryption, to this tasks, we used the [ssl module](https://nginx.org/en/docs/http/ngx_http_ssl_module.html) and  [reverse proxy module](https://nginx.org/en/docs/http/ngx_http_proxy_module.html).
 
 ```jinja2
    [...]
