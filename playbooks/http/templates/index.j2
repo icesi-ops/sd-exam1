@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
@@ -100,19 +101,130 @@ table{
       <tr>
         <td>Server # </td>
         <td>Storage</td>
-        
-      </tr>
-      <tr>
-        <td>Server # </td>
-        <td>Storage</td>
-        
-      </tr>
-      <tr>
-        <td>Db </td>
-        <td>Storage</td>
-       
-      </tr>
-      </table></center>
+=======
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-</body>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+  </head>
+
+  <h1 align=center> Welcom to  {{print_hostname.stdout}}</h1>
+    
+
+    <body>
+      <div class="container my-5 text-center">
+          <button class="btn btn-danger w-100" onclick="loadFiles()"> List files </button>
+          <button class="btn btn-danger w-70" onclick="loadAvstorage()">Look at storage</button>
+          <div class="mt-5" id="avstorage">
+            <p> </p>
+            </div>
+
+          <div class="mt-5" >
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Path</th>
+                    <th scope="col">Type</th>
+                  </tr>
+                </thead>
+                  <tbody id="contenido">
+
+                  </tbody>
+            </table>
+           </div>
+
+        
+
+     </div>
+
+            <form method="POST" id="form" enctype="multipart/form-data">
+            <input type="file" name="files[]" multiple  class="btn btn-danger w-50" />
+            <input type="submit" class="btn btn-danger w-80" value="Upload File" name="submit" onclick="loadFiles()" />
+            </form>
+
+    <script>
+        const url= "https://192.168.33.200"
+        var contenido= document.querySelector("#contenido")
+        var avstorage= document.querySelector("#avstorage")
+
+        function loadFiles(){
+
+            fetch(url)
+           .then(res => res.json())
+           .then(data => {
+              tableFiles(data)
+            })
+        }
+
+        function tableFiles(data){
+          contenido.innerHTML= '' 
+
+            for(let valor of data){
+
+             contenido.innerHTML += `
+
+              <tr>
+               <th scope="row">${valor.id}</th>
+               <td>${valor.name}</td>
+               <td>${valor.path}</td>
+               <td>${valor.type}</td>
+               </tr>
+
+               `
+            }
+
+        }
+
+
+        function loadAvstorage(){
+
+
+         fetch(url + "/avstorage")
+         .then(res => res.text())
+         .then(data => {
+         console.log(data)
+         avstorage.innerHTML= `${data}`
+
+          })
+        }
+
+
+
+        const form = document.querySelector('form')
+        form.addEventListener('submit', (e) => {
+        e.preventDefault()
+>>>>>>> origin/front
+        
+        const files = document.querySelector('[type=file]').files
+        const formData = new FormData()
+
+        for (let i = 0; i < files.length; i++) {
+            let file    = files[i]
+
+           formData.append('originalFileName', file)
+        }
+        console.log(formData.get(name));
+        
+
+        fetch(url +"/uploads", {
+           method: 'POST',
+            body: formData,
+        })
+        .then((response) => {
+            console.log(response)
+        })
+       
+    })
+
+    </script>
+
+  </body>
 </html>
