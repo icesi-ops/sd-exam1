@@ -430,7 +430,15 @@ lb.vm.provision "ansible" do |ansible|
   }
 end  
 ```
+## Frontend
 
+### The first frontend we tough of using was the page shown below
+
+![image](evidence/1stview.png)
+
+## Later, for ease of use and comodity we decided to refactor it using React, to end uo looking as follows
+
+![image](evidence/finalview.png)
 
 
 
