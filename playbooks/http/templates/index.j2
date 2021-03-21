@@ -47,7 +47,7 @@
             </form>
 
     <script>
-        const url= "https://192.168.33.200"
+        const url= "https://127.0.0.2:8083"
         var contenido= document.querySelector("#contenido")
         var avstorage= document.querySelector("#avstorage")
 
@@ -110,8 +110,8 @@
         
 
         fetch(url +"/uploads", {
-           method: 'POST',
-            body: formData,
+          method: 'POST',
+          body: formData,
         })
         .then((response) => {
             console.log(response)
