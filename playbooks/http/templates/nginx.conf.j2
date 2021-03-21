@@ -12,9 +12,13 @@ http {
     # HTTPS Test server configuration.
     # Redirect HTTP traffic to HTTPS.
     server {
+
         listen 80 default_server;
         server_name _;
+        add_header Access-Control-Allow-Origin *;
+        add_header Access-Control-Allow-Methods "GET,HEAD,PUT,PATCH,POST,DELETE";
         index index.html;
+        
     }
 
 }
