@@ -35,12 +35,6 @@
       file:
         path: "{{nginx_docroot}}"
         state: directory
-    - name: Run python server
-      shell: "(python -m SimpleHTTPServer 8083 >/dev/null 2>&1 &)"
-      async: 10
-      poll: 0
-      args:
-        chdir: "{{ nginx_docroot }}"
     - name: Nginx configuration server
       template:
         src: templates/nginx.conf.j2
