@@ -57,15 +57,19 @@ Vagrant.configure('2') do |config|
       vb.customize ['modifyvm', :id, '--memory', '512', '--cpus', '1', '--name', 'db']
       unless File.exist?(masterbrick)
         vb.customize ['createhd', '--filename', masterbrick, '--variant',
-                      'Fixed', '--size', 5 * 1024]
-        vb.customize ['storageattach', :id,  '--storagectl', 'IDE',
-                      '--port', 1, '--device', 0, '--type', 'hdd',
-                      '--medium', masterbrick]
+                      'Fixed', '--size', 2 * 1024]
       end
+      vb.customize ['storageattach', :id, '--storagectl', 'IDE',
+                    '--port', 1, '--device', 0, '--type', 'hdd',
+                    '--medium', masterbrick]
     end
     db.vm.provision 'ansible' do |ansible|
       ansible.playbook = 'playbooks/db/main.yml'
     end
-    db.vm.provision 'shell', inline: 'ansible-playbook ./playbooks/glusterfs/shared-config.yml'
+    db.vm.provision 'ansible' do |ansible|
+      ansible.playbook = 'playbooks/glusterfs/shared-config.yml'
+      ansible.inventory_path = 'ansible_hosts'
+    end
   end
+
 end

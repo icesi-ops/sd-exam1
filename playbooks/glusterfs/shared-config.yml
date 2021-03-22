@@ -10,4 +10,10 @@
       state: directory
       mode: '0755'
   - name: Strat Gluster volumen 
-    shell: mount.glusterfs "localhost:/{{gluster_name}}" "{{gluster_share}}"
+    mount:
+      name: "{{gluster_name}}"
+      src: "localhost:/{{gluster_name}}"
+      path: "{{gluster_share}}"
+      fstype: glusterfs
+      opts: "defaults,_netdev"
+      state: mounted

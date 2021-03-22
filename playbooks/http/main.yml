@@ -4,8 +4,6 @@
   vars_files:
     - vars/main.yml
     - ../glusterfs/vars/main.yml
-  vars:
-    variable: "print_hostname"
   pre_tasks:
     - name: Install all dependencies
       yum:
@@ -52,4 +50,4 @@
         path: /opt/backend
         state: directory
     - name: run Ktor server
-      shell: nohup java -jar /home/vagrant/icesi-health.jar -host=127.0.0.2 -port=8083 &
+      shell: nohup java -jar /home/vagrant/icesi-health.jar -host="{{ansible_default_ipv4.address}}" -port=8083 &
