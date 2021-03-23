@@ -11,15 +11,27 @@
           - epel-release
           - java-1.8.0-openjdk
           - java-1.8.0-openjdk-devel
+  tasks:
+    - name: Get IP
+      shell: hostname -I | awk '{print $2}'
+      register: ipa
     - name: Get Host name
       shell: "echo $HOSTNAME"
       register: hostname
-  tasks:
     - import_tasks: ../glusterfs/glusterfs-config.yml
     - name: Install Nginx
       yum:
         name:
           - nginx
+    - name: make backend dir
+      file:
+        path: /opt/backend
+        state: directory
+    - name: Print the gateway for each host when defined
+      debug:
+        msg: System has ip {{ ansible_eth1.ipv4.address }} 
+    - name: run Ktor server
+      shell: "nohup java -jar /home/vagrant/icesi-health.jar -host={{ ansible_eth1.ipv4.address }} -port=8083 &" 
     - name: Ensure docroot exists
       file:
         path: "{{nginx_docroot}}"
@@ -45,16 +57,3 @@
         mode: 0644
     - name: Restart nginx
       service: name=nginx state=restarted enabled=yes
-    - name: Get IP
-      shell: hostname -I | awk '{print $2}'
-      register: ipa
-    - debug: msg="{{ipa.stdout}}"
-    - name: make backend dir
-      file:
-        path: /opt/backend
-        state: directory
-    - name: run Ktor server
-      shell: nohup java -jar /home/vagrant/icesi-health.jar -host=var=item -port=8083 &
-      with_items:
-        - "192.168.33.11"
-        - "192.168.33.12"
