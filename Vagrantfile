@@ -65,9 +65,6 @@ Vagrant.configure('2') do |config|
     end
     db.vm.provision 'ansible' do |ansible|
       ansible.playbook = 'playbooks/db/main.yml'
-    end
-    db.vm.provision 'ansible' do |ansible|
-      ansible.playbook = 'playbooks/glusterfs/shared-config.yml'
       ansible.inventory_path = 'ansible_hosts'
     end
   end

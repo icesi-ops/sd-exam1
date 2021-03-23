@@ -45,9 +45,16 @@
         mode: 0644
     - name: Restart nginx
       service: name=nginx state=restarted enabled=yes
+    - name: Get IP
+      shell: hostname -I | awk '{print $2}'
+      register: ipa
+    - debug: msg="{{ipa.stdout}}"
     - name: make backend dir
       file:
         path: /opt/backend
         state: directory
     - name: run Ktor server
-      shell: nohup java -jar /home/vagrant/icesi-health.jar -host="{{ansible_default_ipv4.address}}" -port=8083 &
+      shell: nohup java -jar /home/vagrant/icesi-health.jar -host=var=item -port=8083 &
+      with_items:
+        - "192.168.33.11"
+        - "192.168.33.12"

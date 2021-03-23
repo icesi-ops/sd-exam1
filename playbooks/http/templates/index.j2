@@ -10,7 +10,7 @@
 
   </head>
 
-  <h1 align=center> Welcom to  {{print_hostname.stdout}}</h1>
+  <h1 align=center> Welcom to  "{{ ansible_hostname }}" </h1>
     
 
     <body>
@@ -47,7 +47,7 @@
             </form>
 
     <script>
-        const url= "https://127.0.0.2:8083"
+        const url= "http://192.168.33.11:8083"
         var contenido= document.querySelector("#contenido")
         var avstorage= document.querySelector("#avstorage")
 
@@ -109,7 +109,7 @@
         console.log(formData.get(name));
         
 
-        fetch(url +"/uploads", {
+        fetch(url +"/data/shared", {
           method: 'POST',
           body: formData,
         })

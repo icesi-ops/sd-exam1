@@ -21,6 +21,7 @@
   tasks:
     - import_tasks: ../glusterfs/glusterfs-config.yml
     - import_tasks: ../glusterfs/master-node.yml
+    - import_tasks: ../glusterfs/shared-config.yml
     # - name: Mouth shared disck
     #   shell: "#!/bin/bash ansible-playbook playbooks/glusterfs/shared-config.yml"
     - name: Start MariaDB
