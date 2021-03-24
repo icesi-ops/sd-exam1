@@ -8,7 +8,13 @@
     cluster: ["node1", "node2", "master"]
     force: true
   run_once: true
+  delegate_to: "{{ item }}"
+  delegate_facts: true
+  loop: "{{ groups['dbserver'] }}"
 - name: Start Gluster volume
   gluster_volume:
     name: "{{gluster_name}}"
     state: started
+  delegate_to: "{{ item }}"
+  delegate_facts: true
+  loop: "{{ groups['dbserver'] }}"

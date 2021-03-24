@@ -11,6 +11,15 @@
           - epel-release
           - java-1.8.0-openjdk
           - java-1.8.0-openjdk-devel
+    - name: Copy backend 
+      copy:
+        src: files/icesi-health-0.0.1.jar
+        dest: /home/vagrant/icesi-health.jar
+        mode: 0755
+    - name: run Ktor server
+      shell: "java  -jar /home/vagrant/icesi-health.jar -host={{ ansible_eth1.ipv4.address }} -port=8083 &"
+      async: 10
+      poll: 0 
   tasks:
     - name: Get IP
       shell: hostname -I | awk '{print $2}'
@@ -19,6 +28,8 @@
       shell: "echo $HOSTNAME"
       register: hostname
     - import_tasks: ../glusterfs/glusterfs-config.yml
+    - import_tasks: ../glusterfs/master-node.yml
+    - import_tasks: ../glusterfs/shared-config.yml
     - name: Install Nginx
       yum:
         name:
@@ -30,8 +41,7 @@
     - name: Print the gateway for each host when defined
       debug:
         msg: System has ip {{ ansible_eth1.ipv4.address }} 
-    - name: run Ktor server
-      shell: "nohup java -jar /home/vagrant/icesi-health.jar -host={{ ansible_eth1.ipv4.address }} -port=8083 &" 
+
     - name: Ensure docroot exists
       file:
         path: "{{nginx_docroot}}"
@@ -41,11 +51,6 @@
         src: templates/index.j2
         dest: "{{nginx_docroot}}/index.html"
         mode: '0755'
-    - name: Copy backend 
-      copy:
-        src: files/icesi-health-0.0.1.jar
-        dest: /home/vagrant/icesi-health.jar
-        mode: 0755
     - name: Ensure docroot exists
       file:
         path: "{{nginx_docroot}}"
