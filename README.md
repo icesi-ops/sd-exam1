@@ -6,7 +6,7 @@
 - Carlos Heyder Gonzales
 
 ## Vagrant initial Configuration
-### First we will be creating the web servers machines, using the following code 
+ First we will be creating the web servers machines, using the following code 
  - Web 1 IP: 192.168.33.11
  - Web 2 IP: 192.168.33.12
 
@@ -26,7 +26,7 @@ Vagrant.configure("2") do |config|
    end
 ```
 
-### Then we will be creating the data base that will be used in the architecture
+ Then we will be creating the data base that will be used in the architecture
 
 ``` ruby
   config.vm.define "db" do |db|
@@ -43,7 +43,7 @@ Vagrant.configure("2") do |config|
   end  
 ```
 
-### Next the load balancer creation 
+ Next the load balancer creation 
 
 ``` ruby
   config.vm.define "lb" do |lb|
@@ -60,7 +60,7 @@ Vagrant.configure("2") do |config|
 
 ### Disks creation
 
-### So first we created a variable that contains the name that will be given to the new web servers disks
+ So first we created a variable that contains the name that will be given to the new web servers disks
 
 ```ruby
 def webDisk(num)
@@ -68,12 +68,12 @@ def webDisk(num)
 end
 ```
 
-### Then another one for the db disk
+ Then another one for the db disk
 
 ```ruby
 dbDisk = './storage/dbDisk.vdi'
 ```
-### Next we will be creating and mounting the disk for each of the web servers, as shown in the following code, as we can see, in the first part is checked wether or not a disk exist, and if it doesnt is created, and next mounted on the web servers (the same proccess is followed in the data base, just using the variable created for it) 
+ Next we will be creating and mounting the disk for each of the web servers, as shown in the following code, as we can see, in the first part is checked wether or not a disk exist, and if it doesnt is created, and next mounted on the web servers (the same proccess is followed in the data base, just using the variable created for it) 
 
  ```ruby
 unless File.exist?(webDisk(i))
@@ -84,7 +84,7 @@ end
  ```
 
 
-### First we created a folder to save the playbooks
+ First we created a folder to save the playbooks
 ```bash
 # Create ansible playbooks folder
 mkdir ./playbooks
@@ -94,7 +94,7 @@ mkdir ./playbooks/glusterfs
 mkdir ./playbooks/vars
 mkdir ./playbooks/glusterfs/templates
 ```
-### Then create the glusterfs variables file 🧾 
+ Then create the glusterfs variables file 🧾 
 Open the file with any editor (in this example  I use VSCode)
 ``` bash
 code ./playbooks/vars/variables.yml
@@ -183,7 +183,7 @@ Finally we mounted the file system and loaded the hosts file
     - name: Set /etc/hosts using template
       action: template dest=/etc/hosts src=templates/hosts.j2 owner=root group=root
 ```
-### The glusterfs playbook is mounted onto the web servers using the following code
+The glusterfs playbook is mounted onto the web servers using the following code
 ```ruby
 web.vm.provision "ansible" do |ansible|
   ansible.playbook = "playbooks/glusterfs/glusterfs.yml"
@@ -192,7 +192,7 @@ web.vm.provision "ansible" do |ansible|
   }
 end
 ```
-### And next the glusterfs playbook created for the data base were mounted too, as shown below
+And next the glusterfs playbook created for the data base were mounted too, as shown below
 
 ```ruby
 db.vm.provision "ansible" do |ansible|
@@ -223,7 +223,7 @@ On the other hand, the master.yml file is executed on the db type hosts, creatin
       gluster_volume: name={{ volumeName }} state=started
 ```
 
-### The following code shows the host gluster which is used for installing the volume gluster in each of the host
+The following code shows the host gluster which is used for installing the volume gluster in each of the host
 
 ```yaml
 ---
@@ -245,7 +245,7 @@ On the other hand, the master.yml file is executed on the db type hosts, creatin
 
 In the pretask the sharedFolder is created, a directory with 755 permissions for it to execute the tasks, which consists in start the gluster and mount the defined volumes.
 
-### The client gluster is installed in the web servers(media inventory) and the data base, as shown below
+The client gluster is installed in the web servers(media inventory) and the data base, as shown below
 
 ```ruby
  db.vm.provision "ansible" do |ansible|
@@ -254,7 +254,7 @@ In the pretask the sharedFolder is created, a directory with 755 permissions for
   ansible.inventory_path = 'hosts_inventory'
 end 
 ```
-### As shown below, this code install a functional docker
+As shown below, this code install a functional docker
 
 ```yml
 - hosts: all
@@ -305,7 +305,7 @@ end
         groups: docker
         append: yes
 ```
-### Next the code for the docker as shown below, mounted onto the data base
+Next the code for the docker as shown below, mounted onto the data base
 
 ```ruby
 db.vm.provision "ansible" do |ansible|
@@ -315,7 +315,7 @@ db.vm.provision "ansible" do |ansible|
 end
 ```
 
-###  As shown below the db.yml stop and delete the container in case there is already one running, and then starts a new container, passing onto it the gluster volume, and then download mongo
+As shown below the db.yml stop and delete the container in case there is already one running, and then starts a new container, passing onto it the gluster volume, and then download mongo
 ```yml
 - hosts: db
   become: true
@@ -335,14 +335,14 @@ end
     - name: Start docker db continer
       shell: docker run -d --name db -v {{sharedFolder}}/db:/data/db -p 27017:27017 mongo:4.4.4
 ```
-### Next the playbook db.yml is mounted onto the db in the Vagrant file
+Next the playbook db.yml is mounted onto the db in the Vagrant file
 
 ```ruby
 db.vm.provision "ansible" do |ansible|
   ansible.playbook = "playbooks/db/db.yml"
 end  
 ```
-### The webserver.yml has a similar construct as the db, checking if theres a running docker, stopping it and deleting it in case there is, and then creating a new one with the cluster of gluster and a bunch of enviroment variables (these variables are hostname, the load balancer IP, the data base IP and the path to the sharedfolder)
+The webserver.yml has a similar construct as the db, checking if theres a running docker, stopping it and deleting it in case there is, and then creating a new one with the cluster of gluster and a bunch of enviroment variables (these variables are hostname, the load balancer IP, the data base IP and the path to the sharedfolder)
  ```yml
  ---
 - hosts: webservers
@@ -366,7 +366,7 @@ end
       shell: docker run --name back -d -p 3000:3000 -v {{sharedFolder}}:{{sharedFolder}} -e STORAGE={{sharedFolder}}/data -e DB_IP={{master}} -e HOST=$HOSTNAME -e LB={{lb}} zeronetdev/sd-exam-1-back
  ``` 
 
-### Then the playbook is mounted onto the db
+Then the playbook is mounted onto the db
 ```ruby
 db.vm.provision "ansible" do |ansible|
   ansible.playbook = "playbooks/webserver/webserver.yml"
@@ -374,7 +374,7 @@ db.vm.provision "ansible" do |ansible|
   ansible.inventory_path = 'hosts_inventory'
 end
 ```
-### For the load balencer the following main.yml is needed
+For the load balencer the following main.yml is needed
 ```yml
 - hosts: lb
   become: true
@@ -417,7 +417,7 @@ end
     - name: Configure SO to allow to nginx make the proxyredirect
       shell: setsebool httpd_can_network_connect on -P
 ```
-### Next this playbook is mounted onto the load balancer as shown below
+Next this playbook is mounted onto the load balancer as shown below
 
 ```ruby
 lb.vm.provision "ansible" do |ansible|
@@ -432,11 +432,11 @@ end
 ```
 ## Frontend
 
-### The first frontend we tough of using was the page shown below
+The first frontend we tough of using was the page shown below
 
 ![image](evidence/1stview.png)
 
-## Later, for ease of use and comodity we decided to refactor it using React, to end uo looking as follows
+Later, for ease of use and comodity we decided to refactor it using React, to end up looking as follows
 
 ![image](evidence/finalview.png)
 
