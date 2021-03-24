@@ -1,5 +1,5 @@
 certificate_dir: /etc/ssl/private
-server_hostname: sistemasdistribuidos
+server_hostname: loadbalancer
 nginx_docroot: /usr/share/nginx/html
 pip_install_packages: ['pyopenssl']
 

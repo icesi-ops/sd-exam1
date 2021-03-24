@@ -1,0 +1,1 @@
+{"rsync":{"/vagrant":{"type":"rsync","guestpath":"/vagrant","hostpath":"/home/woolf/Escritorio/Parcial1/sd-exam1","disabled":false,"__vagrantfile":true,"owner":"vagrant","group":"vagrant"}}}

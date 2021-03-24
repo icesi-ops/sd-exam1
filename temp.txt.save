@@ -1,0 +1,4 @@
+- name: Run python server
+      shell: python3 /home/vagrant/webserver.py
+      async: 10
+      poll: 0
