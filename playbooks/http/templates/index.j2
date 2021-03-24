@@ -1,118 +1,72 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>First exam </title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Primer parcial</title>
+  </head>
+  <body>
+    <h1>Welcome to {{hostname.stdout}}</h1>
 
-<style>
-body {background-color: #edeef7;
-padding: 0;
-margin-left: 50px;
-margin-right: 50px;
-margin-top: 50px;
-}
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <td>Id</td>
+            <td>Name</td>
+            <td>Path</td>
+            <td>Type</td>
+          </tr>
+        </thead>
+        <tbody id="file-list">
 
-input{
-  background-color: #b8b5ff;
-  position: center;
+        </tbody>
+      </table>
+      
+      <form>
+        <input type="file" id="file-to-upload" />
+        <input type="submit" id="upload-file" value="Upload File" />
+      </form>
 
-}
+    </div>
+    <script charset="utf-8">
+      
+      const renderItem = (item) => {
+          return `<tr data-id="${item.id}">
+                  <td>${item.id}</td>
+                  <td>${item.name}</td>
+                  <td>${item.path}</td>
+                  <td>${item.type}</td>
+              </tr>`
+      }
 
-h2   {color: #7868e6;
-font-family: calibri; 
-}
-h1 {color: #7868e6;
-font-family: calibri;
-}
+      window.onload = () => {
+          const URL = 'http://{{ ansible_eth1.ipv4.address }}:8083'
+          fetch(URL)
+              .then(response => response.json())
+              .then(data => {
+                  const fileList = document.getElementById('file-list')
+                  const template = data.map(renderItem).join('')
+                  fileList.innerHTML = template
+              });
+      }
 
-table{
-  margin-right:20px;
-}
+          const file = document.getElementById('file-to-upload')
+          const uploadFile = document.getElementById('upload-file')
 
-</style>
+          const upload = (file) => {
+              fetch('http://{{ansible_eth1.ipv4.address}}:8083/uploads',{
+                method: 'POST',
+                mode: 'cors',
+                redirect: 'follow',
+                referrerPolicy: 'no-referrer',
+                body: file
+              }).then(response => console.log(response));
+          };
 
-</head>
-<body>
-  <h1><center>Welcome to {{print_hostname.stdout}}"</center></h1>
-  <p> Welcome to this proyect,  </p>
-  <br>
-  <!--Area to Add a file-->
-  <div><h2>Add a file</h2></div>
-  <p> Select file that you want save in our database</p>
-  <br>
-  <!--Filechooser
-  -->
-    <div class="input-file input-file--reverse">
-          <center><input type="file" id="file">
-          <label for="file" class="input-file__field"></label></center>
-         
-      </div>
-   
-  <br>
-   <!--Area to view uploaded files-->
-  <div><h2>Uploaded files</h2></div>
-  <p> Here you can see all ulpoaded files.</p><br>
+          const onSelectFileUpload = () => upload(file.file[0]);
+          uploadFile.addEventListener('change', onSelectFileUpload, false); 
 
-  <!--Table with information of database and every upluaded files-->
-  <center><table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Name</th>
-      <th scope="col">Id</th>
-      <th scope="col">Path</th>
-      <th scope="col">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>like</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td colspan="2">Larry the Bird</td>
-      <td>@twitter</td>
-    </tr>
-  </tbody>
-</table>
-</table></center>
-
-  <!--Area to view uploaded files-->
-  <br><div><h2>Resource information</h2></div>
-  <p> Here you can see all information about servers </p>
-  <br>
-   <center><table class="table table-borderless">
-    <tr>
-        <th>Name Server</th>
-        <th>Storage</th>
-       
-      </tr>
-      <tr>
-        <td>Server # </td>
-        <td>Storage</td>
-        
-      </tr>
-      <tr>
-        <td>Server # </td>
-        <td>Storage</td>
-        
-      </tr>
-      <tr>
-        <td>Db </td>
-        <td>Storage</td>
-       
-      </tr>
-      </table></center>
-
-</body>
+    </script>
+  </body>
 </html>

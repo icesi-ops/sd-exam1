@@ -1,0 +1,35 @@
+---
+- name: Install centos release gluster
+  yum: name=centos-release-gluster state=latest
+- name: Install glusterfs server
+  yum: name=glusterfs-server state=latest
+- name: Install xfsprogs
+  yum: name=xfsprogs state=latest
+- name: Preparate disck
+  parted:
+    device: /dev/sdb
+    number: 1
+    state: present
+- name: create filesysem
+  filesystem:
+    fstype: xfs
+    dev: /dev/sdb1
+- name: Ensure gluster dir exists
+  file:
+    path: "{{gluster_dir}}"
+    state: directory
+    mode: 0755
+- name: Start glusterfs service
+  service: name=glusterd state=started
+- name: mount glusterfs
+  mount:
+    path: "{{gluster_dir}}"
+    src: /dev/sdb1
+    fstype: xfs
+    state: mounted
+- name: copy gluster config
+  template:
+    src: templates/hosts.j2
+    dest: /etc/hosts
+    owner: root
+    group: root

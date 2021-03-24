@@ -1,24 +1,33 @@
 ---
 - hosts: db
   become: true
+  vars_files:
+    - ../glusterfs/vars/main.yml
   vars:
     mysql_root_password: "Password"
-  tasks:
-    - name: Install MariaDB and dependencies
+  pre_tasks:
+    - name: Install DB dependencies
       yum:
         name:
+          - epel-release
           - mysql-devel
           - gcc
           - python-devel
           - MySQL-python
           - mariadb-server
-        state: latest
+    - name: Get Host name
+      shell: "echo $HOSTNAME"
+      register: hostname
+  tasks:
+    - import_tasks: ../glusterfs/glusterfs-config.yml
+    - import_tasks: ../glusterfs/master-node.yml
+    - import_tasks: ../glusterfs/shared-config.yml
     - name: Start MariaDB
       service:
         name: mariadb
         enabled: true
         state: started
-    - name: password confing
+    - name: Mysql user confing
       mysql_user:
         login_user: root
         login_password: "{{mysql_root_password}}"

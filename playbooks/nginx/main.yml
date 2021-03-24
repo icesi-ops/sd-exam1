@@ -27,18 +27,14 @@
           - nginx
     - name: Enable firewall
       shell: "firewall-cmd --permanent --add-service={http,https}"
+    - name: Firewall rule
+      shell: "firewall-cmd --zone=public --add-port=8083/tcp"
     - name: Start firewall rule
       shell: "firewall-cmd --reload"
     - name: Ensure docroot exists
       file:
         path: "{{nginx_docroot}}"
         state: directory
-    - name: Run python server
-      shell: "(python -m SimpleHTTPServer 8083 >/dev/null 2>&1 &)"
-      async: 10
-      poll: 0
-      args:
-        chdir: "{{ nginx_docroot }}"
     - name: Nginx configuration server
       template:
         src: templates/nginx.conf.j2

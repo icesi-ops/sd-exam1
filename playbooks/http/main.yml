@@ -3,36 +3,57 @@
   become: true
   vars_files:
     - vars/main.yml
-  vars:
-    variable: "print_hostname"
+    - ../glusterfs/vars/main.yml
   pre_tasks:
-    - name: Ensure epel repository exists
-      yum: name=epel-release
-    - name: Install JRE
-      yum: name=java-1.8.0-openjdk
-    - name: Insyall JDK
-      yum: name=java-1.8.0-openjdk-devel
+    - name: Install all dependencies
+      yum:
+        name:
+          - epel-release
+          - java-1.8.0-openjdk
+          - java-1.8.0-openjdk-devel
   tasks:
+    - name: Get IP
+      shell: hostname -I | awk '{print $2}'
+      register: ipa
     - name: Get Host name
       shell: "echo $HOSTNAME"
-      register: print_hostname
+      register: hostname
+    - import_tasks: ../glusterfs/glusterfs-config.yml
+    - name: Install Nginx
+      yum:
+        name:
+          - nginx
+    - name: make backend dir
+      file:
+        path: /opt/backend
+        state: directory
+    - name: Print the gateway for each host when defined
+      debug:
+        msg: System has ip {{ ansible_eth1.ipv4.address }} 
+    - name: run Ktor server
+      shell: "nohup java -jar /home/vagrant/icesi-health.jar -host={{ ansible_eth1.ipv4.address }} -port=8083 &" 
     - name: Ensure docroot exists
       file:
         path: "{{nginx_docroot}}"
         state: directory
     - name: Copy html file
-      copy:
+      template:
         src: templates/index.j2
         dest: "{{nginx_docroot}}/index.html"
-        mode: 0755
+        mode: '0755'
     - name: Copy backend 
       copy:
         src: files/icesi-health-0.0.1.jar
         dest: /home/vagrant/icesi-health.jar
         mode: 0755
-    - name: make backend dir
+    - name: Ensure docroot exists
       file:
-        path: /opt/backend
+        path: "{{nginx_docroot}}"
         state: directory
-    - name: run Ktor server
-      shell: nohup java -jar /home/vagrant/icesi-health.jar -host=127.0.0.1 -port=8083 &
+    - name: Nginx configuration server
+      template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        mode: 0644
+    - name: Restart nginx
+      service: name=nginx state=restarted enabled=yes
