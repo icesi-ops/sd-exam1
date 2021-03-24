@@ -1,22 +1,29 @@
 ---
 - hosts: webserver
   become: true
+  pre_tasks:
+    - name: install pip
+      yum: name=python3-pip state=latest
+
+    
+    
   tasks:
-    - name: "install httpd"
-      yum:
-        name: httpd
-    - name: "Know hostname"
-      shell: "echo $HOSTNAME"
-      register: print_hostname
-    - name: "COnfigure httpd"
-      template:
-        src: templates/index.j2
-        dest: /var/www/html/index.html
-        owner: root
-        group: wheel
-        mode: "0644"
-    - name: "Start httpd"
-      service:
-        name: httpd
-        state: restarted
-        enabled: yes
+    - name: Install flask
+      shell: pip3 install Flask
+    - name: Install Werkzeug
+      shell: pip3 install Werkzeug
+    - name: "Moving the web file"
+      copy:
+        src: templates/templates
+        dest: /home/vagrant
+        mode: 0755
+    - name: "Moving the python file"
+      copy:
+        src: templates/webserver.py
+        dest: /home/vagrant
+        mode: 0755
+    - name: Run python server
+      shell: python3 /home/vagrant/webserver.py
+      async: 10
+      poll: 0
+
