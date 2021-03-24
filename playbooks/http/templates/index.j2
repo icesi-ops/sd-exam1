@@ -9,17 +9,62 @@
     <h1>Welcome to {{hostname.stdout}}</h1>
 
     <div>
+      <table>
+        <thead>
+          <tr>
+            <td>Id</td>
+            <td>Name</td>
+            <td>Path</td>
+            <td>Type</td>
+          </tr>
+        </thead>
+        <tbody id="file-list">
+
+        </tbody>
+      </table>
       <form action="index_submit" method="get" accept-charset="utf-8">
-        <input type="text" value="" name="" id=""/>
+        <input type="submit" value="get" name="" id=""/>
       </form>    
+
+      <form method="POST" id="upload-file" enctype="multipart/form-data">
+        <input type="file" value="" id="file-to-upload" name="files[]"/>
+        <input type="submit" value="Upload File" name="submit"/>
+      </form>
+
     </div>
-
     <script charset="utf-8">
-      const URL = 'http://192.168.33.11:8083'
-      fetch(URL)
-      .then(response => response.json())
-      .then(data => console.log(data));
-    </script>
+      
 
+      const renderItem = (item) => {
+          return `<tr data-id="${item.id}">
+                  <td>${item.id}</td>
+                  <td>${item.name}</td>
+                  <td>${item.path}</td>
+                  <td>${item.type}</td>
+              </tr>`
+      }
+
+      window.onload = () => {
+          const URL = 'http://{{ ansible_eth1.ipv4.address }}:8083'
+          fetch(URL)
+              .then(response => response.json())
+              .then(data => {
+                  const fileList = document.getElementById('file-list')
+                  const template = data.map(renderItem).join('')
+                  fileList.innerHTML = template
+              });
+          
+          let file = document.getElementById("file-to-upload").files[0];
+          let formatData = new FormData(); 
+          
+
+          fetch(URL+'/uploads',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body:formatData)
+      }
+    </script>
   </body>
 </html>

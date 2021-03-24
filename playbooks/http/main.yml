@@ -37,10 +37,10 @@
         path: "{{nginx_docroot}}"
         state: directory
     - name: Copy html file
-      copy:
+      template:
         src: templates/index.j2
         dest: "{{nginx_docroot}}/index.html"
-        mode: 0755
+        mode: '0755'
     - name: Copy backend 
       copy:
         src: files/icesi-health-0.0.1.jar
