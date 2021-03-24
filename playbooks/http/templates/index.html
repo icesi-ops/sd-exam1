@@ -22,19 +22,15 @@
 
         </tbody>
       </table>
-      <form action="index_submit" method="get" accept-charset="utf-8">
-        <input type="submit" value="get" name="" id=""/>
-      </form>    
-
-      <form method="POST" id="upload-file" enctype="multipart/form-data">
-        <input type="file" value="" id="file-to-upload" name="files[]"/>
-        <input type="submit" value="Upload File" name="submit"/>
+      
+      <form>
+        <input type="file" id="file-to-upload" />
+        <input type="submit" id="upload-file" value="Upload File" />
       </form>
 
     </div>
     <script charset="utf-8">
       
-
       const renderItem = (item) => {
           return `<tr data-id="${item.id}">
                   <td>${item.id}</td>
@@ -53,18 +49,24 @@
                   const template = data.map(renderItem).join('')
                   fileList.innerHTML = template
               });
-          
-          let file = document.getElementById("file-to-upload").files[0];
-          let formatData = new FormData(); 
-          
-
-          fetch(URL+'/uploads',
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body:formatData)
       }
+
+          const file = document.getElementById('file-to-upload')
+          const uploadFile = document.getElementById('upload-file')
+
+          const upload = (file) => {
+              fetch('http://{{ansible_eth1.ipv4.address}}:8083/uploads',{
+                method: 'POST',
+                mode: 'cors',
+                redirect: 'follow',
+                referrerPolicy: 'no-referrer',
+                body: file
+              }).then(response => console.log(response));
+          };
+
+          const onSelectFileUpload = () => upload(file.file[0]);
+          uploadFile.addEventListener('change', onSelectFileUpload, false); 
+
     </script>
   </body>
 </html>
