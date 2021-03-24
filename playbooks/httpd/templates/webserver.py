@@ -26,4 +26,4 @@ def uploader():
 
 if __name__ == '__main__':
  # Iniciamos la aplicación
- app.run(port=80)
+ app.run(host="0.0.0.0", port="80")

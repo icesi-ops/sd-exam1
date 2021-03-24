@@ -24,6 +24,6 @@
         mode: 0755
     - name: Run python server
       shell: python3 /home/vagrant/webserver.py
-      async: 10
+      async: 45
       poll: 0
 
