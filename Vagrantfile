@@ -67,9 +67,17 @@ Vagrant.configure('2') do |config|
           'webservers' => ["web-#{i}"]
         }
       end
+      if i == 2
+        web.vm.provision 'ansible' do |ansible|
+          ansible.playbook = 'playbooks/glusterfs/master-node.yml'
+          ansible.inventory_path = 'ansible_hosts'
+        end
+        web.vm.provision 'ansible' do |ansible|
+          ansible.playbook = 'playbooks/glusterfs/shared-config.yml'
+          ansible.inventory_path = 'ansible_hosts'
+        end
+      end
     end
   end
-
-
 
 end

@@ -28,8 +28,6 @@
       shell: "echo $HOSTNAME"
       register: hostname
     - import_tasks: ../glusterfs/glusterfs-config.yml
-    - import_tasks: ../glusterfs/master-node.yml
-    - import_tasks: ../glusterfs/shared-config.yml
     - name: Install Nginx
       yum:
         name:

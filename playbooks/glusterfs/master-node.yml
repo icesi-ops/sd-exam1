@@ -1,20 +1,23 @@
 ---
-- name: Master Node Configuration | create glusterfs volume 
-  gluster_volume:
-    state: present
-    name: "{{gluster_name}}"
-    bricks: "{{gluster_dir}}/{{gluster_name}}"
-    replicas: 3
-    cluster: ["node1", "node2", "master"]
-    force: true
-  run_once: true
-  delegate_to: "{{ item }}"
-  delegate_facts: true
-  loop: "{{ groups['dbserver'] }}"
-- name: Start Gluster volume
-  gluster_volume:
-    name: "{{gluster_name}}"
-    state: started
-  delegate_to: "{{ item }}"
-  delegate_facts: true
-  loop: "{{ groups['dbserver'] }}"
+- hosts: all
+  become: true
+  vars_files:
+    - vars/main.yml
+  tasks:
+  - name: Master Node Configuration | create glusterfs volume 
+    gluster_volume:
+      state: present
+      name: "{{gluster_name}}"
+      bricks: "{{gluster_dir}}/{{gluster_name}}"
+      replicas: 3
+      cluster: ["node1", "node2", "master"]
+      force: true
+    run_once: true
+    delegate_to: 192.168.33.100
+    delegate_facts: true
+  - name: Start Gluster volume
+    gluster_volume:
+      name: "{{gluster_name}}"
+      state: started
+    delegate_to: 192.168.33.100
+    delegate_facts: true
