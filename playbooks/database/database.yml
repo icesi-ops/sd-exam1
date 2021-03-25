@@ -33,6 +33,14 @@
                    owner: root
                    group: wheel
                    mode: '0644'
+
+          - name: Create Directory for DB
+            file:
+                  path: /mnt/glusterfs/db
+                  state: directory
+
+          - name: Change dbpath
+            shell: "nohup mongod --dbpath /mnt/glusterfs/db &"
           
           - name: "Start MongoDB"
             service:
