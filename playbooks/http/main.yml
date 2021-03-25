@@ -17,7 +17,7 @@
         dest: /home/vagrant/icesi-health.jar
         mode: 0755
     - name: run Ktor server
-      shell: "java  -jar /home/vagrant/icesi-health.jar -host={{ ansible_eth1.ipv4.address }} -port=8083 &"
+      shell: "java  -jar /home/vagrant/icesi-health.jar -host={{ ansible_eth1.ipv4.address }} -port=8083 2 >> /home/vagrant/javaLog.log &"
       async: 10
       poll: 0 
   tasks:
