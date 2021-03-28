@@ -22,26 +22,23 @@
 
         </tbody>
       </table>
-      <form action="index_submit" method="get" accept-charset="utf-8">
-        <input type="submit" value="get" name="" id=""/>
-      </form>    
 
-      <form method="POST" id="form" enctype="multipart/form-data">
-        <input type="file" id="file-name" name="files[]" multiple   />
-        <input type="submit" id="file-to-upload"  value="Upload File" name="submit" />
-      </form>
+        <form>
+          <input type="file" value="Browse File" id="file-to-upload" />
+          <input type="submit" value="Upload File" id="trigger-file-upload"/>
+        </form>
 
     </div>
     <script charset="utf-8">
       
       const URL = 'http://{{ ansible_eth1.ipv4.address }}:8083'
-      const renderItem = (item) => {
+      const rendererItem = (item) => {
           return `<tr data-id="${item.id}">
-                  <td>${item.id}</td>
-                  <td>${item.name}</td>
-                  <td>${item.path}</td>
-                  <td>${item.type}</td>
-              </tr>`
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.path}</td>
+                    <td>${item.type}</td>
+                  </tr>`
       }
 
       window.onload = () => {
@@ -49,31 +46,33 @@
               .then(response => response.json())
               .then(data => {
                   const fileList = document.getElementById('file-list')
-                  const template = data.map(renderItem).join('')
+                  const template = data.map(rendererItem).join('')
                   fileList.innerHTML = template
-              });
+              })
       }
-      
-      const formdata  = document.getElementById('file-name')
-      const triggerToUpload = document.getElementById('file-to-upload')
-      formdata.append("originalFileName ", formdata.files[0], formdata.files[0].name);
+
+      const inputFile = document.getElementById('file-to-upload')
+      const formdata = new FormData()
+      const file = inputFile.files[0]
+      formdata.append("originalFileName", file)
 
       var requestOptions = {
-        method: 'POST',
-        body: formdata,
-        redirect: 'follow'
-      };
+              method: 'POST',
+              body: formdata,
+              redirect: 'follow',
+              mode: 'cors',
+              credentials: 'same-origin',
+            };
 
-      const uploadFile = (file) => {
-        fetch("http://{{ ansible_eth1.ipv4.address }}:8083/uploads", requestOptions)
-          .then(response => response.text())
-          .then(result => console.log(result))
-          .catch(error => console.log('error', error));
-      };
+      const uploadFile = () => {
+              fetch(URL+"/uploads", requestOptions)
+                .then(response => response.text())
+                .then(result => console.log(result))
+                .catch(error => console.log('error', error));
+            };
 
-      const onSelectFile = () => uploadFile(formdata.files[0]);
-
-      triggerToUpload.addEventListener('change', onselectFile, false);
+      const onSelectFile = () => uploadFile();
+      inputFile.addEventListener('change', onSelectFile, false);
 
     </script>
   </body>

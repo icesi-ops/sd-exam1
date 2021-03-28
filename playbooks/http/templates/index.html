@@ -26,9 +26,9 @@
         <input type="submit" value="get" name="" id=""/>
       </form>    
 
-      <form method="POST" id="form" enctype="multipart/form-data">
-        <input type="file" id="file-name" name="files[]" multiple   />
-        <input type="submit" id="file-to-upload"  value="Upload File" name="submit" />
+      <form >
+        <input type="file" id="file-name" />
+        <input type="submit" id="file-to-upload"  value="Upload File" />
       </form>
 
     </div>
@@ -53,27 +53,30 @@
                   fileList.innerHTML = template
               });
       }
-      
-      const formdata  = document.getElementById('file-name')
-      const triggerToUpload = document.getElementById('file-to-upload')
-      formdata.append("originalFileName ", formdata.files[0], formdata.files[0].name);
+
+      const inputFile = document.getElementById('file-name')
+      const triggerToUploadFile = document.getElementById('file-to-upload')
+      const formdata = new FormData()
+      const file = inputFile.files[0]
+      formdata.append("originalFileName", file)
 
       var requestOptions = {
-        method: 'POST',
-        body: formdata,
-        redirect: 'follow'
-      };
+              method: 'POST',
+              body: formdata,
+              redirect: 'follow',
+              mode: 'cors',
+              credentials: 'same-origin',
+            };
 
-      const uploadFile = (file) => {
-        fetch("http://{{ ansible_eth1.ipv4.address }}:8083/uploads", requestOptions)
-          .then(response => response.text())
-          .then(result => console.log(result))
-          .catch(error => console.log('error', error));
-      };
+      const uploadFile = () => {
+              fetch(URL+"/uploads", requestOptions)
+                .then(response => response.text())
+                .then(result => console.log(result))
+                .catch(error => console.log('error', error));
+            };
 
-      const onSelectFile = () => uploadFile(formdata.files[0]);
-
-      triggerToUpload.addEventListener('change', onselectFile, false);
+      const onSelectFile = () => uploadFile();
+      triggerToUploadFile.addEventListener('change', onSelectFile, false);
 
     </script>
   </body>
