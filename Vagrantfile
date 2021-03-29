@@ -58,6 +58,7 @@ Vagrant.configure("2") do |config|
           end
           database.vm.provision "shell", path: "scripts/glusterfs.sh"
           database.vm.provision "shell", path: "scripts/configuration.sh"
+          database.vm.provision "shell", path: "scripts/mongoDB.sh", privileged: true
           database.vm.provision "shell", inline: "echo Iam DB server"
        		end
        	end
