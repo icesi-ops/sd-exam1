@@ -1,5 +1,5 @@
 [mongodb-org-4.4]
-name=Repositorio de MongoDB para CentOS 7
+name=MongoDB Repository
 baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/4.4/x86_64/
 gpgcheck=1
 enabled=1
