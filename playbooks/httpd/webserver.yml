@@ -23,7 +23,7 @@
         dest: /home/vagrant
         mode: 0755
     - name: Run python server
-      shell: python3 /home/vagrant/webserver.py
+      shell: "(python3 /home/vagrant/webserver.py >/dev/null 2>&1 &)"
       async: 45
       poll: 0
 
