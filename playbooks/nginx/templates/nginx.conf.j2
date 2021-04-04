@@ -9,8 +9,8 @@ http {
    
 ##Load balancer
 upstream webservers {
-    server 192.168.33.11;
-    server 192.168.33.12;
+    server 192.168.33.11:80;
+    server 192.168.33.12:80;
 }
 
 # HTTPS Test server configuration.
