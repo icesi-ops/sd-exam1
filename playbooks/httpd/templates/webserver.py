@@ -33,9 +33,6 @@ ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 def allowed_file(filename):
  return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
  
- class FileDB(db.Document):
-    name = db.StringField()
-
 @app.route("/")
 def upload_file():
   return render_template('index.j2')
@@ -47,8 +44,6 @@ def uploader():
 
     if file and allowed_file(file.filename):
        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-       filesavedb = (name=filename)
-       filesavedb.save()
        flash('File successfully uploaded ' + file.filename + ' to the database!')
        return redirect('/')
     else:
