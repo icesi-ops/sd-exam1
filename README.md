@@ -5,6 +5,12 @@
 - Brayan S. Garces
 - Carlos Heyder Gonzales
 
+## Branching Strategy 
+![image](evidence/Diagramasparcial-Page-2.png)
+
+## Overall Operation 
+![image](evidence/Diagramasparcial.png)
+
 ## Vagrant initial Configuration
  First we will be creating the web servers machines, using the following code 
  - Web 1 IP: 192.168.33.11
