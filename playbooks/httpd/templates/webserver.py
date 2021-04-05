@@ -15,7 +15,7 @@ import urllib.request
 app = Flask(__name__)
 app.secret_key = 'myawesomesecretkey'
 app.config['MONGODB_SETTINGS'] = {
-    'db': 'local',
+    'db': 'BaseDeDatosExamen1',
     'host': '192.168.33.100',
     'port': 27017
 }
@@ -32,7 +32,9 @@ ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 def allowed_file(filename):
  return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
+ 
+ class FileDB(db.Document):
+    name = db.StringField()
 
 @app.route("/")
 def upload_file():
@@ -45,6 +47,8 @@ def uploader():
 
     if file and allowed_file(file.filename):
        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+       filesavedb = (name=filename)
+       filesavedb.save()
        flash('File successfully uploaded ' + file.filename + ' to the database!')
        return redirect('/')
     else:
