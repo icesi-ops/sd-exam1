@@ -446,6 +446,10 @@ Later, for ease of use and comodity we decided to refactor it using React, to en
 
 ![image](evidence/finalview.png)
 
+## Troubleshooting
+
+We found out that, when the gluster volume was up, and we try to do the provisioning again an error ocurred. But this problem was esasily solved by using the ansible´s glusterfs package.
+
 
 
 
