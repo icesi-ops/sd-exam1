@@ -1,5 +1,5 @@
 # Imports
-import os
+import os, socket
 from flask import Flask, render_template, request, jsonify, Response, flash, redirect
 from flask_pymongo import PyMongo
 from bson import json_util
@@ -35,7 +35,7 @@ def allowed_file(filename):
  
 @app.route("/")
 def upload_file():
-  return render_template('index.j2')
+  return render_template('index.j2',machine=socket.gethostname())
 
 @app.route("/upload", methods=['POST'])
 def uploader():
