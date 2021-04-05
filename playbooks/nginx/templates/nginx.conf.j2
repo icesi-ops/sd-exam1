@@ -13,13 +13,10 @@ upstream webservers {
     server 192.168.33.12;
 }
 
-# HTTPS Test server configuration.
 # Redirect HTTP traffic to HTTPS
 server {
     listen 80;
-    location / {
-        proxy_pass http://webservers;
-    }
+    return 301 https://$host$request_uri;
 }
 
 # Proxy HTTPS traffic using a self-signed certificate.
@@ -32,9 +29,8 @@ server {
 	proxy_set_header X-Real-IP $remote_addr;
 	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 	proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_pass          http://webservers;
+        proxy_pass http://webservers;
         proxy_read_timeout  90s;
-        proxy_redirect      http://localhost:8083 {{ server_hostname }};
     }
 
     ssl_certificate {{ certificate_dir }}/{{ server_hostname }}/fullchain.pem;
