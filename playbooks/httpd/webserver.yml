@@ -4,8 +4,11 @@
   pre_tasks:
     - name: install pip
       yum: name=python3-pip state=latest
+    - name: install wheel
+      shell: pip3 install wheel
     
   tasks:
+  
     - name: Install flask
       shell: pip3 install Flask
     - name: Install Werkzeug
@@ -29,6 +32,8 @@
     - name: Install Flask-PyMongo
       shell: pip3 install Flask-PyMongo
     - name: Install waitress
-      shell: pip3 install waitress 
+      shell: pip3 install waitress
+    - name: Install MongoEngine
+      shell: pip3 install flask-mongoengine 
  
 

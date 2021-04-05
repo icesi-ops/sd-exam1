@@ -30,3 +30,9 @@
                     name: mongod
                     state: started
                     enabled: yes
+
+          - name: Create directory static
+            shell: mkdir static
+
+          - name: Create directory img
+            shell: mkdir static/img

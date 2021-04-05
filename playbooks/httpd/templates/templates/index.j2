@@ -2,12 +2,35 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Universidad Icesi</title>
+    <title>Sistemas Distribuidos Parcial 1 (PYTHON)</title>
   </head>
+  <h2>A continuación se muestra el nombre del Servidor que ha atendido la solicitud</h2>
+  <p1> {{ ansible_hostname }}</p1>
   <body>
-   <form action="/upload" method="POST" enctype="multipart/form-data">
-   <input type="file" name="archivo">
-   <input type="submit">
-   </form>
+  <h3>Select a file to upload</h3>
+        <p>
+         {% with messages = get_flashed_messages() %}
+           {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-primary">
+             <strong>{{ message }}</strong>
+           </div>
+          {% endfor %}
+           {% endif %}
+         {% endwith %}
+        </p>
+   <form method="post" action="/upload" enctype="multipart/form-data">
+   <p><input type="file" name="inputFile" autocomplete="off" required onchange="loadFile(event)"></p>
+   <p><input type="submit" value="Submit"></p></form>
+   <img id="output" width="500"/>
+   <script>
+  	var loadFile = function(event) {
+    	var output = document.getElementById('output');
+    	output.src = URL.createObjectURL(event.target.files[0]);
+    	output.onload = function() {
+      	URL.revokeObjectURL(output.src) 
+    	}
+  	};
+   </script>
   </body>
 </html>
