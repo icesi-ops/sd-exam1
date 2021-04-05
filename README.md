@@ -448,7 +448,8 @@ Later, for ease of use and comodity we decided to refactor it using React, to en
 
 ## Troubleshooting
 
-We found out that, when the gluster volume was up, and we try to do the provisioning again an error ocurred. But this problem was esasily solved by using the ansible´s glusterfs package.
+- We found out that, when the gluster volume was up, and we try to do the provisioning again an error ocurred. But this problem was esasily solved by using the ansible´s glusterfs package.
+- Also, we realised at the moment we created the frontend using plain html that is was getting quite difficult for us to unify the already full developed backend with the brand new front so for us to be able to use the database, and reading it, so we decided to switch to React, been this an easy one for us to use due to a one of the partners already having some experience in it.
 
 
 
