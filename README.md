@@ -579,10 +579,10 @@ http {
     }
 ```
 
-###KTOR's Leanrning curve
+### KTOR's Leanrning curve
 We never had programmed any app in kotlin, so we had to read the documentation and learn a new paradigm of programming. Another problem was to find examples due to KTOR is actually new and the documentation give some basic examples that didn't match our necesities.
 This was solved reading the documentation.
 
-###Provisioning GlusterFS with Ansible
+### Provisioning GlusterFS with Ansible
 The first problem was to take the configuration of GlusterFS from shell to Ansible. We thought that it was as simple as following the steps in the shell way. But we realized that we had to add the attributes of opts "defaults,_netdev" in the mount module. And the second problem was the order of the tasks with mount shared disk.
 We solved this problem with delegate_to.
