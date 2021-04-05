@@ -1,14 +1,24 @@
 ---
-- name: Shared GlusterFs Configuration | Create shared folder 
-  file:
-    path: "{{gluster_share}}"
-    state: directory
-    mode: '0755'
-  delegate_to: "{{ item }}"
-  delegate_facts: true
-  loop: "{{ groups['glusterfs'] }}"
-- name: Strat Gluster volumen 
-  shell: mount.glusterfs "localhost:/{{gluster_name}}" "{{gluster_share}}"
-  delegate_to: "{{ item }}"
-  delegate_facts: true
-  loop: "{{ groups['glusterfs'] }}"
+- hosts: glusterfs
+  become: true
+  vars_files:
+    - vars/main.yml
+  tasks:
+  - name: Shared GlusterFs Configuration | Create shared folder 
+    file:
+      path: "{{gluster_share}}"
+      state: directory
+      mode: '0755'
+    delegate_to: "{{ item }}"
+    delegate_facts: true
+    loop: "{{ groups['glusterfs'] }}"
+  - name: Strat Gluster volumen 
+    mount:
+      name: "{{gluster_share}}"
+      src: "localhost:/{{gluster_name}}"
+      fstype: glusterfs
+      opts: "defaults,_netdev"
+      state: mounted
+    delegate_to: "{{ item }}"
+    delegate_facts: true
+    loop: "{{ groups['glusterfs'] }}"

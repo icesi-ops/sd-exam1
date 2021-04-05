@@ -20,8 +20,6 @@
       register: hostname
   tasks:
     - import_tasks: ../glusterfs/glusterfs-config.yml
-    - import_tasks: ../glusterfs/master-node.yml
-    - import_tasks: ../glusterfs/shared-config.yml
     - name: Start MariaDB
       service:
         name: mariadb
