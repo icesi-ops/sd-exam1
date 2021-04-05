@@ -1,6 +1,6 @@
 ## Integrantes 
 #### Nelson López  - A00347546
-#### Jair Aguirre  - A0034
+#### Jair Aguirre  - A00346739
 #### Juan Camilo Vélez  - A00345791
 
 # Documentación
