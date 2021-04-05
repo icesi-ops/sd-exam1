@@ -455,8 +455,6 @@ To configure the glusterfs in these machines we create three tasks. The first is
 
 The second tasks is in `playbooks/glusterfs/master-node.yml` this file configure the master node (in this case db machine) 
 
-
-
 ```yaml
 ---
 - name: Master Node Configuration | create glusterfs volume 
@@ -474,13 +472,46 @@ The second tasks is in `playbooks/glusterfs/master-node.yml` this file configure
     state: started
 ```
 
+In the taks `playbooks/glusterfs/shared-config.yml` we configure the shared system between the three machines.
+
+```yaml
+---
+- hosts: glusterfs
+  become: true
+  vars_files:
+    - vars/main.yml
+  tasks:
+  - name: Shared GlusterFs Configuration | Create shared folder 
+    file:
+      path: "{{gluster_share}}"
+      state: directory
+      mode: '0755'
+    delegate_to: "{{ item }}"
+    delegate_facts: true
+    loop: "{{ groups['glusterfs'] }}"
+  - name: Strat Gluster volumen 
+    mount:
+      name: "{{gluster_share}}"
+      src: "localhost:/{{gluster_name}}"
+      fstype: glusterfs
+      opts: "defaults,_netdev"
+      state: mounted
+    delegate_to: "{{ item }}"
+    delegate_facts: true
+    loop: "{{ groups['glusterfs'] }}"
+```
+
+
+
 ## Branching strategy
+
 Our branching strategy is made up first for master, that is main branch, is where we upload each version of the application, in this case one version. Second branch that is Develop, is where be upload each funtional features.Third a front branch, is where we deploy all about frontend, here is configure html and js to connect to backend and where we configure the variables of ansible. And last, back branch, that is a point to end, becouse be use two repositories, and to end, we join each repository. In figure 2, you can see our branching strategy. 
 
 ![](sources/branchingstrategy.png)
 **Figure 2.** -  Branching strategy
 
 # Problems Log
+
 We had issues with CROS: Cors header Acces Control- Allow-Origin’ missing. It’s is about The required Access-Control-Allow-Origin header is missing, which is used to determine whether or not the resource can be accessed by content within the current origin.
 We have this problem when we thested the end-points of API Rest on Ktor.
 We solve this error by installing CORS in the REST API on Ktor
@@ -506,16 +537,16 @@ We fix this error partially when we test the REST API locally but we have to add
 ```j2
 ---
 http {
-   include	mime.types;
-   default_type	application/octet-stream;
-   keepalive_timeout	65;
+   include    mime.types;
+   default_type    application/octet-stream;
+   keepalive_timeout    65;
 
     server {
 
         listen 80 default_server;
         server_name _;
         index index.html;
-        
+
         location / {
              if ($request_method = 'OPTIONS') {
                 add_header 'Access-Control-Allow-Origin' '*';
