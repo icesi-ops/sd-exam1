@@ -89,12 +89,12 @@ upstream webservers {
     server 192.168.33.12;
 }
 
+# Redirect HTTP traffic to HTTPS
 server {
     listen 80;
-    location / {
-        proxy_pass https://webservers;
-    }
+    return 301 https://$host$request_uri;
 }
+
 
 # Proxy HTTPS traffic using a self-signed certificate.
 server {
@@ -106,7 +106,7 @@ server {
 	proxy_set_header X-Real-IP $remote_addr;
 	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 	proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_pass          http://webservers;
+        proxy_pass http://webservers;
     }
 
     ssl_certificate {{ certificate_dir }}/{{ server_hostname }}/fullchain.pem;
@@ -134,8 +134,6 @@ Luego de haber configurado el template del servidor, se definen las tasks en el 
         mode: 0644
     - name: Restart nginx
       service: name=nginx state=restarted enabled=yes
-    - name: COnfigure SO to allow to nginx make the proxyredirect
-      shell: setsebool httpd_can_network_connect on -P
 ```
 
 
