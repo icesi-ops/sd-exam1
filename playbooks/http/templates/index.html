@@ -22,26 +22,23 @@
 
         </tbody>
       </table>
-      <form action="index_submit" method="get" accept-charset="utf-8">
-        <input type="submit" value="get" name="" id=""/>
-      </form>    
 
-      <form >
-        <input type="file" id="file-name" />
-        <input type="submit" id="file-to-upload"  value="Upload File" />
-      </form>
+        <form>
+          <input type="file" value="Browse File" id="file-to-upload" />
+          <input type="submit" value="Upload File" id="trigger-file-upload"/>
+        </form>
 
     </div>
     <script charset="utf-8">
       
       const URL = 'http://{{ ansible_eth1.ipv4.address }}:8083'
-      const renderItem = (item) => {
+      const rendererItem = (item) => {
           return `<tr data-id="${item.id}">
-                  <td>${item.id}</td>
-                  <td>${item.name}</td>
-                  <td>${item.path}</td>
-                  <td>${item.type}</td>
-              </tr>`
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.path}</td>
+                    <td>${item.type}</td>
+                  </tr>`
       }
 
       window.onload = () => {
@@ -49,13 +46,12 @@
               .then(response => response.json())
               .then(data => {
                   const fileList = document.getElementById('file-list')
-                  const template = data.map(renderItem).join('')
+                  const template = data.map(rendererItem).join('')
                   fileList.innerHTML = template
-              });
+              })
       }
 
-      const inputFile = document.getElementById('file-name')
-      const triggerToUploadFile = document.getElementById('file-to-upload')
+      const inputFile = document.getElementById('file-to-upload')
       const formdata = new FormData()
       const file = inputFile.files[0]
       formdata.append("originalFileName", file)
@@ -76,7 +72,7 @@
             };
 
       const onSelectFile = () => uploadFile();
-      triggerToUploadFile.addEventListener('change', onSelectFile, false);
+      inputFile.addEventListener('change', onSelectFile, false);
 
     </script>
   </body>
