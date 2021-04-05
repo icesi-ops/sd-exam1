@@ -35,5 +35,10 @@
       shell: pip3 install waitress
     - name: Install MongoEngine
       shell: pip3 install flask-mongoengine 
+    - name: Create directory static
+      shell: mkdir static
+    - name: Create directory img
+      shell: mkdir static/img
+
  
 
