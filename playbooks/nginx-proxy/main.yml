@@ -1,0 +1,3 @@
+---
+- hosts: lb
+  become: true # para ejecutar todos los comandos como sudo
