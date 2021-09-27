@@ -13,6 +13,10 @@
         owner: root
         group: wheel
         mode: "0644"
+    - name: "Allow other port to haproxy"
+      shell: "echo sudo setsebool -P haproxy_connect_any=1"
+    - name: "Open 8083 port"
+      command: echo "firewall-cmd --add-port=8083/tcp"
     - name: "Restart and enable haproxy"
       service:
         name: haproxy
