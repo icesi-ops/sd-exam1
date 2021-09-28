@@ -19,6 +19,7 @@ Vagrant.configure("2") do |config|
     end
     lb.vm.provision "ansible" do |ansible|
       ansible.playbook = "playbooks/haproxy/loadbalancer.yml"
+      ansible.playbook = "playbooks/nginx-proxy/main.yml"
       ansible.extra_vars = {
          "web_servers" => [
           {"name": "web-1","ip":"192.168.33.11"},
