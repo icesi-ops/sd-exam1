@@ -1,2 +1,6 @@
 # sd-exam1
-Please upload your exam here. 
+
+#### Integrantes:
+* Paola Fuentes Caro - A00352567
+* Mateo Gallego Ramírez - A00347937
+* Nicolás Sanabria Ortíz - A00291568
