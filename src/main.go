@@ -1,15 +1,14 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
-  handlers "github.com/nonsenseguy/sd-exam1/handler"
-	"github.com/gorilla/mux"
+	handlers "github.com/nonsenseguy/sd-exam1/handler"
 )
 
 func main() {
-	r := mux.NewRouter()
+	http.HandleFunc("/upload", handlers.UploadFilesHandler)
 
-	r.HandleFunc("/upload", handlers.UploadFilesHandler)
-	http.Handle("/", r)
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
