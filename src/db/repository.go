@@ -19,6 +19,7 @@ type repo struct {
 
 type repoI interface {
 	CreateFile(File) error
+  FetchFiles() ([]File, error)
 }
 
 type File struct {
