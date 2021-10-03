@@ -4,22 +4,22 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"os"
 	"time"
 )
 
 var (
-	cockroachAddress      = os.Getenv("COCKROACH_ADDRESS")
-	cockroachDatabaseName = os.Getenv("COCKROACH_DB_NAME")
+  // FIX THIS VARIABLES FOR ENV VARS INSTEAD TO 
+	cockroachAddress      = "root@localhost:26257"
+	cockroachDatabaseName = "files"
 )
 
 type repo struct {
 	db *sql.DB
 }
 
-type repoI interface {
+type RepoI interface {
 	CreateFile(File) error
-  FetchFiles() ([]File, error)
+	FetchFiles() ([]File, error)
 }
 
 type File struct {
@@ -33,7 +33,7 @@ func NewConection(addr, db string) (*sql.DB, error) {
 	return sql.Open("postgres", fmt.Sprintf("postgresql://%s/%s?sslmode=disable", addr, db))
 }
 
-func NewRepository() repoI {
+func NewRepository() RepoI {
 	conn, err := NewConection(cockroachAddress, cockroachDatabaseName)
 	if err != nil {
 		log.Fatal(err)
@@ -43,9 +43,9 @@ func NewRepository() repoI {
 }
 
 func (r repo) CreateFile(file File) error {
-	query := `INSERT INTO files (id, path, mimetype, created_at) VALUES ($1, $2, $3, NOW())`
+	query := `INSERT INTO files (id, path, mimetype, created_at) VALUES ($1, $2, $3, $4)`
 
-	_, err := r.db.Exec(query, file.ID, file.Path, file.MimeType)
+	_, err := r.db.Exec(query, file.ID, file.Path, file.MimeType, file.CreatedAt)
 	if err != nil {
 		return err
 	}

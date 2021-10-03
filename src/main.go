@@ -8,7 +8,8 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/upload", handlers.UploadFilesHandler)
+  handler := handlers.NewHandler()
+	http.HandleFunc("/upload", handler.UploadFilesHandler)
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8081", nil))
 }
