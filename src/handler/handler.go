@@ -2,6 +2,7 @@ package handler
 
 import (
 	"crypto/rand"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -53,12 +54,23 @@ func (h *Handler) UploadFilesHandler(res http.ResponseWriter, req *http.Request)
 	fmt.Fprintf(res, "Succesfully uploaded file")
 }
 
+func (h *Handler) FetchFilesHandler(res http.ResponseWriter, req *http.Request) {
+  files, err := h.repo.FetchFiles()
+  if err != nil {
+    log.Println(fmt.Errorf("error fetching files: %w", err))
+    return
+  }
+
+  json.NewEncoder(res).Encode(files)
+}
+
+
 func (h *Handler) saveFileRegister(handler *multipart.FileHeader) error {
 	file := db.File{
-		ID:       generateUUID(),
-		Path:     handler.Filename,
-		MimeType: "dummy",
-		CreatedAt:     time.Now(),
+		ID:        generateUUID(),
+		Path:      handler.Filename,
+		MimeType:  "dummy",
+		CreatedAt: time.Now(),
 	}
 
 	err := h.repo.CreateFile(file)
