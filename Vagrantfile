@@ -39,9 +39,9 @@ Vagrant.configure("2") do |config|
      end
     vb.customize ['storageattach', :id, '--storagect1', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', firstDisk]
     end
-    web1.vm.provision "shell", path: "scrips/glusterfs.sh"
-    web1.vm.provision "shell", path: "scrips/configuration.sh"
-    web.vm.provision "ansible" do |ansible|
+    web1.vm.provision "shell", path: "scripts/glusterfs.sh"
+    web1.vm.provision "shell", path: "scripts/configuration.sh"
+    web1.vm.provision "ansible" do |ansible|
        ansible.playbook = "playbooks/nginx/nginx.yml"
        ansible.groups = {
          "servers" => ["web-1"]
@@ -60,9 +60,9 @@ Vagrant.configure("2") do |config|
      end
     vb.customize ['storageattach', :id, '--storagect1', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', secondDisk]
     end
-    web1.vm.provision "shell", path: "scrips/glusterfs.sh"
-    web1.vm.provision "shell", path: "scrips/configuration.sh"
-    web.vm.provision "ansible" do |ansible|
+    web2.vm.provision "shell", path: "scripts/glusterfs.sh"
+    web2.vm.provision "shell", path: "scripts/configuration.sh"
+    web2.vm.provision "ansible" do |ansible|
        ansible.playbook = "playbooks/nginx/nginx.yml"
        ansible.groups = {
          "servers" => ["web-2"]
@@ -82,9 +82,10 @@ Vagrant.configure("2") do |config|
      end
     vb.customize ['storageattach', :id, '--storagect1', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', thirdDisk]
     end
-    web1.vm.provision "shell", path: "scrips/glusterfs.sh"
-    web1.vm.provision "shell", path: "scrips/configuration.sh"
-    web.vm.provision "ansible" do |ansible|
+    db.vm.provision "shell", path: "scripts/glusterfs.sh"
+    db.vm.provision "shell", path: "scripts/configuration.sh"
+    db.vm.provision "shell", path: "scripts/masterConfig.sh"
+    db.vm.provision "ansible" do |ansible|
        ansible.playbook = "playbooks/nginx/nginx.yml"
        ansible.groups = {
          "servers" => ["db"]
