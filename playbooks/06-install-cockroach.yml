@@ -1,0 +1,8 @@
+---
+- hosts: servers
+  become: true
+  sudo: true
+  tasks:
+    - name: Transfer and execute script
+      script: ../scripts/install_cockroach.sh
+        name: epel-release
