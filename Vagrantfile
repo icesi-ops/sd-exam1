@@ -32,7 +32,7 @@ Vagrant.configure("2") do |config|
     web1.vm.box = "centos/7"
     web1.vm.hostname = "WebServer1"
     web1.vm.network "private_network", ip: "192.168.33.11"
-    web1.vm.povider "virtualbox" do |vb|
+    web1.vm.provider "virtualbox" do |vb|
       vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "web-1"]
     unless File.exist?(firstDisk)
       vb.customize ['createhd', '--filename', firstDisk, '--variant', 'Fixed', '--size', 2 * 1024]
@@ -53,7 +53,7 @@ Vagrant.configure("2") do |config|
     web2.vm.box = "centos/7"
     web2.vm.hostname = "WebServer2"
     web2.vm.network "private_network", ip: "192.168.33.12"
-    web2.vm.povider "virtualbox" do |vb|
+    web2.vm.provider "virtualbox" do |vb|
       vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "web-2"]
     unless File.exist?(secondDisk)
       vb.customize ['createhd', '--filename', secondDisk, '--variant', 'Fixed', '--size', 2 * 1024]
@@ -75,7 +75,7 @@ Vagrant.configure("2") do |config|
     db.vm.hostname = "db"
     db.vm.network "private_network", ip: "192.168.33.100"
     db.vm.provision "shell", inline: "echo Iam DB server"
-    db.vm.povider "virtualbox" do |vb|
+    db.vm.provider "virtualbox" do |vb|
       vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "db"]
     unless File.exist?(thirdDisk)
       vb.customize ['createhd', '--filename', thirdDisk, '--variant', 'Fixed', '--size', 2 * 1024]
