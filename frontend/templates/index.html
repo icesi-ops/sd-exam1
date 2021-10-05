@@ -1,0 +1,116 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" type="text/css" href="styles.css"> -->
+    <title>Best app 4ever</title>
+</head>
+
+<body>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .main {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .table-files {
+            width: 50vw;
+            border: 1px solid darkgray;
+            border-radius: 5px;
+        }
+
+        .table-files>thead {
+            background: lightgray;
+        }
+
+        td,
+        th {
+            padding: 8px;
+        }
+
+        button,
+        input[type="file"] {
+            padding: 8px;
+            border: 2px solid grey;
+            border-radius: 5px;
+            background: white;
+            width: auto;
+        }
+
+        .uploader {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+
+        .general-info {
+            margin: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upload-text {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .down {
+            border: solid darkgray;
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 3px;
+            transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+            margin-left: 6px;
+        }
+
+    </style>
+    <div class="main">
+        <div class="general-info">
+            <h3>Welcome to Better-than-S3 App!</h3>
+            <span>Upload your files and see the resume downbelow</span>
+        </div>
+        <div class="uploader">
+            <form action="/upload" method="post">
+                <input class="file-loader" type="file" name=file>
+                <input type="submit" value="Upload">
+            </form>
+
+        </div>
+        <table class="table-files">
+            <thead>
+                <th>Name</th>
+                <th>Path</th>
+                <th>Type</th>
+            </thead>
+            <tbody>
+                {% for el in files -%}
+                <tr>
+                    <td>{{el.name}}</td>
+                    <td>{{el.path}}</td>
+                    <td>{{el.type}}</td>
+                </tr>
+                {% endfor -%}
+            </tbody>
+        </table>
+        <div class="system-info">
+            <h3>System information</h3>
+        </div>
+    </div>
+
+</body>
+
+</html>
