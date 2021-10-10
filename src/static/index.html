@@ -9,11 +9,17 @@
 
     <body>
 	
-        <label> Capacidad:  </label> <p id=capacity> </p>
+        <label id=capaLabel> Capacidad:  </label> <p id=capacity> </p>
         
-        <form>
-	<label>Archivos</label>
-	<input type="">Si desea subir un archivo presione</h3>
-	</form>      
+        <div id="listFiles"></div>
+
+        <form id=form>
+
+            <label>Archivos</label>
+            <div class="input-group mb-3">
+                <input type="file" class="form-control" id="inputGroupFile02">
+                <button class="input-group-text"  for="inputGroupFile02" >Upload</button>
+            </div>
+	    </form>      
     </body>
 </html>
