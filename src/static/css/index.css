@@ -1,0 +1,25 @@
+body{
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: "../assets/background.jpg";
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.form-neon{
+    position: relative;
+    display: inline-block;
+    padding: 15 px 30 px;
+    color: rgb(13, 35, 233);
+    letter-spacing: 4px;
+    font-size: 25px;
+    text-decoration: none;
+    overflow: hidden;
+    transition: 0.2s;
+}
+
+
+
