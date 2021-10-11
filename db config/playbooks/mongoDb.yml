@@ -3,7 +3,7 @@
   tasks:
   - name: Copy file with owner and permissions
     copy:
-      src: ./mongo.repo
+      src: ../mongo.repo
       dest: /etc/yum.repos.d/
   - name: Install mongodb
     yum:
