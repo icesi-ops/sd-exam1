@@ -13,13 +13,9 @@
         
         <div id="listFiles"></div>
 
-        <form id=form>
-
-            <label>Archivos</label>
-            <div class="input-group mb-3">
-                <input type="file" class="form-control" id="inputGroupFile02">
-                <button class="input-group-text"  for="inputGroupFile02" >Upload</button>
-            </div>
+        <form id=form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="archivo">
+            <input type="submit" value="Enviar">
 	    </form>      
     </body>
 </html>
