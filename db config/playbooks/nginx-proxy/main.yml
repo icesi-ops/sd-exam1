@@ -1,18 +1,22 @@
-
 ---
-- hosts: lb
+- hosts: all
   become: true
   vars_files:
     - vars/main.yml
   pre_tasks:
+    - shell: echo 'ingresa a las pre-tareas'
     - name: Ensure epel repository exists
       yum: name=epel-release
     - name: Install openssl dependencies
       yum: 
         name:
           - openssl-devel
+    - name: upgrtade openssl
+      yum: name=openssl state=latest
     - name: Turn on firewalld
       service: name=firewalld state=started enabled=yes
+    - name: upgrade python
+      yum: name=python state=latest
     - name: install pip
       yum: name=python-pip state=latest
     - name: upgrade pip
@@ -22,6 +26,7 @@
         name: pyopenssl
 
   tasks:
+    - shell: echo "ingresa a las tareas principales"
     - import_tasks: tasks/self-signed-cert.yml
     - name: Install nginx 
       yum:
@@ -54,4 +59,4 @@
     - name: Restart nginx
       service: name=nginx state=restarted enabled=yes
     - name: COnfigure SO to allow to nginx make the proxyredirect
-      shell: setsebool httpd_can_network_connect on -P
+      shell: setsebool httpd_can_network_connect on -P 
