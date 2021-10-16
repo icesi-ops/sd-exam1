@@ -1,3 +1,4 @@
 ### Vagrant ###
 # General
 .vagrant/
+node_modules

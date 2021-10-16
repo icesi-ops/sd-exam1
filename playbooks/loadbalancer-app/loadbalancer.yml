@@ -28,5 +28,3 @@
         owner: root
         group: wheel
         mode: "0644"
-    - name: "Create the Node.js application"
-      shell: node /etc/loadbalancer/main.js
