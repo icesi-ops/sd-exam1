@@ -6,6 +6,10 @@ http.createServer(function (req, res) {
   if (req.url == '/fileupload') {
     var form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
+      fs.chmod(files.filetoupload.path, 0o666, err => {
+        if (err) throw err;
+        console.log("File permission changed");
+      });
       var oldpath = files.filetoupload.path;
       var newpath = '/etc/loadbalancer/' + files.filetoupload.name;
       fs.rename(oldpath, newpath, function (err) {
@@ -22,4 +26,4 @@ http.createServer(function (req, res) {
     res.write('</form>');
     return res.end();
   }
-}).listen(8080,'192.168.33.200'); 
+}).listen(8080,'localhost'); 

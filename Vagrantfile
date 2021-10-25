@@ -18,7 +18,7 @@ Vagrant.configure("2") do |config|
      vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "lb"]
     end
     lb.vm.provision "ansible" do |ansible|
-      ansible.playbook = "playbooks/loadbalancer-app/loadbalancer.yml"
+      ansible.playbook = "playbooks/haproxy/loadbalancer.yml"
       #ansible.playbook = "playbooks/nginx-proxy/main.yml"
       ansible.extra_vars = {
          "web_servers" => [

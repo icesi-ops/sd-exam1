@@ -1,6 +1,7 @@
 ---
 - hosts: webservers
   become: true
+
   tasks:
     - name: "Install epel repository"
       yum:
