@@ -50,7 +50,7 @@ Deberá incluir un README.md con los sgntes puntos:
 - Desglose claro de los pasos: se supone que alguien que no esté familiarizado con su desarrollo debería ser capaz de leer los documentos y ejecutar los pasos necesarios para correr el ambiente de su app.
 - Si necesitas poner este servicio en producción, ¿qué crees que puede faltar? ¿que le falta? ¿Qué le añadirías si tuvieras más tiempo?
 
-# BONUS (BONUS PARA parcial en grupo)
+# BONUS (para parcial en grupo)
 - Montar una ec2 y desplegar el parcial en una ec2.
 - Utilizar un dominio gratis como .tk para el consumo de la aplicación corriendo en la ec2
 - Crear el script de despliegue usando JENKINS.
