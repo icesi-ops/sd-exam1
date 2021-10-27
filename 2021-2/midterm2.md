@@ -37,6 +37,10 @@ El contexto de la app es LIBRE, es decir, el estudiante o grupo le puede dar el 
 - EL API solo debe devolver respuestas en formato JSON.
 - Debe existir delante de la aplicación un NGINX que funcione como proxy para el redireccionamiento HTTP a HTTPS.
 
+Deberá incluir un README.md con los sgntes puntos:
+- Desglose claro de los pasos: se supone que alguien que no esté familiarizado con su desarrollo debería ser capaz de leer los documentos y ejecutar los pasos necesarios para correr el ambiente de su app.
+- Si necesitas poner este servicio en producción, ¿qué crees que puede faltar? ¿que le falta? ¿Qué le añadirías si tuvieras más tiempo?
+
 ## PARCIAL PARA 2-3 PERSONAS (BONUS PARA 1 PERSONA)
 
 Además debera crear un script en bash que automatice todo el proceso de construcción y despliegue de la app con docker-compose.
