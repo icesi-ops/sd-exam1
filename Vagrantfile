@@ -19,7 +19,6 @@ Vagrant.configure("2") do |config|
     end
     lb.vm.provision "ansible" do |ansible|
       ansible.playbook = "playbooks/haproxy/loadbalancer.yml"
-      #ansible.playbook = "playbooks/nginx-proxy/main.yml"
       ansible.extra_vars = {
          "web_servers" => [
           {"name": "web-1","ip":"192.168.33.11"},
@@ -27,7 +26,17 @@ Vagrant.configure("2") do |config|
          ] 
       }
     
-    end  
+    end 
+    lb.vm.provision "ansible" do |ansible|
+      ansible.playbook = "playbooks/nginx-proxy/main.yml"
+      ansible.extra_vars = {
+         "web_servers" => [
+          {"name": "web-1","ip":"192.168.33.11"},
+          {"name": "web-2","ip":"192.168.33.12"}
+         ] 
+      }
+    
+    end   
   end
 
 # This is the provisioning for the two Virtual Machines
@@ -54,7 +63,6 @@ Vagrant.configure("2") do |config|
    db.vm.box = "centos/7"
    db.vm.hostname = "db"
    db.vm.network "private_network", ip: "192.168.33.100"
-   db.vm.provision "shell", inline: "echo Iam DB server"
   end
 end
 
