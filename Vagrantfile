@@ -49,7 +49,7 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "web-#{i}"]
      end
      web.vm.provision "ansible" do |ansible|
-      ansible.playbook = "playbooks/nginx/webserver.yml"
+      ansible.playbook = "playbooks/node/webserver.yml"
       ansible.groups = {
         "webservers" => ["web-#{i}"]
       }
