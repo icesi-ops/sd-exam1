@@ -2,26 +2,29 @@
 - hosts: webservers
   become: true
 
+  # To set the required dependencies and tasks that need to be done first
+  pre_tasks:
+    - name: "Download Nodesource"
+      shell: curl -L -o nodesource_setup.sh https://rpm.nodesource.com/setup_10.x
+    - name: "Install de Nodesource repo"
+      shell: sudo -E bash nodesource_setup.sh
+    - name: "Clean cache info"
+      shell: yum clean all
+    - name: "Ensure queries to be done"
+      shell: yum makecache fast
+    - name: "Install buildin tools"
+      shell: yum install -y gcc-c++ make
+    - name: "Install latest release of Node.js package"
+      shell: yum install -y nodejs
+
+  # Tasks to create the Node.js application
   tasks:
-    - name: "Install epel repository"
-      yum:
-        name: epel-release
-    - name: "Install nginx"
-      yum:
-        name: nginx
-        state: present
-    - name: "Start nginx"
-      service:
-        name: nginx
-        state: started
-        enabled: yes
-    - name: "Declare hostname"
-      shell: "echo $HOSTNAME"
-      register: print_hostname
-    - name: "Configure nginx"
+    - name: "Create the folder"
+      shell: mkdir /usr/share/webserver
+    - name: "Copy app file"
       template:
-        src: templates/index.j2
-        dest: /usr/share/nginx/html/index.html
+        src: templates/main.js
+        dest: /usr/share/webserver/main.js
         owner: root
         group: wheel
         mode: "0644"

@@ -1,6 +1,7 @@
 var http = require('http');
 var formidable = require('formidable');
 var fs = require('fs');
+const port = process.env.PORT;
 
 http.createServer(function (req, res) {
   if (req.url == '/fileupload') {
@@ -11,7 +12,7 @@ http.createServer(function (req, res) {
         console.log("File permission changed");
       });
       var oldpath = files.filetoupload.path;
-      var newpath = '/etc/loadbalancer/' + files.filetoupload.name;
+      var newpath = '/etc/webserver/' + files.filetoupload.name;
       fs.rename(oldpath, newpath, function (err) {
         if (err) throw err;
         res.write('File uploaded and moved!');
@@ -26,4 +27,4 @@ http.createServer(function (req, res) {
     res.write('</form>');
     return res.end();
   }
-}).listen(8080,'localhost'); 
+}).listen(8080, port); 

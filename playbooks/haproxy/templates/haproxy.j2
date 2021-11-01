@@ -79,5 +79,5 @@ backend static
 backend nodes
     balance     roundrobin
     {% for server in web_servers %}
-    server web-{{server.name}} {{server.ip}}:80 check
+    server web-{{server.name}} {{server.ip}}:8080 check
     {% endfor %}
