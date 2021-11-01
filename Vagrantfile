@@ -54,7 +54,16 @@ Vagrant.configure("2") do |config|
    db.vm.box = "centos/7"
    db.vm.hostname = "db"
    db.vm.network "private_network", ip: "192.168.33.100"
-   db.vm.provision "shell", inline: "echo Iam DB server"
+   db.vm.provider "virtualbox" do |vb|
+    vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "db"]
+   end
+  db.vm.provision "ansible" do |ansible|
+    ansible.playbook = "playbooks/database/database.yml"
+    ansible.groups = {
+      "databases" => [{"name": "db","ip":"192.168.33.200"}]
+    }
+    end
   end
 end
+
 
