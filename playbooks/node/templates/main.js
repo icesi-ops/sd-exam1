@@ -9,10 +9,10 @@ http.createServer(function (req, res) {
     form.parse(req, function (err, fields, files) {
       fs.chmod(files.filetoupload.filepath, 0o666, err => {
         if (err) throw err;
-        console.log("File permission changed");
+        console.log("File permission changed "+files.filetoupload.filepath);
       });
       var oldpath = files.filetoupload.filepath;
-      var newpath = '/uploaded_files' + files.filetoupload.originalFilename;
+      var newpath = 'uploaded_files/' + files.filetoupload.originalFilename;
       fs.rename(oldpath, newpath, function (err) {
         if (err) throw err;
         res.write('File uploaded and moved!');
