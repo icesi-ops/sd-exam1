@@ -3,9 +3,9 @@
 # 📚 Team members
 
 <aside>
-💡 **Sebastián Becerra Zapata** A00352804
-**Daniel Alejandro Gómez Páramo** A00305232
-**Maria Camila Lenis Restrepo** A00351598
+💡 Sebastián Becerra Zapata A00352804 |
+Daniel Alejandro Gómez Páramo A00305232 |
+Maria Camila Lenis Restrepo A00351598
 
 </aside>
 
