@@ -64,7 +64,7 @@ func (h *Handler) FetchFilesHandler(res http.ResponseWriter, req *http.Request) 
   json.NewEncoder(res).Encode(files)
 }
 
-
+// FIX MIMETYPE
 func (h *Handler) saveFileRegister(handler *multipart.FileHeader) error {
 	file := db.File{
 		ID:        generateUUID(),

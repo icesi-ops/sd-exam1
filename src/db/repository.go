@@ -77,3 +77,12 @@ func (r repo) FetchFiles() ([]File, error) {
 
 	return files, nil
 }
+
+func (r repo) createFilesTable() error {
+  if _, err := r.db.Exec(
+    "CREATE TABLE IF NOT EXISTS files (id STRING, path STRING, mimetype STRING, created_at TIMESTAMPTZ)"); err != nil {
+      log.Fatal(err)
+    }
+
+  return nil
+}
