@@ -1,7 +1,7 @@
 # sd-exam1
 
-#### Alejandro Barrera Lozano - A
-#### Santiago Figueroa Aguirre - A
+#### Alejandro Barrera Lozano - A00351328
+#### Santiago Figueroa Aguirre - A00347950
 #### Ernesto Betancourt Ramirez - A00049172
 
 # Documentación del sistema centralizado de almacenamiento
