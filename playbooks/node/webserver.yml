@@ -31,8 +31,6 @@
         owner: root
         group: wheel
         mode: "0644"
-    - name: "Create folder to store the uploaded files"
-      shell: "mkdir uploaded_files"
     - name: "Install formidable"
       shell: "npm install formidable"
     - name: "Install forever"
