@@ -1,0 +1,11 @@
+---
+- hosts: databases
+  tasks:
+    - name: Config master
+      script: ../scripts/masterConfig.sh
+    - debug: msg="master configured"
+- hosts: servers
+  tasks:
+    - name: Config slaves
+      script: ../scripts/slaveConfig.sh
+    - debug: msg="slaves configured"
