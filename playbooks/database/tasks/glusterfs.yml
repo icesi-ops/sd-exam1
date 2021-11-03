@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+---
+>>>>>>> 0c4b54636a7d8ea78529e656d3a8ab76a1fa708b
 # These tasks install an set up Gluster
 - name: "Format the sdb disk"
   shell: "mkfs.xfs -i size=512 /dev/sdb "
@@ -21,6 +25,10 @@
   shell: "systemctl enable glusterd"
 - name: "Start Gluster daemon"
   shell: "systemctl start glusterd"
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0c4b54636a7d8ea78529e656d3a8ab76a1fa708b
 - name: "Peer probe web-1"
   shell: "gluster peer probe 192.168.33.11"
 - name: "Peer probe web-2"

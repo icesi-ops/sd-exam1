@@ -2,3 +2,4 @@
 # General
 .vagrant/
 node_modules
+*.vdi

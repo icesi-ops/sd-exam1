@@ -2,6 +2,7 @@
 - hosts: databases
   become: true
 
+<<<<<<< HEAD
   # To set the required dependencies and tasks that need to be done first
   pre_tasks:
     - name: "Download Nodesource"
@@ -48,3 +49,8 @@
       shell: "sudo systemctl start postgresql-11"
     - name: "enable postgresql11"
       shell:  "sudo systemctl enable postgresql-11"
+=======
+  tasks:
+  - import_tasks: tasks/glusterfs.yml
+  
+>>>>>>> 0c4b54636a7d8ea78529e656d3a8ab76a1fa708b
