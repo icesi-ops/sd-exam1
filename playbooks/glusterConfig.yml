@@ -1,0 +1,11 @@
+---
+- hosts: databases
+  become: true
+  tasks:
+    - name: Config master
+      script: ../scripts/masterConfig.sh
+- hosts: servers
+  become: true
+  tasks:
+    - name: Config slaves
+      script: ../scripts/slaveConfig.sh

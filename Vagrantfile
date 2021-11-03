@@ -1,3 +1,4 @@
+
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
@@ -5,7 +6,7 @@ firstDisk = '.firstDisk.vdi'
 secondDisk = './secondDisk.vdi'
 thirdDisk = './thirdDisk.vdi'
 
-Vagrant.configure("2") do |config|
+Vagrant.configure("2") do |config|  
 
   config.ssh.insert_key = false
   config.vm.define "lb" do |lb|
@@ -37,7 +38,7 @@ Vagrant.configure("2") do |config|
     unless File.exist?(firstDisk)
       vb.customize ['createhd', '--filename', firstDisk, '--variant', 'Fixed', '--size', 2 * 1024]
      end
-    vb.customize ['storageattach', :id, '--storagect1', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', firstDisk]
+    vb.customize ['storageattach', :id, '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', firstDisk]
     end
     web1.vm.provision "shell", path: "scripts/glusterfs.sh"
     web1.vm.provision "shell", path: "scripts/configuration.sh"
@@ -58,7 +59,7 @@ Vagrant.configure("2") do |config|
     unless File.exist?(secondDisk)
       vb.customize ['createhd', '--filename', secondDisk, '--variant', 'Fixed', '--size', 2 * 1024]
      end
-    vb.customize ['storageattach', :id, '--storagect1', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', secondDisk]
+    vb.customize ['storageattach', :id, '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', secondDisk]
     end
     web2.vm.provision "shell", path: "scripts/glusterfs.sh"
     web2.vm.provision "shell", path: "scripts/configuration.sh"
@@ -80,16 +81,23 @@ Vagrant.configure("2") do |config|
     unless File.exist?(thirdDisk)
       vb.customize ['createhd', '--filename', thirdDisk, '--variant', 'Fixed', '--size', 2 * 1024]
      end
-    vb.customize ['storageattach', :id, '--storagect1', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', thirdDisk]
+    vb.customize ['storageattach', :id, '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', thirdDisk]
     end
     db.vm.provision "shell", path: "scripts/glusterfs.sh"
     db.vm.provision "shell", path: "scripts/configuration.sh"
-    db.vm.provision "shell", path: "scripts/masterConfig.sh"
+
     db.vm.provision "ansible" do |ansible|
        ansible.playbook = "playbooks/nginx/nginx.yml"
        ansible.groups = {
-         "servers" => ["db"]
+         "databases" => ["db"]
        }
      end
   end
+  
+#  config.vm.provision "ansible" do |ansible|
+#   ansible.playbook = "playbooks/glusterConfig.yml"
+#   ansible.limit = "all"
+#  end
+
+
 end

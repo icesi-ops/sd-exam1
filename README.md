@@ -1,5 +1,4 @@
 # sd-exam1
-
   
 ## Universidad ICESI  
 **Curso:** Sistemas Distribuidos.  
@@ -9,7 +8,8 @@
 
 ### **Objetivos**  
 - Realizar de forma autónoma el aprovisionamiento automático de infraestructura.  
-- Diagnosticar y ejecutar de forma autónoma las acciones necesarias para lograr infraestructuras estables.    
+- Diagnosticar y ejecutar de forma autónoma las acciones necesarias para lograr infraestructuras estables.  
+
 ### **Tecnologías sugeridas para el desarrollo del examen.**   
 - Vagrant.  
 - Box del sistema operativo CentOS7.  
@@ -53,7 +53,6 @@ Para probar su funcionamiento se probó agregando varios archivos a web-1 y efec
 ### **Problemas durante el aprovisionamiento de la infraestructura.**  
 - **Automatización del gluster:** no se logró que quedase automatico la configuración del gluster, por lo que cuando se hace el "vagrant up", toca hacer un "ansible-playbook playbooks/glusterConfig.yml" y con eso quedan las maquinas configuradas con el glusterfs.    
   
-
 
 ### **Integrantes.**
 - Alejandro Barrera Lozano - A00351328.  
