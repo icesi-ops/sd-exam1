@@ -1,0 +1,18 @@
+---
+# These tasks install a haproxy in the loadbalancer
+- name: "Install haproxy"
+  yum:
+    name:
+      - haproxy
+- name: "Configure haproxy"
+  template:
+    src: templates/haproxy.j2
+    dest: /etc/haproxy/haproxy.cfg
+    owner: root
+    group: wheel
+    mode: "0644"
+- name: "Restart and enable haproxy"
+  service:
+    name: haproxy
+    state: restarted
+    enabled: yes

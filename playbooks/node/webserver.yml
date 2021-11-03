@@ -1,5 +1,5 @@
 ---
-- hosts: lb
+- hosts: webservers
   become: true
 
   # To set the required dependencies and tasks that need to be done first
@@ -19,12 +19,21 @@
 
   # Tasks to create the Node.js application
   tasks:
-    - name: "Create the folder"
-      shell: mkdir /etc/loadbalancer
+    - name: "Declare hostname"
+      shell: "echo $HOSTNAME"
+      register: print_hostname
     - name: "Copy app file"
       template:
         src: templates/main.js
-        dest: /etc/loadbalancer/main.js
+        dest: main.js
         owner: root
         group: wheel
         mode: "0644"
+    - name: "Create folder to store the uploaded files"
+      shell: "mkdir uploaded_files"
+    - name: "Install formidable"
+      shell: "npm install formidable"
+    - name: "Install forever"
+      shell: "npm install forever -g"
+    - name: "Run Node app"
+      script: "templates/upload_app.sh {{print_hostname}}"
