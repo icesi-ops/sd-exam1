@@ -1,6 +1,50 @@
-- hosts: db
+---
+- hosts: databases
   become: true
 
+  # To set the required dependencies and tasks that need to be done first
+  pre_tasks:
+    - name: "Download Nodesource"
+      shell: curl -L -o nodesource_setup.sh https://rpm.nodesource.com/setup_10.x
+    - name: "Install de Nodesource repo"
+      shell: sudo -E bash nodesource_setup.sh
+    - name: "Clean cache info"
+      shell: yum clean all
+    - name: "Ensure queries to be done"
+      shell: yum makecache fast
+    - name: "Install buildin tools"
+      shell: yum install -y gcc-c++ make
+    - name: "Install latest release of Node.js package"
+      shell: yum install -y nodejs
+
+  # Tasks to create the Node.js application
   tasks:
-  - import_tasks: tasks/glusterfs.yml
-  
+    - import_tasks: tasks/glusterfs.yml
+    - name: "Declare hostname"
+      shell: "echo $HOSTNAME"
+      register: print_hostname
+    - name: "Copy app file"
+      template:
+        src: db.js
+        dest: db.js
+        owner: root
+        group: wheel
+        mode: "0644"
+    - name: "Create folder to store the uploaded files"
+      shell: "mkdir uploaded_files"
+    - name: "Install formidable"
+      shell: "npm install formidable"
+    - name: "Install forever"
+      shell: "npm install forever -g"
+    - name: "Install pg"
+      shell: "npm install pg -y"
+    - name: "install a repository configuration package using the official PostgreSQL repository"
+      shell: "yum install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm -y"
+    - name: "install postgresql11"
+      shell: "yum install postgresql11-server -y"
+    - name: "Create a new PostgreSQL database cluster with initdb"
+      shell:  "/usr/pgsql-11/bin/postgresql-11-setup initdb"
+    - name: "start postgresql11"
+      shell: "sudo systemctl start postgresql-11"
+    - name: "enable postgresql11"
+      shell:  "sudo systemctl enable postgresql-11"
