@@ -47,6 +47,10 @@ Vagrant.configure("2") do |config|
      web.vm.network "private_network", ip: "192.168.33.1#{i}"
      web.vm.provider "virtualbox" do |vb|
       vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "web-#{i}"]
+      unless File.exist?("./partition_#{i}.vdi")
+        vb.customize ['createhd', '--filename', "./partition_#{i}.vdi", '--size', 5 * 1024]
+      end
+      vb.customize ['storageattach', :id, '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', "./partition_#{i}.vdi"]
      end
      web.vm.provision "ansible" do |ansible|
       ansible.playbook = "playbooks/node/webserver.yml"
@@ -65,6 +69,10 @@ Vagrant.configure("2") do |config|
    db.vm.network "private_network", ip: "192.168.33.100"
    db.vm.provider "virtualbox" do |vb|
     vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "db"]
+    unless File.exist?("./partition_db.vdi")
+      vb.customize ['createhd', '--filename', "./partition_db.vdi", '--size', 5 * 1024]
+    end
+    vb.customize ['storageattach', :id, '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', "./partition_db.vdi"]
    end
   db.vm.provision "ansible" do |ansible|
     ansible.playbook = "playbooks/database/database.yml"
@@ -74,5 +82,3 @@ Vagrant.configure("2") do |config|
     end
   end
 end
-
-
