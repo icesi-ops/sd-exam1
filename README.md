@@ -42,7 +42,7 @@ Deberá desplegar una plataforma que cumpla con los siguientes requerimientos:
 
 ### **Problemas durante el aprovisionamiento de la infraestructura.**  
 - **Automatización del gluster:** no se logró que quedase automatico la configuración del gluster, por lo que cuando se hace el "vagrant up", toca hacer un "ansible-playbook playbooks/glusterConfig.yml" y con eso quedan las maquinas configuradas con el glusterfs.    
-  - .   
+  
 
 
 ### **Integrantes.**
