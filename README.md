@@ -31,7 +31,7 @@ vagrant up
 
 This will create an infrastructure like this:
 
-[https://camo.githubusercontent.com/2373b9f8c6a1f1bdd84295995672de1815806704e4ff274d2485a974cbe6deb0/68747470733a2f2f692e6962622e636f2f595138676459642f6469616772616d2e706e67](https://camo.githubusercontent.com/2373b9f8c6a1f1bdd84295995672de1815806704e4ff274d2485a974cbe6deb0/68747470733a2f2f692e6962622e636f2f595138676459642f6469616772616d2e706e67)
+![](https://i.ibb.co/YQ8gdYd/diagram.png)
 
 <aside>
 💡 There will be four virtual machines running in different ports, where we will get one working as a **loadbalancer** with a **reverse proxy** that will be redirecting HTTP requests to HTTPS. Two virtual machines working as **web servers** and one working as a **database**. 
