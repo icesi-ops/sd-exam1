@@ -6,9 +6,7 @@ firstDisk = '.firstDisk.vdi'
 secondDisk = './secondDisk.vdi'
 thirdDisk = './thirdDisk.vdi'
 
-Vagrant.configure("2") do |config|
-
-  N = 0  
+Vagrant.configure("2") do |config|  
 
   config.ssh.insert_key = false
   config.vm.define "lb" do |lb|
@@ -50,7 +48,6 @@ Vagrant.configure("2") do |config|
          "servers" => ["web-1"]
        }
      end
-  N=1
   end
 
   config.vm.define "web-2" do |web2|
@@ -72,7 +69,6 @@ Vagrant.configure("2") do |config|
          "servers" => ["web-2"]
        }
      end
-  N=2
   end
 
   config.vm.define "db" do |db|
@@ -92,19 +88,16 @@ Vagrant.configure("2") do |config|
 
     db.vm.provision "ansible" do |ansible|
        ansible.playbook = "playbooks/nginx/nginx.yml"
-       ansible.playbook = "playbooks/glusterConfig.yml"
        ansible.groups = {
          "databases" => ["db"]
        }
      end
-  N=3
   end
   
-  if N == 3
-    config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "playbooks/glusterConfig.yml"
-      ansible.limit = "all"
-    end
-  end
+#  config.vm.provision "ansible" do |ansible|
+#   ansible.playbook = "playbooks/glusterConfig.yml"
+#   ansible.limit = "all"
+#  end
+
 
 end
