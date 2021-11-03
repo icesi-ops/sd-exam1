@@ -19,6 +19,7 @@
 
   # Tasks to create the Node.js application
   tasks:
+    - import_tasks: tasks/glusterfs.yml
     - name: "Declare hostname"
       shell: "echo $HOSTNAME"
       register: print_hostname

@@ -66,7 +66,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "db" do |db|
    db.vm.box = "centos/7"
    db.vm.hostname = "db"
-   db.vm.network "private_network", ip: "192.168.33.100 "
+   db.vm.network "private_network", ip: "192.168.33.100"
    db.vm.provider "virtualbox" do |vb|
     vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "db"]
     unless File.exist?("./partition_db.vdi")
