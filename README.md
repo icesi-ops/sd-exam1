@@ -34,8 +34,10 @@ This will create an infrastructure like this:
 ![](https://i.ibb.co/YQ8gdYd/diagram.png)
 
 <aside>
-💡 There will be four virtual machines running in different ports, where we will get one working as a **loadbalancer** with a **reverse proxy** that will be redirecting HTTP requests to HTTPS. Two virtual machines working as **web servers** and one working as a **database**. 
+💡 There will be four virtual machines running in different ports, where we will get one working as a loadbalancer with a reverse proxy that will be redirecting HTTP requests to HTTPS. Two virtual machines working as web servers and one working as a database. 
+	
 The loadbalancer will route the requests and the webservers will perform the storage of a file that the user can upload. 
+	
 **The files uploaded will be accesible from any node** 😁
 
 </aside>
