@@ -10,7 +10,7 @@ import (
 
 var (
 	// FIX THIS VARIABLES FOR ENV VARS INSTEAD TO
-	// cockroachAddress      = "root@localhost:26257"
+	// cockroachAddress = "root@localhost:26257"
 	cockroachAddress      = os.Getenv("DBADDRESS")
 	cockroachDatabaseName = "files"
 )
@@ -87,7 +87,7 @@ func (r repo) FetchFiles() ([]File, error) {
 
 func (r repo) createFilesTable() error {
 	if _, err := r.db.Exec(
-		"CREATE TABLE IF NOT EXISTS files (id STRING, path STRING, mimetype STRING, created_at TIMESTAMPTZ), SET database=files"); err != nil {
+		"CREATE TABLE IF NOT EXISTS files (id STRING, path STRING, mimetype STRING, created_at TIMESTAMPTZ)"); err != nil {
 		log.Fatal(err)
 	}
 
