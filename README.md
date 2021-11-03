@@ -58,3 +58,4 @@ Para probar su funcionamiento se probó agregando varios archivos a web-1 y efec
 - Alejandro Barrera Lozano - A00351328.  
 - Ernesto Betancourt Ramirez - A00049172.  
 - Santiago Figueroa Aguirre - A00347950.  
+

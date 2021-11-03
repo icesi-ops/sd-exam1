@@ -1,0 +1,47 @@
+#html{
+    background-position: center;
+    background-image: url("https://pbs.twimg.com/profile_images/1400844926196150272/vqbIQ7kU.jpg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Times New Roman', Times, serif;
+    background-color: transparent;
+}
+
+.form-neon{
+    position: relative;
+    display: inline-block;
+    padding: 15 px 30 px;
+    color: rgb(230, 230, 230);
+    background-color: rgba(31, 31, 31, 0.356);
+    
+    letter-spacing: 4px;
+    font-size: 25px;
+    text-decoration: none;
+    overflow: hidden;
+    transition: 0.2s;
+}
+
+.form-neon:hover{
+    background: black;
+    color: ghostwhite;
+    box-shadow: 0 0 10px black, 0 0 40px black, 0 0 80px black;
+    transition-delay: 0.5s;
+}
+
+#capacityDiv{
+
+    margin: auto;
+    position: fixed;
+    font-size: 250%;
+    color: rgb(0, 0, 0);
+}
