@@ -1,0 +1,35 @@
+---
+# These tasks install an set up Gluster
+- name: "Format the sdb disk"
+  shell: "mkfs.xfs -i size=512 /dev/sdb "
+- name: "Create mount point of sdb"
+  shell: "mkdir -p /bricks/brick"
+- name: "Configure fstab"
+  shell: "echo '/dev/sdb /bricks/brick xfs defaults 1 2' >> /etc/fstab"
+- name: "Apply changes over fstab"
+  shell: "mount -a"
+- name: "Ensure changes"
+  shell: "mount"
+- name: "Install Gluster release" 
+  yum:
+    name:
+      - centos-release-gluster
+- name: "Install Gluster server" 
+  yum:
+    name:
+      - glusterfs-server
+- name: "Enable Gluster daemon"
+  shell: "systemctl enable glusterd"
+- name: "Start Gluster daemon"
+  shell: "systemctl start glusterd"
+
+- name: "Peer probe web-1"
+  shell: "gluster peer probe 192.168.33.11"
+- name: "Peer probe web-2"
+  shell: "gluster peer probe 192.168.33.12"
+- name: "Create the volumes and replicas"
+  shell: "gluster volume create glustertest replica 2 transport tcp 192.168.33.11:/brick 192.168.33.12:/brick force"
+- name: "Start the volume"
+  shell: "gluster volume start glustertest"
+- name: "Mount the volumen in node"
+  shell: "mkdir /mnt/glusterfs && sudo mount -t glusterfs 192.168.33.100:/glustertest /mnt/glusterfs"

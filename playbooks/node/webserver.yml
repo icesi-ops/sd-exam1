@@ -1,0 +1,39 @@
+
+---
+- hosts: webservers
+  become: true
+
+  # To set the required dependencies and tasks that need to be done first
+  pre_tasks:
+    - name: "Download Nodesource"
+      shell: curl -L -o nodesource_setup.sh https://rpm.nodesource.com/setup_10.x
+    - name: "Install de Nodesource repo"
+      shell: sudo -E bash nodesource_setup.sh
+    - name: "Clean cache info"
+      shell: yum clean all
+    - name: "Ensure queries to be done"
+      shell: yum makecache fast
+    - name: "Install buildin tools"
+      shell: yum install -y gcc-c++ make
+    - name: "Install latest release of Node.js package"
+      shell: yum install -y nodejs
+
+  # Tasks to create the Node.js application
+  tasks:
+    - import_tasks: tasks/glusterfs.yml
+    - name: "Declare hostname"
+      shell: "echo $HOSTNAME"
+      register: print_hostname
+    - name: "Copy app file"
+      template:
+        src: templates/main.js
+        dest: main.js
+        owner: root
+        group: wheel
+        mode: "0644"
+    - name: "Install formidable"
+      shell: "npm install formidable"
+    - name: "Install forever"
+      shell: "npm install forever -g"
+    - name: "Run Node app"
+      script: "templates/upload_app.sh {{print_hostname}}"
