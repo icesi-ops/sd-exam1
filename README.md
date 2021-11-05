@@ -50,6 +50,11 @@ Para ejecutar el binario de Go e inicar el webserver se debe usar una variable d
 
 Donde DBADDRESS sera la direccion de la maquina que ejecute la db
 
+Evidencia de funcionamiento de los request GET y POST, para obtener todos los archivos y para subir uno
+
+![alt text](https://github.com/NonSenseGuy/sd-exam1/blob/master/img/ss_web.png?raw=true)
+![alt text](https://github.com/NonSenseGuy/sd-exam1/blob/master/img/ss_web_2.png?raw=true)
+
 ## Documentación del sistema centralizado de almacenamiento
 
 Para el sistema centralizado de almacenamiento se implementó GlusterFs, haciendo una replica del volumen. Se usaron tres discos, uno para ser el nodo maestro(db machine) y los otros dos para ser los nodos esclavos(web-1, web-2 machines), estos discos fueron creados y asignados a las respectivas maquinas en el Vagrantfile. Del mismo modo, despues de la asignacion de los discos se efectua la instalacion y configuracion de GlusterFs en las maquinas db, web-1 y web-2, haciendo uso de los scrips glusterfs.sh y configuration.sh. 
