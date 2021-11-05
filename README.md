@@ -40,7 +40,11 @@ Deberá desplegar una plataforma que cumpla con los siguientes requerimientos:
 - La CentOS7 Database deberá ser persistente con los datos, es decir, en caso de fallo del servidor de base de datos, este se podrá recuperar con la información que existía.  
 - Solo existe un servidor de base de datos CentOS7 Database.  
 
-## Documentacion del servidor web
+## Documentación del procedimiento para el aprovisionamiento del balanceador y el reverse proxy 
+Para el balanceador de carga se creó una máquina llamada lb que usa dos playbooks encargados de hacer la configuracion del haproxy y del nginx-proxy. El primero se llama loadbalancer.yml, el cual se encarga de la instalación y configuración del haproxy para que el balanceador de carga pueda balancear el tráfico de los servidores web. El segundo playbook se llama main.yml, este se encarga de la instalación y configuración del nginx-proxy con el que se busca que el balanceador de carga sea capás de hacer redirecciones http y https de los servidores haciendo uso del puerto 8083 y activando un firewall para los protocolos.
+Ademas para evitar el mal funcionamiento del balanceador de carga se usa un script encargado de permitirle a la máquina el uso de todos los puertos y agregar el puerto 8083 para que el firewall permita el acceso a los servidores.
+
+## Documentación del servidor web
 
 Para el servidor web se implemento un endpoint en Go, usando cockroachDB como base de datos. Al momento de provisionar estas maquinas se hace build del binario de go y se copia a los respectivos web servers. En el caso de la base de datos se instala cockroachDB y se inicializa como un nodo singular. Todas las vm's comparten una red privada para poder conectarlas los servidores web con la base de datos.
 
