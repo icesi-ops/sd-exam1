@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es" id="html">
+
+    <head>
+        <title> Icesi drive </title>
+        <!-- <link rel="stylesheet" href="css/index.css"> -->
+
+    </head>
+
+    <body>
+	
+        <div id="capacityDiv">
+        <label id=capaLabel> Capacidad:  </label> <p id=capacity> </p>
+        </div>
+        <div id="listFiles"></div>
+
+        <form  action="/file" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" class="form-neon">
+            <!-- <input type="hidden" name="token" value="{{.}}"/> -->
+            <input type="submit" value="Submit" class="form-neon">
+                <span id="span1"></span>
+                <span id="span2"></span>
+                <span id="span3"></span>
+                <span id="span4"></span>
+	    </form>      
+    </body>
+</html>

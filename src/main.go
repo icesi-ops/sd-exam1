@@ -4,18 +4,27 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	handlers "github.com/nonsenseguy/sd-exam1/handler"
 )
 
+func newRouter() *mux.Router {
+	r := mux.NewRouter()
+
+	handlers := handlers.NewHandler()
+
+	r.HandleFunc("/file", handlers.FetchFilesHandler).Methods("GET")
+	r.HandleFunc("/file", handlers.UploadFilesHandler).Methods("POST")
+
+	staticFileDirectory := http.Dir("./assets")
+	staticFileHandler := http.StripPrefix("/assets/", http.FileServer(staticFileDirectory))
+	r.PathPrefix("/assets").Handler(staticFileHandler).Methods("GET")
+
+	return r
+}
+
 func main() {
-  handler := handlers.NewHandler()
-  fs:= http.FileServer(http.Dir("./static"))
-  
-  http.HandleFunc("/", fs)
+	r := newRouter()
 
-	http.HandleFunc("/upload", handler.UploadFilesHandler)
-  http.HandleFunc("/files", handler.FetchFilesHandler)
-  
-
-	log.Fatal(http.ListenAndServe(":8081", nil))
+	log.Fatal(http.ListenAndServe(":8081", r))
 }

@@ -52,6 +52,7 @@ Vagrant.configure("2") do |config|
     web1.vm.provision "shell", path: "scripts/configuration.sh"
     web1.vm.provision "ansible" do |ansible|
        ansible.playbook = "playbooks/nginx/nginx.yml"
+       ansible.playbook = "playbooks/run-go.yml"
        ansible.groups = {
          "servers" => ["web-1"]
        }
@@ -73,6 +74,7 @@ Vagrant.configure("2") do |config|
     web2.vm.provision "shell", path: "scripts/configuration.sh"
     web2.vm.provision "ansible" do |ansible|
        ansible.playbook = "playbooks/nginx/nginx.yml"
+       ansible.playbook = "playbooks/run-go.yml"
        ansible.groups = {
          "servers" => ["web-2"]
        }

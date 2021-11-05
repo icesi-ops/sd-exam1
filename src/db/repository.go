@@ -4,12 +4,14 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
 	"time"
 )
 
 var (
-  // FIX THIS VARIABLES FOR ENV VARS INSTEAD TO 
-	cockroachAddress      = "root@localhost:26257"
+	// FIX THIS VARIABLES FOR ENV VARS INSTEAD TO
+	// cockroachAddress = "root@localhost:26257"
+	cockroachAddress      = os.Getenv("DBADDRESS")
 	cockroachDatabaseName = "files"
 )
 
@@ -39,7 +41,12 @@ func NewRepository() RepoI {
 		log.Fatal(err)
 	}
 
-	return repo{db: conn}
+	r := repo{db: conn}
+
+	// remove this after debugging
+	r.createFilesTable()
+
+	return r
 }
 
 func (r repo) CreateFile(file File) error {
@@ -79,10 +86,10 @@ func (r repo) FetchFiles() ([]File, error) {
 }
 
 func (r repo) createFilesTable() error {
-  if _, err := r.db.Exec(
-    "CREATE TABLE IF NOT EXISTS files (id STRING, path STRING, mimetype STRING, created_at TIMESTAMPTZ)"); err != nil {
-      log.Fatal(err)
-    }
+	if _, err := r.db.Exec(
+		"CREATE TABLE IF NOT EXISTS files (id STRING, path STRING, mimetype STRING, created_at TIMESTAMPTZ)"); err != nil {
+		log.Fatal(err)
+	}
 
-  return nil
+	return nil
 }
