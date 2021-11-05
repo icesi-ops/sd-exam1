@@ -5,6 +5,5 @@ web-2 ansible_ssh_host=192.168.33.12
 [databases]
 db ansible_ssh_host=192.168.33.100
 
-[first:children]
-servers
-databases
+[lb]
+lb ansible_ssh_host=192.168.33.200
