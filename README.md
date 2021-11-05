@@ -39,9 +39,17 @@ Deberá desplegar una plataforma que cumpla con los siguientes requerimientos:
 - Los servidores web en su frontend, también mostrarán la lista de archivos ya cargados actualmente.  
 - La CentOS7 Database deberá ser persistente con los datos, es decir, en caso de fallo del servidor de base de datos, este se podrá recuperar con la información que existía.  
 - Solo existe un servidor de base de datos CentOS7 Database.  
+## Documentacion del servidor web
 
+Para el servidor web se implemento un endpoint en Go, usando cockroachDB como base de datos. Al momento de provisionar estas maquinas se hace build del binario de go y se copia a los respectivos web servers. En el caso de la base de datos se instala cockroachDB y se inicializa como un nodo singular. Todas las vm's comparten una red privada para poder conectarlas los servidores web con la base de datos.
 
-# Documentación del sistema centralizado de almacenamiento
+Para ejecutar el binario de Go e inicar el webserver se debe usar una variable de entorno asi,
+
+`DBADDRESS=root@localhost:26257 ./main`
+
+Donde DBADDRESS sera la direccion de la maquina que ejecute la db
+
+## Documentación del sistema centralizado de almacenamiento
 
 Para el sistema centralizado de almacenamiento se implementó GlusterFs, haciendo una replica del volumen. Se usaron tres discos, uno para ser el nodo maestro(db machine) y los otros dos para ser los nodos esclavos(web-1, web-2 machines), estos discos fueron creados y asignados a las respectivas maquinas en el Vagrantfile. Del mismo modo, despues de la asignacion de los discos se efectua la instalacion y configuracion de GlusterFs en las maquinas db, web-1 y web-2, haciendo uso de los scrips glusterfs.sh y configuration.sh. 
 
@@ -52,6 +60,7 @@ Para probar su funcionamiento se probó agregando varios archivos a web-1 y efec
 
 ### **Problemas durante el aprovisionamiento de la infraestructura.**  
 - **Automatización del gluster:** no se logró que quedase automatico la configuración del gluster, por lo que cuando se hace el "vagrant up", toca hacer un "ansible-playbook playbooks/glusterConfig.yml" y con eso quedan las maquinas configuradas con el glusterfs.    
+- **Automatizacion de la ejecucion del binario de go en los servidores web"** Se intento usar un task que ejecutara el binario en segundo plano pero no funciono, como otra posible solucion se considero correr como un servicio usando las utils de systemd. Por cuestiones de tiempo no se logro esta implementacion e iniciamos la aplicacion de forma manual despues de provisionar los webservers.
   
 
 ### **Integrantes.**
