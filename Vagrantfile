@@ -14,19 +14,27 @@ Vagrant.configure("2") do |config|
     lb.vm.hostname = "lb"
     lb.vm.network "private_network", ip: "192.168.33.200"
     lb.vm.provider "virtualbox" do |vb|
-      vb.customize []
+      vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "lb"]
     end
     lb.vm.provision "ansible" do |ansible|
       ansible.playbook = "playbooks/haproxy/loadbalancer.yml"
+      ansible.extra_vars = {
+        "web_servers" =>[
+           {"name": "web-1", "ip": "192.168.33.11"},
+           {"name": "web-2", "ip": "192.168.33.12"}
+          ]
+      }
+    end
+    lb.vm.provision "ansible" do |ansible|
       ansible.playbook = "playbooks/nginx-proxy/main.yml"
       ansible.extra_vars = {
         "web_servers" =>[
            {"name": "web-1", "ip": "192.168.33.11"},
-           {"name": "web-2", "ip": "192.168.33.12"},
-           {"name": "web-3", "ip": "192.168.33.13"}
+           {"name": "web-2", "ip": "192.168.33.12"}
           ]
       }
     end
+    lb.vm.provision "shell", path: "scripts/openPort.sh"
   end
 
   config.vm.define "web-1" do |web1|
