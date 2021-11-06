@@ -1,0 +1,12 @@
+
+.main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+button {
+    border: 2px solid lightgray;
+    background: lightblue;
+}
