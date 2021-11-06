@@ -71,6 +71,9 @@ Para probar su funcionamiento se probó agregando varios archivos a web-1 y efec
 
 ![alt text](https://github.com/NonSenseGuy/sd-exam1/blob/master/img/2?raw=true)
 
+## Documentación de las tareas de integración
+Para la realización del parcial, cada miembro trabajó en una rama con funcionalidades distintas. En un inicio se usó como base un proyecto trabajado en clase el cual contenia la creación de las máquinas, el balancedor de carga incompleto, el reverse proxy incompleto y el sistema centralizado de almacenamiento.
+
 ### **Problemas durante el aprovisionamiento de la infraestructura.**  
 - **Automatización del gluster:** no se logró que quedase automatico la configuración del gluster, por lo que cuando se hace el "vagrant up", toca hacer un "ansible-playbook playbooks/glusterConfig.yml" y con eso quedan las maquinas configuradas con el glusterfs.    
 - **Automatizacion de la ejecucion del binario de go en los servidores web"** Se intento usar un task que ejecutara el binario en segundo plano pero no funciono, como otra posible solucion se considero correr como un servicio usando las utils de systemd. Por cuestiones de tiempo no se logro esta implementacion e iniciamos la aplicacion de forma manual despues de provisionar los webservers.
