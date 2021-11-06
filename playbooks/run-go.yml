@@ -1,0 +1,15 @@
+---
+- hosts: servers
+  become: true
+  tasks:
+    - name: Copy go binary
+      copy:
+        src: ../src/main
+        dest: /home/vagrant/go-app
+        owner: root
+        group: root
+        mode: 0644
+    - name: Run go binary
+      shell: "( ( nohup /usr/bin/go-app 1>/dev/null 2>&1 ) & )"
+      async: 5
+      poll: 0

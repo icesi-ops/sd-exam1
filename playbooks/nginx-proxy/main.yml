@@ -1,0 +1,43 @@
+---
+- hosts: lb
+  become: true
+  vars_files:
+    - vars/main.yml
+  pre_tasks:
+    - name: ensure epel repository exist
+      yum: name=epel-release
+    - name:
+      yum:
+        name:
+          - openssl-devel
+    - name: turn on firewalld
+      service: name=firewalld state=started enabled=yes
+    - name: install pip
+      yum: name=python-pip state=latest
+    - name: upgrade pip
+      shell: pip install --upgrade "pip <21.0"
+    - name: install pip dependec
+      pip:
+        name: pyopenssl
+  tasks:
+    - import_tasks: tasks/self-signed-cert.yml
+    - name: install nginx
+      yum:
+        name: nginx
+        state: present
+    - name: enable firewall
+      shell: "firewall-cmd --permanent --add-service={http,https}"
+    - name: start firewall rule
+      shell: "firewall-cmd --reload"
+    - name: Nginx configuration server
+      template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        mode: 0644
+    - name: start nginx
+      service:
+        name: nginx
+        state: restarted
+        enabled: yes
+    - name: Configure so to allow to nginx make the proxyredirect
+      shell: setsebool httpd_can_network_connect on -P

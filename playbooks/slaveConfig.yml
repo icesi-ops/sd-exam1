@@ -1,0 +1,6 @@
+---
+ - hosts: servers
+   become: true
+   tasks:
+     - name: Config slaves
+       script: ../scripts/slaveConfig.sh

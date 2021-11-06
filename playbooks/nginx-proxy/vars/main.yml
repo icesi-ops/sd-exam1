@@ -1,0 +1,4 @@
+---
+# vars file for nginx-proxy
+certificate_dir: /etc/ssl/private
+server_hostname: sistemasdistribuidos

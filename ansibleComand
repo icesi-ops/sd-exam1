@@ -1,0 +1,4 @@
+ansible-playbook playbooks/glusterConfig.yml
+
+for i in $(seq -w 1 100) ; do sudo touch /mnt/test-file-$i; done
+ls /mnt/  
