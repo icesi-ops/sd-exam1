@@ -6,8 +6,8 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
-app.config["IMAGE_UPLOADS"] = "/home/anamvgd/Documents/Parcial1_Distribuidos/app/static/img/uploads"
-app.config["ALLOW_IMAGE_EXTENSIONS"] = ["PNG", "JPG", "JPEG", "GIF"]
+app.config["IMAGE_UPLOADS"] = "/share"
+app.config["ALLOW_IMAGE_EXTENSIONS"] = ["png", "PNG", "JPG", "JPEG", "GIF"]
 app.config["MAX_IMAGE_FILESIZE"] = 50 * 1024 *1024
 
 def allowed_image(filename):
@@ -31,7 +31,7 @@ def allowed_image_filesize(filesize):
         return False
 
 
-@app.route("/upload-image")
+@app.route("/upload-image", methods=["GET","POST"])
 def upload_image():
 
         if request.files:
@@ -58,8 +58,8 @@ def upload_image():
             
             print("Image saved")
 
-            return redirect(request.url)
+            return "Image saved"
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1',port=5010)
+    app.run(host='0.0.0.0',port=5010)

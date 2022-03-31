@@ -1,0 +1,82 @@
+#Docker Network
+
+docker network create redcita 
+
+##FRONT
+
+sudo docker build -t frontapp .
+
+sudo docker run -d -p 5000:5000 --network redcita --name frontapp frontapp
+
+##BACK
+
+sudo docker build -t backapp .
+
+sudo docker run -d -p 5010:5010 --network redcita --name backapp backapp
+
+##SAMBA
+
+docker pull dperson/samba
+
+#Create samba folder and file in a especific place
+
+/home/anamvgd/Documents/sd-exam1/sd-exam1/TestParcial/sambaconfig
+
+#Content of the Samba config file smb.conf
+
+[global]
+workgroup = SAMBA
+security = user
+passdb backend = tdbsam
+printing = bsd
+printcap name = /dev/null
+
+[homes]
+comment = Home Directories
+valid users = %S, %D%w%S
+browseable = No
+read only = No
+inherit acls = Yes
+
+[share]
+path = /usr/local/share
+browsable = yes
+public = yes
+writeable = yes
+
+docker run --detach --publish 139:139 --publish 445:445 --volume /home/anamvgd/Documents/sd-exam1/sd-exam1/TestParcial/sambaconfig:/etc/samba --volume /usr/local/docker/samba/share:/usr/local/share --restart unless-stopped --name samba dperson/samba
+
+#Enter samba bash
+
+docker exec -it samba bash
+
+chmod 777 share 
+
+#To try to connect to the samba server 
+
+useradd -p itsasecret -d /home/extuser -s /bin/bash extuser
+
+smbpasswd -a extuser
+
+#To verify the user was added to samba
+
+pdbedit --list --smbpasswd-style
+
+#Connect externally
+
+
+
+smbclient --list //$(hostname -s)/share --user extuser
+
+smbclient --list //$(127.0.0.1 -s)/share --user extuser
+
+
+smbclient --list //127.0.0.1/share --user extuser
+
+smbclient //127.0.0.1/share -U extuser
+
+smbclient //127.0.0.1/share %151120Space. -c 'put testing testing'
+
+
+
+
