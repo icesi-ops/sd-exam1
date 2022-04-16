@@ -4,6 +4,8 @@ import os
 
 from werkzeug.utils import secure_filename
 
+import subprocess
+
 app = Flask(__name__)
 
 app.config["IMAGE_UPLOADS"] = "/share"
@@ -55,6 +57,11 @@ def upload_image():
                 filename = secure_filename(image.filename)
                 
                 image.save(os.path.join(app.config["IMAGE_UPLOADS"], filename))
+                imageDir = app.config["IMAGE_UPLOADS"] + "/" + filename
+                sambaSave = subprocess.run(["smbclient", "//samba/share", "%", "-c", "put "+imageDir+" "+filename])
+                #/usr/local/share
+                #sambaSave = subprocess.run(["smbclient", "//samba/share", "%", "-c", "put","sunset2.jpg",filename])
+                print(sambaSave.stdout)
             
             print("Image saved")
 
