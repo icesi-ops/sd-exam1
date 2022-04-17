@@ -1,0 +1,35 @@
+http:
+  port: 8080
+admin:
+  port: 9876
+  host: localhost
+apiEndpoints:
+  upload:
+    host: localhost
+    paths: ['/upload-image','/upload-image/*']
+serviceEndpoints:
+  uploadService:
+    url: 'http://loadbalancer/upload-image'
+policies:
+  - basic-auth
+  - cors
+  - expression
+  - key-auth
+  - log
+  - oauth2
+  - proxy
+  - rate-limit
+pipelines:
+  default:
+    apiEndpoints:
+      - upload
+    policies:
+    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+    #  - key-auth: 
+      - proxy:
+          - action:
+              serviceEndpoint: uploadService
+              changeOrigin: true
+              prependPath:  false
+              ignorePath:   false
+              stripPath:    false

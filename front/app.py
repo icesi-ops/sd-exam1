@@ -1,5 +1,7 @@
 from flask import Flask, request, render_template
+from threading import Thread
 import requests
+import consul
 
 app = Flask(__name__, template_folder='template')
 
@@ -9,8 +11,14 @@ def hello():
 
 @app.route("/upload-image", methods=["GET", "POST"])
 def upload():
-    
     return render_template("upload_image.html")
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',port = 5000)
+    c = consul.Consul(host='consul', port=8500)
+    # Register Service
+    c.agent.service.register('upload-image',
+                            service_id='upload-image',
+                            port=5000,
+                            tags=['upload'])
+    app.run(host='0.0.0.0',port = 5000) 
+    

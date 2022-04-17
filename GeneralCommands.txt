@@ -64,8 +64,6 @@ pdbedit --list --smbpasswd-style
 
 #Connect externally
 
-
-
 smbclient --list //$(hostname -s)/share --user extuser
 
 smbclient --list //$(127.0.0.1 -s)/share --user extuser
@@ -79,6 +77,50 @@ smbclient //127.0.0.1/share %151120Space. -c 'put testing testing'
 
 smbclient //samba/share % -c 'put testing testing2'
 
+#consul
+docker run -d -p 8500:8500 -p 8600:8600/udp --network redcita --name consul consul:latest agent -server -bootstrap-expect 1 -ui -data-dir /tmp -client=0.0.0.0
 
+#load balancer
 
+docker build -t loadbalancer .
 
+docker run  -p 80:80\
+            -p 1936:1936 \
+            --network redcita \
+            --name loadbalancer \
+            -d \
+            loadbalancer
+
+# Application gateway
+
+In order to use Identity features, we need to have a data storage like Redis.
+
+docker run --network redcita -d --name express-gateway-data-store \
+                -p 6379:6379 \
+                redis:alpine
+2. Start the Express-Gateway instance
+Run the command inside appgw directory o keep in mind change the volume path to pointing to gateway.config.yml
+docker run -d --name express-gateway \
+    --network redcita \
+    -v $PWD:/var/lib/eg \
+    -p 8080:8080 \
+    -p 9876:9876 \
+    express-gateway
+
+3. uncoment #key-auth
+4. connect to gw container
+docker exec -it express-gateway sh
+
+5. create users
+eg users create
+
+6. assign auth key
+eg credentials create -c sleep -t key-auth -q
+
+7. copy key 6SEbE4hl9wJ1HkrGgWxw5c:5KdF7HnGFHt6CejfFbEZWw
+
+8. Curl API endpoint as sleep  with key credentials - SUCCESS!
+
+curl -H "Authorization: apiKey ${keyId}:${keySecret}" http://localhost:5000/upload-image
+
+curl -H "Authorization: apiKey 0hTEARfMg6Nlwd55WVvkYV:2J7aQO26amW4Qw0elAwMkI" http://0.0.0.0:5000/upload-image
