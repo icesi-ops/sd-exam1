@@ -18,9 +18,15 @@ sudo docker run -d -p 5010:5010 --network redcita --name backapp backapp
 
 docker pull dperson/samba
 
-#Create samba folder and file in a especific place
+#Create samba folder and file in a especific place with the Samba config file
 
-/home/anamvgd/Documents/sd-exam1/sd-exam1/TestParcial/sambaconfig
+For example:
+/home/nelson/Desktop/sd-exam1/sambaconfig
+
+#Create a folder to be the volume where images are stored in the local machine
+
+For example:
+/usr/local/docker/samba/share
 
 #Content of the Samba config file smb.conf
 
@@ -44,13 +50,15 @@ browsable = yes
 public = yes
 writeable = yes
 
+#Execute samaba
 docker run --network redcita --detach --publish 139:139 --publish 445:445 --volume /home/nelson/Desktop/sd-exam1/sambaconfig:/etc/samba --volume /usr/local/docker/samba/share:/usr/local/share --restart unless-stopped --name samba dperson/samba
 
 #Enter samba bash
 
 docker exec -it samba bash
-//Enter the usr folder
-chmod 777 share 
+//Enter the folder where the share folder is located
+cd /usr/local
+chmod 777 share
 
 #To try to connect to the samba server 
 
@@ -63,11 +71,6 @@ smbpasswd -a extuser
 pdbedit --list --smbpasswd-style
 
 #Connect externally
-
-smbclient --list //$(hostname -s)/share --user extuser
-
-smbclient --list //$(127.0.0.1 -s)/share --user extuser
-
 
 smbclient --list //127.0.0.1/share --user extuser
 
@@ -98,6 +101,7 @@ In order to use Identity features, we need to have a data storage like Redis.
 docker run --network redcita -d --name express-gateway-data-store \
                 -p 6379:6379 \
                 redis:alpine
+
 2. Start the Express-Gateway instance
 Run the command inside appgw directory o keep in mind change the volume path to pointing to gateway.config.yml
 docker run -d --name express-gateway \
@@ -108,6 +112,7 @@ docker run -d --name express-gateway \
     express-gateway
 
 3. uncoment #key-auth
+
 4. connect to gw container
 docker exec -it express-gateway sh
 
@@ -116,11 +121,17 @@ eg users create
 
 6. assign auth key
 eg credentials create -c sleep -t key-auth -q
+eg credentials create -c nelso -t key-auth -q
 
 7. copy key 6SEbE4hl9wJ1HkrGgWxw5c:5KdF7HnGFHt6CejfFbEZWw
+6PMbaRjBEsyy7kFeRbzN3e:2NSKTllrpaaGsDyBV2XXgw
+
 
 8. Curl API endpoint as sleep  with key credentials - SUCCESS!
 
 curl -H "Authorization: apiKey ${keyId}:${keySecret}" http://localhost:5000/upload-image
 
-curl -H "Authorization: apiKey 0hTEARfMg6Nlwd55WVvkYV:2J7aQO26amW4Qw0elAwMkI" http://0.0.0.0:5000/upload-image
+It should look like this:
+curl -H "Authorization: apiKey $6PMbaRjBEsyy7kFeRbzN3e:2NSKTllrpaaGsDyBV2XXgw" http://localhost:6379
+
+curl -H "Authorization: apiKey $6PMbaRjBEsyy7kFeRbzN3e:2NSKTllrpaaGsDyBV2XXgw" http://0.0.0.0:5000/upload-image
