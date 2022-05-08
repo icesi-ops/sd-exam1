@@ -1,0 +1,11 @@
+Try "help" to get a list of possible commands.
+  .                                   D        0  Sat May  7 22:17:27 2022
+  ..                                  D        0  Tue May  3 02:57:57 2022
+  test2.txt                           A       15  Sat May  7 17:13:48 2022
+  testback.txt                        A       22  Sat May  7 21:43:21 2022
+  .deleted                           DH        0  Sat May  7 21:33:17 2022
+  7aded5a21fa5e244bb3da9001           A   175868  Sat May  7 22:01:00 2022
+  7aded5a21fa5e244bb3da9000           A       41  Sat May  7 21:44:26 2022
+  pods-running.png                    A   175868  Sat May  7 22:17:27 2022
+
+		24074608 blocks of size 1024. 7164808 blocks available

@@ -1,0 +1,17 @@
+version: "3.4"
+services:
+  samba:
+    image: dperson/samba
+    container_name: samba
+    environment:
+      TZ: 'EST5EDT'
+    volumes:
+      - ~/docker/samba/public:/public
+    ports:
+      - "137:137/udp"
+      - "138:138/udp"
+      - "139:139/tcp"
+      - "445:445/tcp"
+    tty: true
+    restart: unless-stopped
+    command: '-s "public;/public;yes;no;no;underbedmonster" -u "underbedmonster;password1" -p'
