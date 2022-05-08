@@ -1,0 +1,126 @@
+# Docker Network
+
+docker network create redcita 
+
+# FRONT
+
+sudo docker build -t frontapp .
+
+sudo docker run -d -p 5000:5000 --network redcita --name frontapp frontapp
+
+# BACK
+
+sudo docker build -t backapp .
+
+sudo docker run -d -p 5010:5010 --network redcita --name backapp backapp
+
+# SAMBA
+
+docker pull dperson/samba
+
+#Create samba folder and file in a especific place
+
+/home/anamvgd/Documents/sd-exam1/sd-exam1/TestParcial/sambaconfig
+
+#Content of the Samba config file smb.conf
+
+[global]
+workgroup = SAMBA
+security = user
+passdb backend = tdbsam
+printing = bsd
+printcap name = /dev/null
+
+[homes]
+comment = Home Directories
+valid users = %S, %D%w%S
+browseable = No
+read only = No
+inherit acls = Yes
+
+[share]
+path = /usr/local/share
+browsable = yes
+public = yes
+writeable = yes
+
+docker run --network redcita --detach --publish 139:139 --publish 445:445 --volume /home/nelson/Desktop/sd-exam1/sambaconfig:/etc/samba --volume /usr/local/docker/samba/share:/usr/local/share --restart unless-stopped --name samba dperson/samba
+
+#Enter samba bash
+
+docker exec -it samba bash
+//Enter the usr folder
+chmod 777 share 
+
+#To try to connect to the samba server 
+
+useradd -p itsasecret -d /home/extuser -s /bin/bash extuser
+
+smbpasswd -a extuser
+
+#To verify the user was added to samba
+
+pdbedit --list --smbpasswd-style
+
+#Connect externally
+
+smbclient --list //$(hostname -s)/share --user extuser
+
+smbclient --list //$(127.0.0.1 -s)/share --user extuser
+
+
+smbclient --list //127.0.0.1/share --user extuser
+
+smbclient //127.0.0.1/share -U extuser
+
+smbclient //127.0.0.1/share %151120Space. -c 'put testing testing'
+
+smbclient //samba/share % -c 'put testing testing2'
+
+# consul
+docker run -d -p 8500:8500 -p 8600:8600/udp --network redcita --name consul consul:latest agent -server -bootstrap-expect 1 -ui -data-dir /tmp -client=0.0.0.0
+
+# load balancer
+
+docker build -t loadbalancer .
+
+docker run  -p 80:80\
+            -p 1936:1936 \
+            --network redcita \
+            --name loadbalancer \
+            -d \
+            loadbalancer
+
+# Application gateway
+
+In order to use Identity features, we need to have a data storage like Redis.
+
+docker run --network redcita -d --name express-gateway-data-store \
+                -p 6379:6379 \
+                redis:alpine
+2. Start the Express-Gateway instance
+Run the command inside appgw directory o keep in mind change the volume path to pointing to gateway.config.yml
+docker run -d --name express-gateway \
+    --network redcita \
+    -v $PWD:/var/lib/eg \
+    -p 8080:8080 \
+    -p 9876:9876 \
+    express-gateway
+
+3. uncoment #key-auth
+4. connect to gw container
+docker exec -it express-gateway sh
+
+5. create users
+eg users create
+
+6. assign auth key
+eg credentials create -c sleep -t key-auth -q
+
+7. copy key 6SEbE4hl9wJ1HkrGgWxw5c:5KdF7HnGFHt6CejfFbEZWw
+
+8. Curl API endpoint as sleep  with key credentials - SUCCESS!
+
+curl -H "Authorization: apiKey ${keyId}:${keySecret}" http://localhost:5000/upload-image
+
+curl -H "Authorization: apiKey 0hTEARfMg6Nlwd55WVvkYV:2J7aQO26amW4Qw0elAwMkI" http://0.0.0.0:5000/upload-image

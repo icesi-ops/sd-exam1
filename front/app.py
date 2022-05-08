@@ -18,6 +18,7 @@ if __name__ == "__main__":
     # Register Service
     c.agent.service.register('upload-image',
                             service_id='upload-image',
+                            address='172.20.0.7',
                             port=5000,
                             tags=['upload'])
     app.run(host='0.0.0.0',port = 5000) 
