@@ -1,20 +1,55 @@
+docker pull consul
+docker pull redis:alpine
+docker pull express-gateway
+
 #Docker Network
 
 docker network create redcita 
 
-##FRONT
-
-sudo docker build -t frontapp .
-
-sudo docker run -d -p 5000:5000 --network redcita --name frontapp frontapp
-
-docker run -d -p 5001:5000 --network redcita --name frontapp2 frontapp
-
 ##BACK
 
-sudo docker build -t backapp .
+docker build -t backapp ./back/
 
-sudo docker run -d -p 5010:5010 --network redcita --name backapp backapp
+docker run -d -p 5010:5010 --network redcita --name backapp backapp
+
+#consul
+docker run -d -p 8500:8500 -p 8600:8600/udp --network redcita --name consul consul:latest agent -server -bootstrap-expect 1 -ui -data-dir /tmp -client=0.0.0.0
+
+#load balancer
+
+docker build -t loadbalancer ./haproxy/
+
+docker run  -p 80:80\
+            -p 1936:1936 \
+            --network redcita \
+            --name loadbalancer \
+            -d \
+            loadbalancer
+
+# Application gateway
+
+In order to use Identity features, we need to have a data storage like Redis.
+
+docker run --network redcita -d --name express-gateway-data-store \
+                -p 6379:6379 \
+                redis:alpine
+
+2. Start the Express-Gateway instance
+Run the command inside appgw directory o keep in mind change the volume path to pointing to gateway.config.yml
+docker run -d --name express-gateway \
+    --network redcita \
+    -v $PWD:/var/lib/eg \
+    -p 8080:8080 \
+    -p 9876:9876 \
+    express-gateway
+
+##FRONT
+
+docker build -t frontapp ./front/
+
+docker run -d -p 5000:5000 --network redcita --name frontapp1 frontapp
+
+docker run -d -p 5001:5000 --network redcita --name frontapp2 frontapp
 
 ##SAMBA
 
@@ -82,58 +117,3 @@ smbclient //127.0.0.1/share %151120Space. -c 'put testing testing'
 
 smbclient //samba/share % -c 'put testing testing2'
 
-#consul
-docker run -d -p 8500:8500 -p 8600:8600/udp --network redcita --name consul consul:latest agent -server -bootstrap-expect 1 -ui -data-dir /tmp -client=0.0.0.0
-
-#load balancer
-
-docker build -t loadbalancer .
-
-docker run  -p 80:80\
-            -p 1936:1936 \
-            --network redcita \
-            --name loadbalancer \
-            -d \
-            loadbalancer
-
-# Application gateway
-
-In order to use Identity features, we need to have a data storage like Redis.
-
-docker run --network redcita -d --name express-gateway-data-store \
-                -p 6379:6379 \
-                redis:alpine
-
-2. Start the Express-Gateway instance
-Run the command inside appgw directory o keep in mind change the volume path to pointing to gateway.config.yml
-docker run -d --name express-gateway \
-    --network redcita \
-    -v $PWD:/var/lib/eg \
-    -p 8080:8080 \
-    -p 9876:9876 \
-    express-gateway
-
-3. uncoment #key-auth
-
-4. connect to gw container
-docker exec -it express-gateway sh
-
-5. create users
-eg users create
-
-6. assign auth key
-eg credentials create -c sleep -t key-auth -q
-eg credentials create -c nelso -t key-auth -q
-
-7. copy key 6SEbE4hl9wJ1HkrGgWxw5c:5KdF7HnGFHt6CejfFbEZWw
-6PMbaRjBEsyy7kFeRbzN3e:2NSKTllrpaaGsDyBV2XXgw
-
-
-8. Curl API endpoint as sleep  with key credentials - SUCCESS!
-
-curl -H "Authorization: apiKey ${keyId}:${keySecret}" http://localhost:5000/upload-image
-
-It should look like this:
-curl -H "Authorization: apiKey $6PMbaRjBEsyy7kFeRbzN3e:2NSKTllrpaaGsDyBV2XXgw" http://localhost:6379
-
-curl -H "Authorization: apiKey $6PMbaRjBEsyy7kFeRbzN3e:2NSKTllrpaaGsDyBV2XXgw" http://0.0.0.0:5000/upload-image
