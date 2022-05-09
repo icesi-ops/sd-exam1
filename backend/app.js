@@ -16,12 +16,13 @@ const server = http.createServer((req, res) => {
 
 		form.parse(req, (err, fields, files) => {
 			if (err) {
-				res.writeHead(err.httpCode || 400, { 'Content-Type': 'text/plain' });
-				res.end(String(err));
+				//res.writeHead(err.httpCode || 400, { 'Content-Type': 'text/plain' });
+				//res.end(String(err));
+                console.log(String(err));
 				return;
 			}
-			res.writeHead(200, { 'Content-Type': 'application/json' });
-			res.end(JSON.stringify({ fields, files }, null, 2));
+			//res.writeHead(200, { 'Content-Type': 'application/json' });
+			//res.end(JSON.stringify({ fields, files }, null, 2));
             console.log("RECEIVED");
             var filepath = files.multipleFiles.filepath;
             var name = files.multipleFiles.originalFilename.replace(/ /g,"_");
