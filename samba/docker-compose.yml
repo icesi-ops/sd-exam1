@@ -1,4 +1,5 @@
 version: "3.4"
+
 services:
   samba:
     image: dperson/samba
@@ -15,3 +16,8 @@ services:
     tty: true
     restart: unless-stopped
     command: '-s "public;/public;yes;no;no;underbedmonster" -u "underbedmonster;password1" -p'
+
+networks:
+    default:
+        external:
+            name: parcial1
