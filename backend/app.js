@@ -1,6 +1,13 @@
 const http = require('http');
 const formidable = require('formidable');
 const { exec } = require('child_process');
+const os = require('os');
+
+var networkInterfaces = os.networkInterfaces();
+var ip = networkInterfaces['eth0'][0]['address'];
+
+console.log(networkInterfaces);
+
 
 const server = http.createServer((req, res) => {
     if (req.url == '/api/upload' && req.method == 'POST') {

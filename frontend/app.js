@@ -1,5 +1,8 @@
 const http = require('http');
+const os = require('os');
 
+var networkInterfaces = os.networkInterfaces();
+var ip = networkInterfaces['eth0'][0]['address'];
 
 const Consul = require('consul');
 
