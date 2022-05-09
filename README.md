@@ -59,7 +59,14 @@ docker run \
       -u "backend;backend" \
       -s "storage;/storage;yes;no;yes;all;backend;backend"
 
-
+docker run -d \
+    -p 21:21 \
+    -p 21000-21010:21000-21010 \
+    -e USERS="backend|backend" \
+    -e ADDRESS=ftp.site.domain \
+    --hostname ftp.site.domain \
+    delfer/alpine-ftp-server
+    
 # Register frontend service in the consul server
 docker exec -d sd-p1-frontend consul agent -config-file=consul.json
 
