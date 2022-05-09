@@ -10,6 +10,10 @@ SERVICE_ADDRESS = socket.gethostbyname(socket.gethostname())
 
 @app.route("/")
 def hello():
+    return "Hello World!"
+
+@app.route("/upload-image", methods=["GET", "POST"])
+def upload():
     return render_template("upload_image.html")
 
 def register():
