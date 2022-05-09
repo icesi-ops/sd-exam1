@@ -1,5 +1,32 @@
 const http = require('http');
 
+
+const Consul = require('consul');
+
+const consul = new Consul({
+    host: 'consul',
+    port: 8500,
+    promisify: true,
+});
+
+consul.agent.service.register({
+    name: upload-files,
+    address: 'localhost',
+    port: 5000,
+    check: {
+        http: 'http://localhost:3000/health',
+        interval: '10s',
+        timeout: '5s',
+    }
+}, function(err, result) {
+    if (err) {
+        console.error(err);
+        throw err;
+    }
+
+    Console.log (servicename + 'registered successfully! ).
+})
+
 const server = http.createServer((req, res) => {
 	// show a file upload form
 	res.writeHead(200, { 'Content-Type': 'text/html' });
