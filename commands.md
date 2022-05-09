@@ -27,4 +27,5 @@ docker run --network parcial1 -d --name express-gateway-data-store -p 6379:6379 
 
 docker run -d --name express-gateway --network parcial1 -v $PWD:/var/lib/eg -p 8080:8080 -p 9876:9876 express-gateway
 
-Write in browser: http://localhost:8080/upload-files/upload
+- Write in browser to upload file: http://localhost:8080/upload-files/upload
+- Write in broswer to see list of uploaded files: http://localhost:8080/upload-files/
