@@ -1,6 +1,8 @@
 # Docker images pull
-docker pull consul
+docker pull consul 
+
 docker pull redis:alpine
+
 docker pull express-gateway
 
 # Docker Network
@@ -37,6 +39,7 @@ docker run --network redcita -d --name express-gateway-data-store \
 
 2. Start the Express-Gateway instance
 Run the command inside appgw directory o keep in mind change the volume path to pointing to gateway.config.yml
+cd appgw
 docker run -d --name express-gateway \
     --network redcita \
     -v $PWD:/var/lib/eg \
@@ -89,7 +92,7 @@ public = yes
 writeable = yes
 
 #Execute samaba
-docker run --network redcita --detach --publish 139:139 --publish 445:445 --volume /home/nelson/Desktop/sd-exam1/sambaconfig:/etc/samba --volume /usr/local/docker/samba/share:/usr/local/share --restart unless-stopped --name samba dperson/samba
+docker run --network redcita --detach --publish 139:139 --publish 445:445 --volume /home/sleep/Desktop/exam1/sd-exam1/sambaconfig:/etc/samba --volume /usr/local/docker/samba/share:/usr/local/share --restart unless-stopped --name samba dperson/samba
 
 #Enter samba bash
 

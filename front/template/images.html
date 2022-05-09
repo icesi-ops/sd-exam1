@@ -1,0 +1,34 @@
+<html>
+<style>
+table, th,td {
+    border: 1px solid black;
+}
+</style>
+<link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+<script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+<py-env>
+- requests
+- prettytable
+</py-env>
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+            <h1> Images </h1> 
+            
+            
+            <py-script>
+import requests 
+import prettytable
+response = requests.get("http://127.0.0.1:5010/images")
+sambaList = response.text.split('\n')
+t = prettytable(['Image Name'])
+for i in range(len(sambaList)):
+    t.add_row([sambaList[i]])
+print(t)
+            </py-script>
+
+        </div>
+    </div>
+</div>
+</html>
