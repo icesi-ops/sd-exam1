@@ -2,9 +2,7 @@
 docker network create parcial1
 #### Build and run the two frontends
 docker build -t uploader .
-docker run -d -p 5000:5000 --network parcial1 --name uploader uploader
-docker build -t show .
-docker run -d -p 3030:3030 --network parcial1 --name show show
+docker run -d -p 5000:5000 --network parcial1 --name frontend frontend
 #### Build and run the backend
 docker build -t backend .
 docker run -d -p 8080:8080 --network parcial1 --name backend backend
