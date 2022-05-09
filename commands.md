@@ -1,25 +1,61 @@
 # Docker images pull
+
+We bring some necesarry images for the deployment
+
+```
 docker pull consul
+```
 
+```
 docker pull redis:alpine
+```
 
+```
 docker pull express-gateway
+```
 
 # Docker Network
+We create a docker Network where all the containers will interact with each other
 
+```
 docker network create redcita 
+```
 
 # BACK
 
-docker build -t backapp ./back/
+The first docker container we are going to deploy is the back end app where the app saves the images and stores them in a share volume with a samba container.
 
+Remeber to execute the docker build command insed the back folder.
+
+```
+docker build -t backapp ./back/
+```
+
+We need to run the container inside the previusly created network redcita.
+
+```
 docker run -d -p 5010:5010 --network redcita --name backapp backapp
+```
 
 # Consul
+
+This container is necessary to perform service descovery and as a dns table for the microservices containers.
+
+That dns table will help the load balancer perform its functions.
+
+```
 docker run -d -p 8500:8500 -p 8600:8600/udp --network redcita --name consul consul:latest agent -server -bootstrap-expect 1 -ui -data-dir /tmp -client=0.0.0.0
+```
 
 # Load balancer
 
+The load balancer is the one in charge of distributing network or application traffic across a number of containers.
+
+In our case we are working with multiple instances of the container with the front application, and the load balancer decides which instance the user should use.
+
+The configuration of the load balancer is inside the haproxy folder in haproxy.cfg file.
+
+```
 docker build -t loadbalancer ./haproxy/
 
 docker run  -p 80:80\
@@ -28,23 +64,29 @@ docker run  -p 80:80\
             --name loadbalancer \
             -d \
             loadbalancer
+```
 
 # Application gateway
 
-In order to use Identity features, we need to have a data storage like Redis.
+1. In order to use Identity features, we need to have a data storage like Redis, that is a database.
 
+```
 docker run --network redcita -d --name express-gateway-data-store \
                 -p 6379:6379 \
                 redis:alpine
+```
 
 2. Start the Express-Gateway instance
 Run the command inside appgw directory o keep in mind change the volume path to pointing to gateway.config.yml
+
+```
 docker run -d --name express-gateway \
     --network redcita \
     -v $PWD:/var/lib/eg \
     -p 8080:8080 \
     -p 9876:9876 \
     express-gateway
+```
 
 # FRONT
 
