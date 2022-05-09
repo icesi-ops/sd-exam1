@@ -51,6 +51,6 @@ const server = http.createServer((req, res) => {
 	}
 });
 
-server.listen(8080, () => {
-    console.log('Server listening on http://localhost:8080/ ...');
+server.listen(5050, () => {
+    console.log('Server listening on http://localhost:5050/ ...');
 });

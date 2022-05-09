@@ -31,7 +31,7 @@ const server = http.createServer((req, res) => {
 		res.writeHead(200, { 'Content-Type': 'text/html' });
 		const options = {
 			hostname: 'bendi',
-			port: '8080',
+			port: '5050',
 			path: '/api/files',
 			method: 'GET'
 		};
@@ -57,7 +57,7 @@ const server = http.createServer((req, res) => {
 		res.writeHead(200, { 'Content-Type': 'text/html' });
 		res.end(`
 			<h2>With Node.js <code>"http"</code> module</h2>
-			<form action="http://bendi:8080/api/upload" enctype="multipart/form-data" method="post">
+			<form action="http://bendi:5050/api/upload" enctype="multipart/form-data" method="post">
 			<div>File: <input type="file" name="multipleFiles" multiple="multiple" /></div>
 			<input type="submit" value="Upload" />
 			</form>

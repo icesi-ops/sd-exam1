@@ -1,7 +1,8 @@
 # Core
 db:
   redis:
-    emulate: true
+    host: express-gateway-data-store
+    port: 6379
     namespace: EG
 
 #plugins:
