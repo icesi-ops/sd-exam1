@@ -8,5 +8,8 @@
     "start": "node app.js"
   },
   "author": "DanielVillota16",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "consul": "^0.40.0"
+  }
 }

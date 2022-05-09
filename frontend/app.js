@@ -13,11 +13,11 @@ const consul = new Consul({
 });
 
 consul.agent.service.register({
-    name: upload-files,
-    address: 'localhost',
+    name: 'upload-files',
+    address: ip,
     port: 5000,
     check: {
-        http: 'http://localhost:3000/health',
+        http: `http://${ip}:5000/health`,
         interval: '10s',
         timeout: '5s',
     }
@@ -27,7 +27,7 @@ consul.agent.service.register({
         throw err;
     }
 
-    console.log (servicename + 'registered successfully!' )
+    console.log ('upload-files' + 'registered successfully!' )
 })
 
 const server = http.createServer((req, res) => {
@@ -35,7 +35,7 @@ const server = http.createServer((req, res) => {
 	if(req.url=='/' && req.method=='GET'){
 		res.writeHead(200, { 'Content-Type': 'text/html' });
 		const options = {
-			hostname: 'localhost',
+			hostname: '172.18.0.4',
 			port: '8080',
 			path: '/api/files',
 			method: 'GET'
@@ -62,7 +62,7 @@ const server = http.createServer((req, res) => {
 		res.writeHead(200, { 'Content-Type': 'text/html' });
 		res.end(`
 			<h2>With Node.js <code>"http"</code> module</h2>
-			<form action="http://localhost:8080/api/upload" enctype="multipart/form-data" method="post">
+			<form action="http://172.18.0.4:8080/api/upload" enctype="multipart/form-data" method="post">
 			<div>File: <input type="file" name="multipleFiles" multiple="multiple" /></div>
 			<input type="submit" value="Upload" />
 			</form>
