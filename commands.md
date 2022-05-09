@@ -18,7 +18,7 @@ docker pull express-gateway
 We create a docker Network where all the containers will interact with each other
 
 ```
-docker network create redcita 
+docker network create redcita
 ```
 
 # BACK
@@ -78,8 +78,7 @@ docker run --network redcita -d --name express-gateway-data-store \
 
 2. Start the Express-Gateway instance
 Run the command inside appgw directory o keep in mind change the volume path to pointing to gateway.config.yml
-
-```
+cd appgw
 docker run -d --name express-gateway \
     --network redcita \
     -v $PWD:/var/lib/eg \
@@ -133,7 +132,7 @@ public = yes
 writeable = yes
 
 #Execute samaba
-docker run --network redcita --detach --publish 139:139 --publish 445:445 --volume /home/nelson/Desktop/sd-exam1/sambaconfig:/etc/samba --volume /usr/local/docker/samba/share:/usr/local/share --restart unless-stopped --name samba dperson/samba
+docker run --network redcita --detach --publish 139:139 --publish 445:445 --volume /home/sleep/Desktop/exam1/sd-exam1/sambaconfig:/etc/samba --volume /usr/local/docker/samba/share:/usr/local/share --restart unless-stopped --name samba dperson/samba
 
 #Enter samba bash
 
@@ -142,7 +141,7 @@ docker exec -it samba bash
 cd /usr/local
 chmod 777 share
 
-#To try to connect to the samba server 
+#To try to connect to the samba server
 
 useradd -p itsasecret -d /home/extuser -s /bin/bash extuser
 
@@ -161,4 +160,3 @@ smbclient //127.0.0.1/share -U extuser
 smbclient //127.0.0.1/share %151120Space. -c 'put testing testing'
 
 smbclient //samba/share % -c 'put testing testing2'
-

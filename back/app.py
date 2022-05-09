@@ -32,6 +32,12 @@ def allowed_image_filesize(filesize):
     else:
         return False
 
+@app.route("/images", methods=["GET"])
+def get_images():
+    command = "cd " + app.config["IMAGE_UPLOADS"] + "; ls"
+    sambaList = subprocess.run(command, capture_output=True, shell=True)
+    output = sambaList.stdout.decode("utf-8")
+    return output
 
 @app.route("/upload-image", methods=["GET","POST"])
 def upload_image():

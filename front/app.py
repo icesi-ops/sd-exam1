@@ -10,7 +10,9 @@ SERVICE_ADDRESS = socket.gethostbyname(socket.gethostname())
 
 @app.route("/")
 def hello():
-    return "Hello World!"
+    response = requests.get("http://backapp:5010/images")
+    sambaList = response.text.split('\n')
+    return str(sambaList)
 
 @app.route("/upload-image", methods=["GET", "POST"])
 def upload():
