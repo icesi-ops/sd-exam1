@@ -1,6 +1,17 @@
+## Business case
+
+This particular business case is focused on creating a web application that allows managing the upload of images by users who use Instagram services, where they asked us to create a solution with the tools that Docker offers. The following diagram describes the deployment and how the development of the solution is carried out.
+
+![Diagrama](diagrama.png)
+
+Team:
+- Cesar Canales A00345025
+- Ana Maria Munoz A00354233
+- Nelson Quinonez A00351918
+
 # Docker images pull
 
-We bring some necesarry images for the deployment
+We bring some necessary images for the deployment
 
 ```
 docker pull consul
@@ -85,6 +96,9 @@ Run the command inside appgw directory o keep in mind change the volume path to 
 
 ```
 cd appgw
+```
+
+```
 docker run -d --name express-gateway \
     --network redcita \
     -v $PWD:/var/lib/eg \
@@ -108,19 +122,14 @@ docker run -d -p 5001:5000 --network redcita --name frontapp2 frontapp
 
 # SAMBA
 
-Create a folder named sambaconfig where you can strore a Samba config file
+Create a folder named sambaconfig where you can store a Samba config file
 
 For example:
 ```
 /home/nelson/Desktop/sd-exam1/sambaconfig
 ```
 
-Create a folder to be the volume where images are stored in the machine where the samba container is running
-
-For example:
-```
-/usr/local/docker/samba/share
-```
+Now, you have to create the Samba config file that is going to be create in the previous folder.
 
 #Content of the Samba config file smb.conf
 
@@ -146,9 +155,20 @@ public = yes
 writeable = yes
 ```
 
+Finally, create a folder that will have the volume where images are stored in the machine where the samba container is running
+
+For example:
+```
+/usr/local/docker/samba/share
+```
+
 # Execute samba
 
+When executing samba, remember that next to the first --volume you have to put the path where sambaconfig folder is saved. And, next to the second --volume you have to put the path of the folder where the volume that stores the images is saved.
+
+```
 docker run --network redcita --detach --publish 139:139 --publish 445:445 --volume /home/nelso/Desktop/exam1/sd-exam1/sambaconfig:/etc/samba --volume /usr/local/docker/samba/share:/usr/local/share --restart unless-stopped --name samba dperson/samba
+```
 
 # Enter samba bash
 
