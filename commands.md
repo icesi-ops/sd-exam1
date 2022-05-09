@@ -14,6 +14,10 @@ docker pull redis:alpine
 docker pull express-gateway
 ```
 
+```
+docker pull dperson/samba
+```
+
 # Docker Network
 We create a docker Network where all the containers will interact with each other
 
@@ -23,7 +27,7 @@ docker network create redcita
 
 # BACK
 
-The first docker container we are going to deploy is the back end app where the app saves the images and stores them in a share volume with a samba container.
+The first docker container we are going to deploy is the back end app where the app saves the images and stores them in a share volume with a samba container, that is the reason why you have to also install samba package in the container, this change is done in the Dockerfile.
 
 Remeber to execute the docker build command insed the back folder.
 
@@ -78,6 +82,8 @@ docker run --network redcita -d --name express-gateway-data-store \
 
 2. Start the Express-Gateway instance
 Run the command inside appgw directory o keep in mind change the volume path to pointing to gateway.config.yml
+
+```
 cd appgw
 docker run -d --name express-gateway \
     --network redcita \
@@ -89,28 +95,36 @@ docker run -d --name express-gateway \
 
 # FRONT
 
+We execute two instances of the frontapp to test load balancing capabilities.
+In the front app we visualize the images that we have saved int the "/" path. If we want to save an in image we go to the "/upload-image" path.
+
+```
 docker build -t frontapp ./front/
 
 docker run -d -p 5000:5000 --network redcita --name frontapp1 frontapp
 
 docker run -d -p 5001:5000 --network redcita --name frontapp2 frontapp
+```
 
 # SAMBA
 
-docker pull dperson/samba
-
-#Create samba folder and file in a especific place with the Samba config file
+Create a folder named sambaconfig where you can strore a Samba config file
 
 For example:
+```
 /home/nelson/Desktop/sd-exam1/sambaconfig
+```
 
-#Create a folder to be the volume where images are stored in the local machine
+Create a folder to be the volume where images are stored in the machine where the samba container is running
 
 For example:
+```
 /usr/local/docker/samba/share
+```
 
 #Content of the Samba config file smb.conf
 
+```
 [global]
 workgroup = SAMBA
 security = user
@@ -130,33 +144,29 @@ path = /usr/local/share
 browsable = yes
 public = yes
 writeable = yes
+```
 
-#Execute samaba
-docker run --network redcita --detach --publish 139:139 --publish 445:445 --volume /home/sleep/Desktop/exam1/sd-exam1/sambaconfig:/etc/samba --volume /usr/local/docker/samba/share:/usr/local/share --restart unless-stopped --name samba dperson/samba
+# Execute samba
 
-#Enter samba bash
+docker run --network redcita --detach --publish 139:139 --publish 445:445 --volume /home/nelso/Desktop/exam1/sd-exam1/sambaconfig:/etc/samba --volume /usr/local/docker/samba/share:/usr/local/share --restart unless-stopped --name samba dperson/samba
+
+# Enter samba bash
+
+We need to change the permissions in the folder where the images are going to be saved.
 
 docker exec -it samba bash
 //Enter the folder where the share folder is located
 cd /usr/local
 chmod 777 share
 
-#To try to connect to the samba server
-
-useradd -p itsasecret -d /home/extuser -s /bin/bash extuser
-
-smbpasswd -a extuser
-
-#To verify the user was added to samba
-
-pdbedit --list --smbpasswd-style
-
-#Connect externally
+To test conectivity with the samba server 
 
 smbclient --list //127.0.0.1/share --user extuser
 
 smbclient //127.0.0.1/share -U extuser
 
-smbclient //127.0.0.1/share %151120Space. -c 'put testing testing'
+Using your local linux user you can put manually a file in the samba server.
+
+smbclient //127.0.0.1/share %password . -c 'put testing testing'
 
 smbclient //samba/share % -c 'put testing testing2'
