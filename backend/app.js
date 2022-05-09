@@ -27,7 +27,7 @@ const server = http.createServer((req, res) => {
             var name = files.multipleFiles.originalFilename.replace(/ /g,"_");
             console.log(name);
             console.log(filepath);
-            exec(`bash upload.sh ${filepath} ${name}`, (error, stdout, stderr) => {
+            exec(`sh upload.sh ${filepath} ${name}`, (error, stdout, stderr) => {
                 if (error) {
                     console.error(`exec error: ${error}`);
                     return;
@@ -38,7 +38,7 @@ const server = http.createServer((req, res) => {
 		});
 		return;
 	} else if (req.url == '/api/files' && req.method == 'GET') {
-		exec('bash list.sh', (error, stdout, stderr) => {
+		exec('sh list.sh', (error, stdout, stderr) => {
             if (error) {
                 console.error(`exec error: ${error}`);
                 return;

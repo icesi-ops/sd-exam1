@@ -1,2 +1,2 @@
-#!/bin/bash
-echo ls | smbclient //172.21.0.2/public/ -U underbedmonster%password1 | nawk '$2~/A/ {print $1}'
+#!/bin/sh
+echo ls | smbclient //samba/public/ -U underbedmonster%password1 | awk '$2~/A/ {print $1}'

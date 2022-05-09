@@ -7,7 +7,7 @@ docker run -d -p 5000:5000 --network parcial1 --name frontend frontend
 docker build -t backend .
 docker run -d -p 8080:8080 --network parcial1 --name backend backend
 #### samba
-
+docker-compose up
 #### consul
 
 docker run -d -p 8500:8500 -p 8600:8600/udp --network parcial1 --name consul consul:latest agent -server -bootstrap-expect 1 -ui -data-dir /tmp -client=0.0.0.0
