@@ -1,16 +1,17 @@
 ## Integration evidences
 
-![Pulling necessary images](imagefiles/dockerimages.png)
+![Pulling necessary images](imagesfiles/dockerimages.png)
 
 
-![Create network](imagefiles/network.png)
+![Create network](imagesfiles/network.png)
 
 
-![Back image](imagefiles/backdocer.png)
+![Back image](imagesfiles/backdocer.png)
 
-![Runing back in network](imagefiles/runback.png)
+![Runing back in network](imagesfiles/runback.png)
 
-![Running consul](imagefiles/runconsul.png)
+![Running consul](imagesfiles/runconsul.png)
 
+![Build load balancer](imagesfiles/buildloadba.png)
 
-![Build load balancer](imagefiles/buildloadba.png)
+![Build load balancer](imagesfiles/buildloadba.png)
