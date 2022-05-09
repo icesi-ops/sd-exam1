@@ -2,7 +2,7 @@
 
 This particular business case is focused on creating a web application that allows managing the upload of images by users who use Instagram services, where they asked us to create a solution with the tools that Docker offers. The following diagram describes the deployment and how the development of the solution is carried out.
 
-![Diagrama](diagrama.png)
+![Diagrama](imagefiles/diagrama.png)
 
 Team:
 - Cesar Canales A00345025
@@ -11,7 +11,7 @@ Team:
 
 # Docker images pull
 
-We bring some necessary images for the deployment
+First, we bring some necessary images for the deployment
 
 ```
 docker pull consul
