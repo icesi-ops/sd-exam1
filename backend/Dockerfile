@@ -8,9 +8,10 @@ WORKDIR /usr/src/app
 # where available (npm@5+)
 COPY package*.json ./
 
+RUN apt update
 RUN apt install -y nodejs
 RUN apt install -y npm
-RUN apt install smbclient
+RUN apt install smbclient -y
 
 RUN npm install
 # If you are building your code for production
