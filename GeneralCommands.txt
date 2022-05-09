@@ -116,4 +116,3 @@ smbclient //127.0.0.1/share -U extuser
 smbclient //127.0.0.1/share %151120Space. -c 'put testing testing'
 
 smbclient //samba/share % -c 'put testing testing2'
-
