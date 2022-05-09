@@ -154,10 +154,12 @@ docker run --network redcita --detach --publish 139:139 --publish 445:445 --volu
 
 We need to change the permissions in the folder where the images are going to be saved.
 
+```
 docker exec -it samba bash
 //Enter the folder where the share folder is located
 cd /usr/local
 chmod 777 share
+```
 
 To test conectivity with the samba server 
 
