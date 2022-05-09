@@ -1,6 +1,8 @@
 # Docker images pull
 docker pull consul
+
 docker pull redis:alpine
+
 docker pull express-gateway
 
 # Docker Network
