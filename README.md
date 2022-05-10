@@ -33,9 +33,9 @@ docker run \
       agent -server -bootstrap-expect 1 -ui -data-dir /tmp -client=0.0.0.0
 
 docker run \
-      --name sd-p1-frontend \
+      --name sd-p1-frontend-2 \
       --network sd-p1\
-      -p 8080:8080\
+      -p 8081:8080\
       -d\
       sd-p1-frontend
 
@@ -60,15 +60,13 @@ docker run \
       -s "storage;/storage;yes;no;yes;all;backend;backend"
 
 
+docker run -p 8085:80 --name loadbalancer --network sd-p1 -d sd-p1-loadbalancer
+
+
 # Register frontend service in the consul server
 docker exec -d sd-p1-frontend consul agent -config-file=consul.json
-
-docker run  -p 80:8080\
-            -p 1936:1936 \
-            --network sd-p1 \
-            --name loadbalancer \
-            -d \
-            loadbalancer
+cd haproxy
+docker build -t sd-p1-loadbalancer . && cd ..
 ~~~
 
 ## Development 
@@ -156,3 +154,8 @@ Sebastián García
 Javier Torres 
 
 Christian Gallo 
+
+resolvers consul
+    nameserver consul 127.0.0.1:8600
+    accepted_payload_size 8192
+    hold valid 5s

@@ -6,11 +6,6 @@ const SambaClient = require('samba-client');
 
 let client = new SambaClient({
   address: '//samba/storage', // required
-  username: 'backend', // not required, defaults to guest
-  password: 'backend', // not required
-  domain: 'WORKGROUP', // not required
-  maxProtocol: 'SMB3', // not required
-  maskCmd: true, // not required, defaults to false
 });
 
 console.log("SAMBA CLIENT:", client);
@@ -53,7 +48,7 @@ app.post("/api/upload", (req, res) => {
     console.log("Received request: ");
     const save_path = SAVE_DIR + "/" + req.body.filename
     console.log("Saving encoded file", req.body.filename," in temporal directory ", save_path);
-    await save_file(req.body.data, save_path);
+    save_file(req.body.data, save_path);
     send_file_samba(save_path, req.body.filename);
     res.json({filepath: save_path});
 });
