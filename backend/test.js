@@ -1,15 +1,23 @@
-const SambaClient = require('samba-client');
+const ftp = require("basic-ftp")
 
-let client = new SambaClient({
-  address: '//samba/storage', // required
-});
+example()
 
-console.log(client);
-
-
-async function test() {
-    var res = await client.sendFile('somePath/file', 'destinationFolder/name');
-    console.log(res);
+async function example() {
+    const client = new ftp.Client()
+    client.ftp.verbose = true
+    try {
+        await client.access({
+            host: "ftp.site.domain",
+            user: "backend",
+            password: "backend",
+            secure: true
+        })
+        console.log(await client.list())
+        await client.uploadFrom("README.md", "README_FTP.md")
+        await client.downloadTo("README_COPY.md", "README_FTP.md")
+    }
+    catch(err) {
+        console.log(err)
+    }
+    client.close()
 }
-
-test();
