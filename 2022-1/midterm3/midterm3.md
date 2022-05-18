@@ -17,23 +17,23 @@ A simple REST-based python application has been builded by a expert engineer. He
 
 docker image: icesiops/midterm3app:0.1.0
 
-Create the nexts k8s objects for the application:
+Create the nexts k8s objects for the application:   
 
-• Defines a deployment 2 or more pods
-• Defines a health check on the deployment that makes sure /liveness is responding with a 200
-• Defines a health check on the deployment that makes sure /readiness is responding with a 200
-• Defines a kubernetes service using ClusterIP
-• Defines a kubernetes loadbalancer or kubernetes ingress (it give bonus) to allow traffic on to the pods vía internet.
-For create the loadbalancer in a Local Cluster keep in mind that you have to install a add-ons that allow you simulate the LoadBalancer services.
+• Defines a deployment 2 or more pods  
+• Defines a health check on the deployment that makes sure /liveness is responding with a 200  
+• Defines a health check on the deployment that makes sure /readiness is responding with a 200  
+• Defines a kubernetes service using ClusterIP  
+• Defines a kubernetes loadbalancer or kubernetes ingress (it give bonus) to allow traffic on to the pods vía internet.  
+For create the loadbalancer in a Local Cluster keep in mind that you have to install a add-ons that allow you simulate the LoadBalancer services.  
 For microk8s refer to -> https://microk8s.io/docs/addon-metallb
 
-Create the nexts k8s objects for the database:
-• Defines a deployment 2 or more pods
-• Defines a kubernetes service using ClusterIP
+Create the nexts k8s objects for the database:  
+• Defines a deployment 2 or more pods  
+• Defines a kubernetes service using ClusterIP  
 
-Create a Helm Chart to packing the k8s resources created previously. The helm chart must templating all values used by k8s resources to be configured from the values.yaml. Example:
+Create a Helm Chart to packing the k8s resources created previously. The helm chart must templating all values used by k8s resources to be configured from the values.yaml. Example:  
 
-Maybe you have the next code for the deployment of database:
+Maybe you have the next code for the deployment of database:  
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
