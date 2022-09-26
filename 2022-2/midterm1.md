@@ -42,4 +42,4 @@ Deberá desplegar una plataforma que cumpla con los siguientes requerimientos:
 
 ## Opcional
 * Los servidores web pueden hacer UPDATE Y DELETE de los datos en la base de datos.
-
+* Tenes un nombre de dominio para la aplicación.
