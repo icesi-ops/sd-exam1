@@ -5,10 +5,10 @@
 **Tema:** Infraestructura como código (Aprovisionamiento-CM)  
 **Correo:** josegar0218 at gmail.com
 
-##Integrantes##
-#Jhoan David Fiat Restrepo#
-#Jaime Andrés Mayor Aldana#
-#Alejandra Díaz Parra#
+##Integrantes
+#Jhoan David Fiat Restrepo
+#Jaime Andrés Mayor Aldana
+#Alejandra Díaz Parra
 
 ### Objetivos
 * Realizar de forma autónoma el aprovisionamiento automático de infraestructura
