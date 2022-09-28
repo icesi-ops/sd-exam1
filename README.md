@@ -58,29 +58,29 @@ Deberá desplegar una plataforma que cumpla con los siguientes requerimientos:
 
 ## Primer Paso
 
-Definimos una estrategia de branching, tomando la decisón de cómo será la división de trabajos y responsabilidades en las funciones de cada integrante. Definiendo que se va a trabajar utilizando Git y Github, y vamos a dividir tres etapas principales en ramas para evitar conflictor y separar el trabajo.
+Definimos una estrategia de branching, tomando la decisón de cómo será la división de trabajos y responsabilidades en las funciones de cada integrante. Definiendo que se va a trabajar utilizando Git y Github, y vamos a dividir tres etapas principales en ramas para evitar conflictos y separar el trabajo.
 
 ![](https://i.imgur.com/S6gfVOe.png)
 
-De esa decisión, se define que el siguiente proceso es, basado en los requerimientos realizar el diseño de la infraestructura en donde será alojada la aplicación. 
+De esa decisión se define que el siguiente proceso es, basado en los requerimientos realizar el diseño de la infraestructura en donde será alojada la aplicación. 
 
 Posteriormente a este paso, se propone dividir el trabajo en cuatro etapas principales:
 
 - ### Documentation: 
-    Se toma como parte importante del proceso, en donde se van documentando los procesos de cada etapa, las dificultades encontradas y las conclusiones de cada etapa. Se presenta a través del README del proyecto en git.
+    Se toma como parte importante del proceso, en la cual se van documentando los procesos de cada etapa, las dificultades encontradas y las conclusiones de cada etapa. Se presenta a través del README del proyecto en git.
 - ### Frontend:
-    Se presenta como una rama dentro del repositorio en Github, se propone que una persona trabaje en el front, ya que se considera no es una labor extensa por la naturaliza de la solución, se utiliza React para realizarlo.
+    Se presenta como una rama dentro del repositorio en Github. Se propone que una persona trabaje en el front, ya que se considera no es una labor extensa por la naturaleza de la solución, y se utiliza React para realizarlo.
 - ### Backend:
     Al igual que el frontend, se divide en una rama del repositorio en Github, y del mismo modo una persona se va a encargar de la implementación del backend utilizando Java como lenguaje de programación, logrando división en el trabajo y agilidad en el proceso. 
     #### * Unión de Ramas: es importante aclarar que al tener las ramas de frontend y backend listas, se procede a realizar un merge de ambas ramas, teniendo debidamente implementada la aplicación y esperando que sea dotada de su infraestructura en una rama Application.
 - ### Provisioning:
-    Se realiza en una rama individual, también lo realiza una sola persona utilizando Terraform y Azure para dotar la aplicación de una infraestructura alojada en la nube. Y permitiendo su configuración posterior.
+    Se realiza en una rama individual por una sola persona utilizando Terraform y Azure para dotar la aplicación de una infraestructura alojada en la nube. Y permitiendo su configuración posterior.
     
 ---
 Después de realizado el trabajo de estas ramas, se realiza: 
 
 - ### Configuration Management: 
-    Se crea una rama en donde se trae lo implementado en la rama de Provisioning, logrando continuar el trabajo anterior y realizar las respectivas pruebas y conexión con la infraestructura, la rama Provisioning es destruída al traer todo a la rama de Configuration Management.
+    Se crea una rama en donde se trae lo implementado en la rama de Provisioning, logrando continuar el trabajo anterior y realizar las respectivas pruebas y conexión con la infraestructura. La rama Provisioning es destruida al traer todo a la rama de Configuration Management.
     Se realiza la configuración de la infraestructura de forma remota a través de Ansible, logrando que cumpla todos los requerimientos para permitir la debida ejecución de la aplicación. 
     
    #### * Unión de Ramas: Al finalizar provisioning y configuration management, se realiza un merge de esta rama con la rama Application, en donde se planea llevar a cabo las pruebas de todo el sistema funcionando llevando a cabo ajustes menores. Finalmente se lleva todo a la rama de Production o Development.
