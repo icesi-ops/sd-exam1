@@ -85,3 +85,4 @@ Después de realizado el trabajo de estas ramas, se realiza:
     
    #### * Unión de Ramas: Al finalizar provisioning y configuration management, se realiza un merge de esta rama con la rama Application, en donde se planea llevar a cabo las pruebas de todo el sistema funcionando llevando a cabo ajustes menores. Finalmente se lleva todo a la rama de Production o Development.
 
+![](https://i.imgur.com/RcmDmzr.png)
