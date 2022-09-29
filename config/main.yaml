@@ -1,0 +1,6 @@
+- hosts: front
+  become: true
+  roles:
+    - playbooks/front-app
+  environment:
+    PORT: 8080
