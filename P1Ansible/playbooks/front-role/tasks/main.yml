@@ -1,0 +1,20 @@
+---
+# tasks file for front-role
+- name: Clone a repo with separate git directory
+  git:
+    repo: "{{repo}}"
+    dest: "{{dest}}"
+    clone: yes
+    version: master
+    update: yes
+    force: true
+
+- name: Install packages
+  npm:
+    name: "install"
+    path: "{{path_npm}}"
+
+- name: build
+  npm:
+    name: "build"
+    path: "{{path_build}}"
