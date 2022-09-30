@@ -1,12 +1,25 @@
 ---
 # tasks file for vuejs
-- name: Install nodejs and npm
+- name: Update APT
+  apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+- name: Add nodejs apt key
+  apt_key:
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    state: present
+
+- name: Add nodejs repository
+  apt_repository:
+    repo: deb https://deb.nodesource.com/node_12.x {{ ansible_lsb.codename }} main
+    state: present
+    update_cache: yes
+
+- name: Install nodejs
   apt:
-    name:
-    - nodejs
-    - npm
-    update_cache: true
+    name: nodejs
+    state: present
+
 - name: Install VueJs Package
   npm:
-    name: vue@next
+    name: '@vue/cli'
     global: yes

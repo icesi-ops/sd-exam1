@@ -2,9 +2,9 @@
   become: true
   roles:
     - role: playbooks/vuejs
-    - role: playbooks/front-role
-      vars:
-        repo: 'https://github.com/icesi-ops/microservice-app-example.git'
-        dest: /app
-        path_npm: /app/frontend/
-        path_build: /app/frontend/
+    #- role: playbooks/front-role
+    #  vars:
+    #    repo: 'https://github.com/icesi-ops/microservice-app-example.git'
+    #    dest: /app
+    #    path_npm: /app/frontend/
+    #    path_build: /app/frontend/
