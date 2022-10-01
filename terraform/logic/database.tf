@@ -19,8 +19,8 @@ resource "azurerm_mssql_database" "mssql_database" {
   storage_account_type = "ZRS"
   threat_detection_policy { //enable Microsoft Defender for SQL 
     state                      = "Enabled"
-    storage_endpoint = azurerm_storage_account.storageaccount.primary_blob_endpoint
-    storage_account_access_key = azurerm_storage_account.storageaccount.primary_access_key
+    storage_endpoint = azurerm_storage_account.storage_account.primary_blob_endpoint
+    storage_account_access_key = azurerm_storage_account.storage_account.primary_access_key
   }
   #max_size_gb    = 2
   #read_scale     = true
