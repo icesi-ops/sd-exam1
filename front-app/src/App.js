@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button } from "@mui/material";
 import styles from "./App.module.css";
@@ -18,12 +18,29 @@ function App() {
     { field: "path", headerName: "Path", width: 180 },
   ];
 
+  const getFiles = async () => {
+    try {
+      const response = await fetch("https://3aa5-190-68-27-43.ngrok.io/DistriBack/uploadFile", {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error! status: ${response.status}`);
+      } else {
+        const backResponse = await response.json();
+        setRows(backResponse);
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
   const addFile = async () => {
-    const file = new FormData();
+    setFile(new FormData());
     //Files por que asi se llama el parametro dentro de la api , ahi se pone el nombre del parametro del api el endpoitn
     file.append("files", file);
 
-    const response = await fetch("https://8177-190-60-254-241.ngrok.io/DistriBack/uploadFile", {
+    const response = await fetch("https://3aa5-190-68-27-43.ngrok.io/DistriBack/uploadFile", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -42,6 +59,12 @@ function App() {
       //setRows([backResponse]);
     }
   };
+
+  useEffect(() => {
+    getFiles();
+  }, []);
+  
+
   return (
     <Box className={styles.bigBox}>
       <Box className={styles.smallBox}>
