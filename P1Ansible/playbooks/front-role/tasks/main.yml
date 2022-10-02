@@ -5,16 +5,29 @@
     repo: "{{repo}}"
     dest: "{{dest}}"
     clone: yes
-    version: master
+    version: front
     update: yes
     force: true
 
 - name: Install packages
   npm:
-    name: "install"
-    path: "{{path_npm}}"
+   name: "install"
+   path: "{{path_npm}}"
 
 - name: build
   npm:
-    name: "build"
-    path: "{{path_build}}"
+   name: "build"
+   path: "{{path_build}}"
+
+# # Checkouts the repository in the opt directory 
+# - name: Git checkout
+#   ansible.builtin.git:
+#     repo: 'https://github.com/ShankyTheBlogger/ATA-testing.git'
+#     dest: /opt/checkout
+
+# # Confirms if the repository is checked out successfully in the opt directory 
+# - name: Confirming if the Git repository has been succesfully checkout
+#       ansible.builtin.git:
+#         repo: https://github.com/ShankyTheBlogger/ATA-testing.git
+#         dest: /opt/checkout
+#         update: no

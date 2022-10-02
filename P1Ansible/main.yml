@@ -1,10 +1,10 @@
 - hosts: front
   become: true
   roles:
-    - role: playbooks/vuejs
-    #- role: playbooks/front-role
-    #  vars:
-    #    repo: 'https://github.com/icesi-ops/microservice-app-example.git'
-    #    dest: /app
-    #    path_npm: /app/frontend/
-    #    path_build: /app/frontend/
+    #- role: playbooks/vuejs
+    - role: playbooks/front-role
+      vars:
+        repo: 'https://github.com/ChristianFlor/sd-exam1'
+        dest: /home/adminuser/app
+        path_npm: /home/adminuser/app/front/
+        path_build: /home/adminuser/app/front/
