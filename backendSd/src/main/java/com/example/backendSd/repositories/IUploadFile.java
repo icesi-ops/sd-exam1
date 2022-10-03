@@ -9,4 +9,7 @@ public interface IUploadFile {
 
     public String uploadFileAzure(MultipartFile file);
 
+    public long Storage();
+
+    public String Host();
 }

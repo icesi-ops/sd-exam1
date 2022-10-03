@@ -1,8 +1,5 @@
 package com.example.backendSd.model;
 
-
-import jdk.jfr.DataAmount;
-
 import javax.persistence.*;
 
 @Entity
