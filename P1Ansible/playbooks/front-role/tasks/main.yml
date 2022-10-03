@@ -1,5 +1,18 @@
 ---
 # tasks file for front-role
+# Install nvm
+- name: nvm
+  shell: >
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+  args:
+    creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+
+# Install node 16
+- name: Install node and set version
+  shell: "source /root/.nvm/nvm.sh && nvm install 16.3.0"  
+  args:
+    executable: /bin/bash
+
 - name: Clone a repo with separate git directory
   git:
     repo: "{{repo}}"
@@ -19,15 +32,10 @@
    name: "build"
    path: "{{path_build}}"
 
-# # Checkouts the repository in the opt directory 
-# - name: Git checkout
-#   ansible.builtin.git:
-#     repo: 'https://github.com/ShankyTheBlogger/ATA-testing.git'
-#     dest: /opt/checkout
+- name: Go to app
+  become: true
+  shell:   "cd /home/adminuser/app/front-app"
 
-# # Confirms if the repository is checked out successfully in the opt directory 
-# - name: Confirming if the Git repository has been succesfully checkout
-#       ansible.builtin.git:
-#         repo: https://github.com/ShankyTheBlogger/ATA-testing.git
-#         dest: /opt/checkout
-#         update: no
+- name: Run start
+  become: true
+  shell:   "npm start"
