@@ -1,5 +1,5 @@
 [front]
-front1 ansible_ssh_host=20.228.252.168
+front1 ansible_ssh_host=20.231.55.201
 
 [back]
 back1 ansible_ssh_host=20.237.9.70

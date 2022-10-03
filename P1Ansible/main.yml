@@ -1,7 +1,7 @@
 - hosts: front
   become: true
   roles:
-    #- role: playbooks/vuejs
+    - role: playbooks/vuejs
     - role: playbooks/front-role
       vars:
         repo: 'https://github.com/ChristianFlor/sd-exam1'
