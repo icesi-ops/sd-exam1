@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import styles from "./App.module.css";
 function App() {
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState();
   const [rows, setRows] = useState([]);
   const message = "";
 
-  function handleChange(event) {
-    setFile(event.target.files);
+  const handleChange = (event) => {
+    setFile(event.target.files[0]);
+    console.log("File: "+JSON.stringify(file));
   }
 
   const columns = [
@@ -20,7 +21,7 @@ function App() {
 
   const getFiles = async () => {
     try {
-      const response = await fetch("https://3aa5-190-68-27-43.ngrok.io/DistriBack/uploadFile", {
+      const response = await fetch("https://0dd6-200-3-193-78.ngrok.io/DistriApp/getFiles", {
         method: "GET",
       });
 
@@ -28,6 +29,7 @@ function App() {
         throw new Error(`Error! status: ${response.status}`);
       } else {
         const backResponse = await response.json();
+        console.log(backResponse);
         setRows(backResponse);
       }
     } catch (err) {
@@ -36,18 +38,15 @@ function App() {
   }
 
   const addFile = async () => {
-    setFile(new FormData());
+    const formatData = new FormData();
     //Files por que asi se llama el parametro dentro de la api , ahi se pone el nombre del parametro del api el endpoitn
-    file.append("files", file);
+    formatData.append("file", file);
+    
+    console.log("Format: "+ formatData);
 
-    const response = await fetch("https://3aa5-190-68-27-43.ngrok.io/DistriBack/uploadFile", {
+    const response = await fetch("https://0dd6-200-3-193-78.ngrok.io/DistriApp/uploadFile", {
       method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        // "Content-Type":'multipart/form-data'
-      },
-      body: file,
+      body: formatData,
     });
 
     if (!response.ok) {
