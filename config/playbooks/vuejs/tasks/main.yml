@@ -1,0 +1,20 @@
+---
+# tasks file for vuejs
+- name: Install node.js and npm and react
+  apt:
+    name: 
+    - nodejs
+    - npm
+    - ngnix
+    - react
+    update_cache: true
+# ansible front -a "nodejs --version"
+# ansible front -a "nginx -v"
+# ansible front -a "npm view react version"
+
+- name: Install VueJs Package
+  npm:
+    name: vue@next
+    global: yes
+
+# ansible front -a "npm v vue" 
