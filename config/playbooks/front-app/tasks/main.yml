@@ -1,2 +1,23 @@
 ---
 # tasks file for front-app
+- name: Install git
+  apt:
+    name: 
+    - git
+    update_cache: yes
+
+- name: Create app directory 
+  file: 
+    path: /front-app/
+    state: directory
+
+- name: Clone repo
+  git:
+    repo: 'https://github.com/DavidFiat/Full_Stack_Dev_Ops_App.git'
+    version: Frontend
+    dest: /front-app/
+
+- name: Install front dependencies
+  npm: 
+    path: '/front-app/frontend'
+    executable: '/usr/bin/npm'

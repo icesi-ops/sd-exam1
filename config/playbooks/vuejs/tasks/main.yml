@@ -1,13 +1,38 @@
 ---
 # tasks file for vuejs
-- name: Install node.js and npm and react
+- name: Install node.js
   apt:
     name: 
-    - nodejs
     - npm
-    - ngnix
-    - react
     update_cache: true
+#    upgrade: yes
+
+- name: Install nginx
+  apt:
+    name:
+    - nginx
+
+- name: Start nginx
+  service:
+    name: nginx
+    state: started
+
+- name: "Add nodejs apt key"
+  apt_key:
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    state: present
+
+- name: "Install nodejs 16.x"
+  apt_repository:
+    repo: deb https://deb.nodesource.com/node_16.x focal main
+    update_cache: yes
+
+- name: "Install nodejs"
+  apt:
+    update_cache: yes
+    name: nodejs
+    state: present
+
 # ansible front -a "nodejs --version"
 # ansible front -a "nginx -v"
 # ansible front -a "npm view react version"
