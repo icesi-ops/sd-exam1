@@ -1,8 +1,10 @@
 package com.example.backendSd.services;
 
 import com.example.backendSd.model.FileModel;
+import com.example.backendSd.model.Response;
 import com.example.backendSd.repositories.FileRepositories;
 import com.example.backendSd.repositories.IUploadFile;
+import com.google.gson.Gson;
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.blob.CloudBlob;
 import com.microsoft.azure.storage.blob.CloudBlobClient;
@@ -45,8 +47,10 @@ public class FileServices  implements IUploadFile {
 
             CloudBlob blob;
 
+
             blob = container.getBlockBlobReference(file.getOriginalFilename());
             blob.upload(file.getInputStream(),file.getSize());
+            System.out.println("Host blob:  "+blob.getUri().getHost());
 
             resultService="OK";
             FileModel obj = new FileModel();
@@ -102,12 +106,19 @@ public class FileServices  implements IUploadFile {
     @Override
     public String Host() {
         String hostname="";
+
+        Gson json = new Gson();
+        Response response = new Response();
+        String respuesta="";
         try {
-            hostname =  InetAddress.getLocalHost().getHostName();
+            hostname = InetAddress.getLocalHost().getHostName();
+            response.setResponse(hostname);
+            respuesta = json.toJson(response);
+
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-        return hostname;
+        return respuesta;
     }
 
 

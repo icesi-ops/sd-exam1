@@ -4,6 +4,7 @@ package com.example.backendSd.controllers;
 //Recibe la peticion Web que imediatamente llama un servicio
 
 import com.example.backendSd.model.FileModel;
+import com.example.backendSd.model.Response;
 import com.example.backendSd.repositories.IUploadFile;
 import com.example.backendSd.services.FileServices;
 import org.springframework.beans.factory.annotation.Autowired;

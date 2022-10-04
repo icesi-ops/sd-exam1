@@ -1,6 +1,7 @@
 package com.example.backendSd.repositories;
 
 
+import com.example.backendSd.model.Response;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
