@@ -1,4 +1,46 @@
 ---
-# tasks file for back-role
-- name: Ping back-role
-  action: ping
+- name: Clone a repo with separate git directory
+  git:
+    repo: "{{repo}}"
+    dest: "{{dest}}"
+    clone: yes
+    version: back
+    update: yes
+    force: true
+
+- name: Install java
+  apt:
+    name: java-1.8.0-openjdk
+    state: present
+
+- name: add group tomcat
+  user: name-tomcat group=tomcat home=/usr/share/tomcat createhome=no
+
+- name: Download tomcat
+  get_url: url=http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.61/bin/apache-tomcat-7.0.61.tar.gz dest=http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.61/bin/apache-tomcat-7.0.61.tar.gz
+
+- name: Extract archive
+  command: chdir=/usr/share /bin/tar xvf /opt/apache-tomcat-7.0.61.tar.gz -C /opt/ creates=/opt/apache-tomcat-7.0.61 
+
+- name: Symlink install directory
+  file: src=/opt/apache-tomcat-7.0.61 path=/usr/share/tomcat state=link
+
+- name: Change ownership of tomcat installation
+  file: path=/usr/share/tomcat/ owner=tomcat group=tomcat state=directory recurse=yes
+
+- name: install maven (and other packages if needed)
+  become: true
+  apt: pkg={{ item }} state=latest update_cache=yes cache_valid_time=3600
+  with_items:
+    - maven
+
+- name: maven clean package
+  command: mvn -f {{dest}}/DistriBack/pom.xml clean package
+
+- name: Copy file
+  copy: src={{dest}}/DistriBack/target/DistriBack-0.0.1-SNAPSHOT.war dest=/usr/share/tomcat/webapps/DistriBack-0.0.1-SNAPSHOT.war
+
+- name: Start tomcat
+  shell: /usr/share/tomcat/bin/startup.sh
+  become: true
+  become_user: root

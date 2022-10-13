@@ -3,15 +3,3 @@ front1 ansible_ssh_host=20.231.55.201
 
 [back]
 back1 ansible_ssh_host=20.237.9.70
-
-[jumpboxes_public]
-my-public-bastion ansible_host=20.237.9.70
-
-[jumpboxes_private]
-my-host-behind-bastion ansible_host=10.0.2.5
-
-[jumpboxes_private:vars]
-ansible_ssh_common_args="-o ProxyCommand=\"ssh -q adminuser@20.237.9.70 -o Port=22 -W %h:%p\""
-
-[all:vars] 
-ansible_user=adminuser
