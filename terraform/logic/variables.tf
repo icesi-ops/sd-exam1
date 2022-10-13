@@ -5,7 +5,7 @@ variable "resource_group_name" {
 }
 variable "location" {
   description= "Azure location"
-  default="East US"
+  default="West US"
 }
 variable "virtual_network_name" {
    description= "Virtual network name"
