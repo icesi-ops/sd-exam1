@@ -23,3 +23,8 @@
   npm:
     name: '@vue/cli'
     global: yes
+
+- name: Install pm2
+  npm:
+    name: pm2
+    global: yes
