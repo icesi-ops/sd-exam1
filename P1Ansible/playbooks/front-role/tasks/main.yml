@@ -17,3 +17,15 @@
   npm:
    name: "build"
    path: "{{path_build}}"
+
+- name: Start front-app with process config file, if not running
+  pm2:
+    name: front-app
+    config: /home/adminuser/app/front-app/package.json
+    state: started
+
+# - name: Start front-app.js, if not running
+#   pm2:pyth
+#     name: front-app
+#     script: /home/adminuser/app/front-app/src/app.js
+#     state: started
