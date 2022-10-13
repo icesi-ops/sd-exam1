@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button, Typography } from "@mui/material";
 import styles from "./App.module.css";
+import { BASEURL } from "./Constants";
 function App() {
   const [file, setFile] = useState();
   const [rows, setRows] = useState([]);
@@ -23,7 +24,7 @@ function App() {
   const getHost = async () => {
     try {
       const response = await fetch(
-        "https://39ee-200-3-193-78.ngrok.io/DistriApp/host",
+        BASEURL+"/DistriApp/host",
         {
           method: "GET",
         }
@@ -42,7 +43,7 @@ function App() {
   const getStorage = async () => {
     try {
       const response = await fetch(
-        "https://39ee-200-3-193-78.ngrok.io/DistriApp/capacity",
+        BASEURL+"/DistriApp/capacity",
         {
           method: "GET",
         }
@@ -62,7 +63,7 @@ function App() {
   const getFiles = async () => {
     try {
       const response = await fetch(
-        "https://39ee-200-3-193-78.ngrok.io/DistriApp/getFiles",
+        BASEURL+"/DistriApp/getFiles",
         {
           method: "GET",
         }
@@ -88,7 +89,7 @@ function App() {
     console.log("Format: " + formatData);
 
     const response = await fetch(
-      "https://39ee-200-3-193-78.ngrok.io/DistriApp/uploadFile",
+      BASEURL+"/DistriApp/uploadFile",
       {
         method: "POST",
         mode: "cors",
