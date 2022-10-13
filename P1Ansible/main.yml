@@ -1,13 +1,13 @@
-- hosts: front
-  become: true
-  roles:
-    - role: playbooks/vuejs
-    - role: playbooks/front-role
-      vars:
-        repo: 'https://github.com/ChristianFlor/sd-exam1'
-        dest: /home/adminuser/app
-        path_npm: /home/adminuser/app/front-app/
-        path_build: /home/adminuser/app/front-app/
+# - hosts: front
+#   become: true
+#   roles:
+#     - role: playbooks/vuejs
+#     - role: playbooks/front-role
+#       vars:
+#         repo: 'https://github.com/ChristianFlor/sd-exam1'
+#         dest: /home/adminuser/app
+#         path_npm: /home/adminuser/app/front-app/
+#         path_build: /home/adminuser/app/front-app/
 - hosts: back
   become: true
   roles:
