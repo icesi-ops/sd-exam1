@@ -11,7 +11,7 @@
     <groupId>com.example</groupId>
     <artifactId>DistriBack</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>DistriBack</name>
     <description>DistriBack</description>
     <properties>
