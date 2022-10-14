@@ -1,0 +1,30 @@
+---
+# tasks file for back-app
+- name: Install git
+  apt:
+    name: 
+    - git
+    update_cache: yes
+
+- name: Create app directory 
+  file: 
+    path: /back-app/
+    state: directory
+
+- name: Clone repo
+  git:
+    repo: 'https://github.com/DavidFiat/Full_Stack_Dev_Ops_App.git'
+    version: Backend
+    dest: /back-app/
+
+- name: Install back dependencies
+  npm: 
+    path: '/nack-app/backend'
+    executable: '/usr/bin/npm'
+
+- name: Install ssh with passwords
+  apt:
+    name: 
+    - sshpass
+ #   update_cache: yes
+

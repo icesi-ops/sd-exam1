@@ -7,4 +7,7 @@
     PORT: 8080[REVISAR PORQUE REACT CORRE EN EL 3000]
 #    PORT: 3000
 
-  
+ # - hosts: back
+#   become: true
+#   roles:
+#     - role: playbooks/back-app 

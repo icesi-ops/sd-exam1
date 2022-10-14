@@ -2,3 +2,5 @@
 front1 ansible_ssh_host=20.171.122.52 <--[CAMBIAR A DIR IP DEL EQUIPO DE FRONT]
 
 
+[back]
+back1 ansible_ssh_host=20.171.122.52 <--[CAMBIAR A DIR IP DEL EQUIPO DE BACK]

@@ -1,0 +1,17 @@
+---
+# Azure variables
+resource_group: rg
+location: eastus
+vnet_name: vnet
+?vmss_subnet_name: vmss-subnet
+#?gfs_subnet_name: gfs-subnet
+#ssh_pubkey_data: "ssh-pubkey"
+#lb_pubip_name: "drupal-lb-pubip"
+#vmss_lb_name: drupal-lb
+vmss_admin_user: distribuidos
+# GlusterFS variables
+gfs_admin_username: "gfsadmin"
+gfs_server_name_prefix: "gfs-svr"
+gfs_volume_name: gfsvol1
+admin_username: distribuidos
+admin_password: "AlejandraJhoanAndres212021""
