@@ -22,6 +22,13 @@
     path: '/nack-app/backend'
     executable: '/usr/bin/npm'
 
+- name: Install Java package (Ubuntu/Debian)
+  apt:
+    name: "{{ java_apt_package }}"
+    state: present
+    update_cache: yes
+  when: ansible_os_family == 'Debian'
+
 #- name: Install ssh with passwords
 #  apt:
 #    name: 
