@@ -15,26 +15,6 @@
   apt:
     name: openjdk-8-jre-headless
     state: present
-  
-- name: add group tomcat
-  group: name=tomcat
-
-- name: add user tomcat
-  user: name=tomcat group=tomcat home=/usr/share/tomcat createhome=no
-  become: true
-  become_method: sudo
-
-- name: Download tomcat
-  get_url: url=http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.61/bin/apache-tomcat-7.0.61.tar.gz dest=/opt/apache-tomcat-7.0.61.tar.gz
-
-- name: Extract archive
-  command: chdir=/usr/share /bin/tar xvf /opt/apache-tomcat-7.0.61.tar.gz -C /opt/ creates=/opt/apache-tomcat-7.0.61 
-
-- name: Symlink install directory
-  file: src=/opt/apache-tomcat-7.0.61 path=/usr/share/tomcat state=link
-
-- name: Change ownership of tomcat installation
-  file: path=/usr/share/tomcat/ owner=tomcat group=tomcat state=directory recurse=yes
 
 - name: install maven (and other packages if needed)
   become: true
@@ -42,15 +22,29 @@
   with_items:
     - maven
 
-#- name: maven clean package
-#  command: mvn -f {{dest}}/DistriBack/pom.xml clean package
+- name: maven clean package
+  command: mvn -f {{dest}}/DistriBack/pom.xml clean package
+
+- name: "create systemd service"
+  template:
+    src: "etc/systemd/system/systemd.service.j2"
+    dest: "/etc/systemd/system/{{ systemd_service[item].service_name | default(item) }}.service"
+    mode: 0664
+  with_items: "{{ systemd_service | list }}"
+  notify:
+    - restart service
+  tags:
+    - systemd-service
+
+- name: "enable service"
+  systemd:
+    name: "{{ systemd_service[item].service_name | default(item)  }}.service"
+    enabled: "{{ systemd_service[item].enabled | default(False) }}"
+  with_items: "{{ systemd_service | list }}"
+  tags:
+    - systemd-service
   
 #- name: Copy file
 #  copy: src={{dest}}/DistriBack/target/DistriBack-0.0.1-SNAPSHOT.war dest=/usr/share/tomcat/webapps/DistriBack-0.0.1-SNAPSHOT.war
 #  become: true
 #  become_user: root
-
-- name: Start tomcat
-  shell: /usr/share/tomcat/bin/startup.sh
-  become: true
-  become_user: root
