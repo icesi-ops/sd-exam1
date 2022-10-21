@@ -27,7 +27,7 @@ class AppServiceImplementation(val fileRepo: FileRepo) : AppServiceInterface{
     }
 
     override fun uploadFile(file: MultipartFile): List<Filex>? {
-        var storageConnectionAzure = "DefaultEndpointsProtocol=https;AccountName=bucketmidterm1parcial;AccountKey=MoLX7NX/VxUgwXXLx5aFD26HRP7ON8gGGCH/g9Z5Q5QekEq2Fmj4ik+XPTT5dCfpr16xodlM4I6R+AStnrO9oA==;EndpointSuffix=core.windows.net"
+        var storageConnectionAzure = "DefaultEndpointsProtocol=https;AccountName=bucketmidterm1parcial;AccountKey=bQOKm1PiNPJoOjxJ+LuaMgpv7yjB8jIZcNiSACw6nKQ4+VJGgQXP/XrA0JxOywhUulqLsr5uaq0/+AStiAu4Lw==;EndpointSuffix=core.windows.net"
         var nameContainer = "documents"
         try{
             var account: CloudStorageAccount = CloudStorageAccount.parse(storageConnectionAzure)
@@ -44,7 +44,7 @@ class AppServiceImplementation(val fileRepo: FileRepo) : AppServiceInterface{
     }
 
     override fun capacity(): Capacity {
-        var storageConnectionAzure = "DefaultEndpointsProtocol=https;AccountName=bucketmidterm1parcial;AccountKey=MoLX7NX/VxUgwXXLx5aFD26HRP7ON8gGGCH/g9Z5Q5QekEq2Fmj4ik+XPTT5dCfpr16xodlM4I6R+AStnrO9oA==;EndpointSuffix=core.windows.net"
+        var storageConnectionAzure = "DefaultEndpointsProtocol=https;AccountName=bucketmidterm1parcial;AccountKey=bQOKm1PiNPJoOjxJ+LuaMgpv7yjB8jIZcNiSACw6nKQ4+VJGgQXP/XrA0JxOywhUulqLsr5uaq0/+AStiAu4Lw==;EndpointSuffix=core.windows.net"
         var nameContainer = "documents"
         var size = 0L
         try{
