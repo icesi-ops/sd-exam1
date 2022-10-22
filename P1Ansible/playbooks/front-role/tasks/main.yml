@@ -18,6 +18,15 @@
    name: "build"
    path: "{{path_build}}"
 
+- name: Use NPM to start the target
+  command: npm start
+  args:
+    chdir: "{{path_npm}}"
+  async: 42
+  poll: 0
+  become: yes
+  become_user: root
+
 # - name: Start front-app with process config file, if not running
 #   pm2:
 #     name: front-app
