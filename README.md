@@ -53,3 +53,10 @@ Deberá desplegar una plataforma que cumpla con los siguientes requerimientos:
 #### Diagrama inicial de la solución
 ![image](https://user-images.githubusercontent.com/47872231/197418703-e945ea9b-3132-4e93-8c6a-55f3d45a5741.png)
 
+### Problemas encontrados
+
+**Créditos de Azure:** Debido a la cantidad limitada de créditos que teníamos a disposición, más de una vez nos quedamos sin los suficientes créditos para subir la infraestructura a Azure. Esto no tiene una solución definitiva. No obstante, nuestra solución provisional fue y aún es, cambiar de cuentas para volver a tener los 100 créditos. Adicionalmente, buscamos la manera de disminuir el consumo usando diferentes recursos.
+**Límite de tipo de recursos por región:**
+
+
+
