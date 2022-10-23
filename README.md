@@ -41,3 +41,15 @@ Deberá desplegar una plataforma que cumpla con los siguientes requerimientos:
 **Feature-branches:**  Estas son las ramas más abundantes en la vida del proyecto, se crean cada vez que surge una nueva funcionalidad o tema que incluir. Se derivan directamente de la rama  _Development_  y se integran nuevamente a esta misma rama, una vez se ha terminado de trabajar en la nueva funcionalidad y se considera lista para probar.
 
 **Hotfix:**  Estas ramas surgen cada vez que se detecta una falla en la rama de producción (_Master_)que debe ser solucionada lo más pronto posible. Cuando se termine de solucionar el inconveniente se debe integrar de nuevo tanto a  _Master_  como a  _Development_
+
+#### Feature-branches:
+* ansible: Para el management.
+* back: Para el desarrollo del backend. 
+* front: Para el desarrollo del frontend.
+* terraform: Para el provisioning.
+
+### Diagramas
+
+#### Diagrama inicial de la solución
+![image](https://user-images.githubusercontent.com/47872231/197418703-e945ea9b-3132-4e93-8c6a-55f3d45a5741.png)
+
