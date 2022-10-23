@@ -56,7 +56,11 @@ Deberá desplegar una plataforma que cumpla con los siguientes requerimientos:
 ### Problemas encontrados
 
 **Créditos de Azure:** Debido a la cantidad limitada de créditos que teníamos a disposición, más de una vez nos quedamos sin los suficientes créditos para subir la infraestructura a Azure. Esto no tiene una solución definitiva. No obstante, nuestra solución provisional fue y aún es, cambiar de cuentas para volver a tener los 100 créditos. Adicionalmente, buscamos la manera de disminuir el consumo usando diferentes recursos.
-**Límite de tipo de recursos por región:**
+
+**Límite de tipo de recursos por región:** 
+Para solucionar esto, tuvimos que hacer varios cambios en la infraestructura. Los cambios que nos tocó realizar fueron los siguientes:
+* En vez de usar una VPN, se pasó el Backend de privado a público. Esto permitió realizar el management directamente en la máquina del back.
+* En vez de acceder a los servicios del Frontend por medio de un loadbalancer, pasamos a remover este último. Por lo tanto, se accede directamente por medio de la ip pública del front.
 
 
 
