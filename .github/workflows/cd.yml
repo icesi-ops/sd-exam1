@@ -23,16 +23,16 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
      
-      #- uses: arillso/action.playbook@master
-        #with:
-        #  playbook: ansible/main.yml
-       #   inventory: ansible/ansible_hosts
-      - uses: dawidd6/action-ansible-playbook@v2
+      - uses: arillso/action.playbook@master
         with:
+          playbook: ./ansible/main.yml
+          inventory: ./ansible/ansible_hosts
+      #- uses: dawidd6/action-ansible-playbook@v2
+       # with:
           # Required, playbook filepath
-          playbook: ansible/main.yml
-          inventory: |
-            ansible/ansible_hosts
+        #  playbook: ansible/main.yml
+         # inventory: |
+          #  ansible/ansible_hosts
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
