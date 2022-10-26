@@ -1,0 +1,21 @@
+.bigBox{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.smallBox{
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+.button{
+  background-color: transparent;
+  border-width: 0cm;
+}
+.button:hover{
+  background-color: red;
+  color: white;
+}
