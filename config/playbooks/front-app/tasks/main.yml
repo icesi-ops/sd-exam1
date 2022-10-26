@@ -1,55 +1,56 @@
 ---
 # tasks file for front-app
-- name: Install git
-  apt:
-    name: 
-    - git
-    update_cache: yes
-
-- name: Create app directory 
-  file: 
-    path: /front-app/
-    state: directory
-
-- name: Clone repo
+- name: Clone a repo with separate git directory
   git:
-    repo: 'https://github.com/DavidFiat/Full_Stack_Dev_Ops_App.git'
+    repo: "{{repo}}"
+    dest: "{{dest}}"
+    clone: yes
     version: Frontend
-    dest: /front-app/
+    update: yes
+    force: true
 
-- name: Install front dependencies
-  npm: 
-    path: '/front-app/frontend'
-    executable: '/usr/bin/npm'
+- name: Install packages
+  npm:
+   name: "install"
+   path: "{{path_npm}}"
 
----
+- name: build
+  npm:
+   name: "build"
+   path: "{{path_build}}"
+
+#- name: Install front dependencies
+#  npm: 
+#    path: "{{path_npm}}"
+#    executable: '/usr/bin/npm'
+
 # tasks file for vuejs
-- name: Install npm
-  apt:
-    name: 
-    - npm
-    update_cache: true
+#- name: Install npm
+#  apt:
+#    name: 
+#    - npm
+#    update_cache: true
 #    upgrade: yes
 
-- name: Install nginx
-  apt:
-    name:
-    - nginx
+#- name: Install nginx
+#  apt:
+#    name:
+#    - nginx
 
-- name: Start nginx
-  service:
-    name: nginx
-    state: started
+#- name: Start nginx
+#  service:
+#    name: nginx
+#    state: started
 
-- name: "Add nodejs apt key"
-  apt_key:
-    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-    state: present
+#- name: "Add nodejs apt key"
+#  apt_key:
+#    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+#    state: present
 
-- name: "Install nodejs 16.x"
-  apt_repository:
-    repo: deb https://deb.nodesource.com/node_16.x focal main
-    update_cache: yes
+#- name: "Install nodejs 16.x"
+#  apt_repository:
+#    repo: deb https://deb.nodesource.com/node_16.x focal main
+#    update_cache: yes
 
 #- name: "Install nodejs"
 #  apt:
@@ -61,9 +62,9 @@
 # ansible front -a "nginx -v"
 # ansible front -a "npm view react version"
 
-- name: Install VueJs Package
-  npm:
-    name: vue@next
-    global: yes
+#- name: Install VueJs Package
+#  npm:
+#    name: vue@cli
+#    global: yes
 
 # ansible front -a "npm v vue" 

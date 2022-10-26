@@ -1,37 +1,83 @@
 ---
-# tasks file for back-app
-- name: Install git
-  apt:
-    name: 
-    - git
-    update_cache: yes
-
-- name: Create app directory 
-  file: 
-    path: /back-app/
-    state: directory
-
-- name: Clone repo
+- name: Clone a repo with separate git directory
   git:
-    repo: 'https://github.com/DavidFiat/Full_Stack_Dev_Ops_App.git'
+    repo: "{{repo}}"
+    dest: "{{dest}}"
+    clone: yes
     version: Backend
-    dest: /back-app/
+    update: yes
+    force: true
 
-- name: Install back dependencies
-  npm: 
-    path: '/nack-app/backend'
-    executable: '/usr/bin/npm'
+- name: Update APT
+  apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
 
-- name: Install Java package (Ubuntu/Debian)
+- name: Install java
   apt:
-    name: "{{ java_apt_package }}"
+    name: openjdk-8-jdk
     state: present
-    update_cache: yes
-  when: ansible_os_family == 'Debian'
 
+- name: install maven 
+  become: true
+  apt: pkg={{ item }} state=latest update_cache=yes cache_valid_time=3600
+  with_items:
+    - maven
+
+- name: maven clean package jar
+  command: mvn -f /home/adminuser/application/backendSd/pom.xml clean package
+
+- name: "create systemd service"
+  template:
+    src: "etc/systemd/system/systemd.service.j2"
+    dest: "/etc/systemd/system/{{ systemd_service[item].service_name | default(item) }}.service"
+    mode: 0664
+  with_items: "{{ systemd_service | list }}"
+  notify:
+    - restart service
+  tags:
+    - systemd-service
+- name: "enable service"
+  systemd:
+    name: "{{ systemd_service[item].service_name | default(item)  }}.service"
+    enabled: "{{ systemd_service[item].enabled | default(False) }}"
+  with_items: "{{ systemd_service | list }}"
+  tags:
+    - systemd-service
+  
+
+#----
+# tasks file for back-app
+#- name: Install git
+#  apt:
+#    name: 
+#    - git
+#    update_cache: yes
+#
+#- name: Create app directory 
+#  file: 
+#    path: "{{path_npm}}"
+#    state: directory
+#
+#- name: Clone repo
+#  git:
+#    repo: 'https://github.com/DavidFiat/Full_Stack_Dev_Ops_App.git'
+#    version: Backend
+#    dest: /back-app/
+#
+#- name: Install back dependencies
+#  npm: 
+#    path: '/nack-app/backend'
+#    executable: '/usr/bin/npm'
+#
+#- name: Install Java package (Ubuntu/Debian)
+#  apt:
+#    name: "{{ java_apt_package }}"
+#    state: present
+#    update_cache: yes
+#  when: ansible_os_family == 'Debian'
+#
 #- name: Install ssh with passwords
 #  apt:
 #    name: 
 #    - sshpass
- #   update_cache: yes
+#   update_cache: yes
 
