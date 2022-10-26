@@ -3,6 +3,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import '@fontsource/roboto/300.css';
 import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
+import {BASEURL} from "./Constants"
 
 function App() {
 
@@ -34,7 +35,7 @@ function App() {
   },[rows]);
 
   const getFiles = async ()=>{
-    const files = await fetch ("http://23.101.132.178:8081/getFiles",{
+    const files = await fetch (BASEURL+"getFiles",{
       method:"GET"
     });
     if (!files.ok) {
@@ -48,7 +49,7 @@ function App() {
   }
 
   const getHost = async ()=>{
-    const host = await fetch ("http://23.101.132.178:8081/host",{
+    const host = await fetch (BASEURL+"host",{
       method:"GET"
     });
     if (!host.ok) {
@@ -61,7 +62,7 @@ function App() {
   }
 
   const getStorage = async ()=>{
-    const storage = await fetch ("http://23.101.132.178:8081/storage",{
+    const storage = await fetch (BASEURL+"storage",{
       method:"GET"
     });
     if (!storage.ok) {
@@ -85,7 +86,7 @@ function App() {
     
 
   
-    const response = await fetch("http://23.101.132.178:8081/uploadFile",{
+    const response = await fetch(BASEURL+"uploadFile",{
       method: "POST",
       mode:'cors',
       body: 
