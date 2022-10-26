@@ -1,0 +1,70 @@
+---
+# tasks file for front-app
+- name: Clone a repo with separate git directory
+  git:
+    repo: "{{repo}}"
+    dest: "{{dest}}"
+    clone: yes
+    version: Frontend
+    update: yes
+    force: true
+
+- name: Install packages
+  npm:
+   name: "install"
+   path: "{{path_npm}}"
+
+- name: build
+  npm:
+   name: "build"
+   path: "{{path_build}}"
+
+#- name: Install front dependencies
+#  npm: 
+#    path: "{{path_npm}}"
+#    executable: '/usr/bin/npm'
+
+# tasks file for vuejs
+#- name: Install npm
+#  apt:
+#    name: 
+#    - npm
+#    update_cache: true
+#    upgrade: yes
+
+#- name: Install nginx
+#  apt:
+#    name:
+#    - nginx
+
+#- name: Start nginx
+#  service:
+#    name: nginx
+#    state: started
+
+#- name: "Add nodejs apt key"
+#  apt_key:
+#    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+#    state: present
+
+#- name: "Install nodejs 16.x"
+#  apt_repository:
+#    repo: deb https://deb.nodesource.com/node_16.x focal main
+#    update_cache: yes
+
+#- name: "Install nodejs"
+#  apt:
+#    update_cache: yes
+#    name: nodejs
+#    state: present
+
+# ansible front -a "nodejs --version"
+# ansible front -a "nginx -v"
+# ansible front -a "npm view react version"
+
+#- name: Install VueJs Package
+#  npm:
+#    name: vue@cli
+#    global: yes
+
+# ansible front -a "npm v vue" 
