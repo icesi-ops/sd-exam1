@@ -34,7 +34,7 @@ function App() {
   },[rows]);
 
   const getFiles = async ()=>{
-    const files = await fetch ("http://localhost:8081/getFiles",{
+    const files = await fetch ("http://23.101.132.178:8081/getFiles",{
       method:"GET"
     });
     if (!files.ok) {
@@ -48,7 +48,7 @@ function App() {
   }
 
   const getHost = async ()=>{
-    const host = await fetch ("http://localhost:8081/host",{
+    const host = await fetch ("http://23.101.132.178:8081/host",{
       method:"GET"
     });
     if (!host.ok) {
@@ -61,7 +61,7 @@ function App() {
   }
 
   const getStorage = async ()=>{
-    const storage = await fetch ("http://localhost:8081/storage",{
+    const storage = await fetch ("http://23.101.132.178:8081/storage",{
       method:"GET"
     });
     if (!storage.ok) {
@@ -85,7 +85,7 @@ function App() {
     
 
   
-    const response = await fetch("http://localhost:8081/uploadFile",{
+    const response = await fetch("http://23.101.132.178:8081/uploadFile",{
       method: "POST",
       mode:'cors',
       body: 
