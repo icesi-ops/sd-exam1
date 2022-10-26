@@ -37,7 +37,7 @@ public class FileServices  implements IUploadFile {
 
         String resultService = "";
        // String storageConnectionAzure="DefaultEndpointsProtocol=https;AccountName=accountfiles1;AccountKey=EWzNYtXFeN2/Nyej32bieuKlpDUylWKV7Fd0SZWI/o6dByPww457sVGA06DVAYD/qwjz7d4UoOl7+AStkjteGQ==;EndpointSuffix=core.windows.net";
-        String storageConnectionAzure ="DefaultEndpointsProtocol=https;AccountName=storageaja;AccountKey=bNMwHYtF441P3C/wnmRWlDBYz9mWX+BLCiUdG6GXl78HvbABMlVpP2HIqB6ta8df3ESZysbI3QWE+AStITObNQ==;EndpointSuffix=core.windows.net";
+        String storageConnectionAzure ="DefaultEndpointsProtocol=https;AccountName=storageaja;AccountKey=T4TSGq0ITSJVHwUqJ9fSynmK8E7OkqHvaW7szytAEwI1ENJMYjKrhULAI2hjCVx6Lr2MA86Kky+v+AStuE1aGA==;EndpointSuffix=core.windows.net";
         String nameContainer = "files";
 
         try{
@@ -81,7 +81,7 @@ public class FileServices  implements IUploadFile {
     @Override
     public long Storage() {
 
-        String storageConnectionAzure ="DefaultEndpointsProtocol=https;AccountName=storageaja;AccountKey=bNMwHYtF441P3C/wnmRWlDBYz9mWX+BLCiUdG6GXl78HvbABMlVpP2HIqB6ta8df3ESZysbI3QWE+AStITObNQ==;EndpointSuffix=core.windows.net";
+        String storageConnectionAzure ="DefaultEndpointsProtocol=https;AccountName=storageaja;AccountKey=T4TSGq0ITSJVHwUqJ9fSynmK8E7OkqHvaW7szytAEwI1ENJMYjKrhULAI2hjCVx6Lr2MA86Kky+v+AStuE1aGA==;EndpointSuffix=core.windows.net";
         String nameContainer = "files";
 
         long size =0;
