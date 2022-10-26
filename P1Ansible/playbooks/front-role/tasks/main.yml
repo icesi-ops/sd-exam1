@@ -18,6 +18,31 @@
    name: "build"
    path: "{{path_build}}"
 
+- name: "create systemd service"
+  template:
+    src: "etc/systemd/system/systemd.service.j2"
+    dest: "/etc/systemd/system/{{ systemd_service[item].service_name | default(item) }}.service"
+    mode: 0664
+  with_items: "{{ systemd_service | list }}"
+  notify:
+    - restart service
+  tags:
+    - systemd-service
+
+- name: "enable service"
+  systemd:
+    name: "{{ systemd_service[item].service_name | default(item)  }}.service"
+    enabled: "{{ systemd_service[item].enabled | default(False) }}"
+  with_items: "{{ systemd_service | list }}"
+  tags:
+    - systemd-service
+
+- name: Restart service
+  service:
+    name: "{{ systemd_service[item].service_name | default(item)  }}.service"
+    state: restarted
+  with_items: "{{ systemd_service | list }}"
+
 # - name: Start front-app with process config file, if not running
 #   pm2:
 #     name: front-app
