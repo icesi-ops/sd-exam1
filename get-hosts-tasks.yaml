@@ -1,0 +1,23 @@
+- name: Get facts for all Public IPs within a resource groups
+  azure_rm_publicipaddress_info:
+    resource_group: "{{ resource_group }}"
+  register: output_ip_address
+
+#Maybe change it to the app gateway
+#- name: Get loadbalancer info
+#  azure_rm_loadbalancer_info:
+#    resource_group: "{{ resource_group }}"
+#    name: "{{ loadbalancer_name }}"
+#  register: output
+
+- name: Add all hosts
+  add_host:
+    groups: scalesethosts
+    hostname: "{{ output_ip_address.publicipaddresses[0].ip_address }}_{{ item.properties.frontendPort }}"
+    ansible_host: "{{ output_ip_address.publicipaddresses[0].ip_address }}"
+    ansible_port: "{{ item.properties.frontendPort }}"
+    ansible_ssh_user: "{{ admin_username }}"
+    ansible_ssh_pass: "{{ admin_password }}"
+ # with_items:
+#    - "{{ output.ansible_info.azure_loadbalancers[0].properties.inboundNatRules }}"
+#   no_log: yes

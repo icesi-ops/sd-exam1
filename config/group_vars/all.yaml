@@ -1,0 +1,11 @@
+---
+# Azure variables
+#resource_group: rg
+#location: eastus
+
+#vmss_subnet_name: dev-distri-eastus-backend-sn
+#vmss_admin_user: distribuidos
+admin_username: distribuidos
+admin_password: "AlejandraJhoanAndres212021"
+java_apt_package: openjdk-8-jdk
+java_yum_package: java-1.8.0-openjdk
