@@ -1,0 +1,4 @@
+[front]
+front1 ansible_ssh_host=20.163.248.157
+[back]
+back1 ansible_ssh_host=20.102.121.46

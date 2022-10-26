@@ -1,0 +1,30 @@
+- hosts: front
+  become: true
+  roles:
+    - role: playbooks/vuejs
+    - role: playbooks/front-app
+      vars:
+      repo: 'https://github.com/DavidFiat/Full_Stack_Dev_Ops_App'
+      dest: /home/adminuser/distribuidos
+      path_npm: /home/adminuser/distribuidos/front-app/
+      path_build: /home/adminuser/distribuidos/front-app/
+
+- hosts: back
+  become: true
+  roles:
+    - role: playbooks/back-app
+      become: true
+      vars:
+        repo: 'https://github.com/DavidFiat/Full_Stack_Dev_Ops_App'
+        dest: /home/adminuser/application
+   
+
+
+#  environment:
+#    PORT: 8080[REVISAR PORQUE REACT CORRE EN EL 3000]
+#    PORT: 3000
+#AlejandraJhoanAndres212021 AlejandraJhoanAndres212021
+ # - hosts: back
+#   become: true
+#   roles:
+#     - role: playbooks/back-app 
