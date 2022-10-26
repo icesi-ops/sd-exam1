@@ -1,8 +1,8 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
 import React,{useState , useEffect} from 'react'
 import { DataGrid } from '@mui/x-data-grid';
 import '@fontsource/roboto/300.css';
 import { Typography } from '@mui/material';
+import Button from '@mui/material/Button';
 
 function App() {
 
@@ -106,6 +106,7 @@ function App() {
 
   return (
     <div class="col-auto  p-5 text-center" overflowX="hidden" overflowY="hidden">
+  
       <input type="file" name="files" onChange={(e) => subirArchivos(e.target.files)} /> 
       <div style={{display:'flex', flexWrap:'wrap',justifyContent:'center',alignItems:'center'}}>
       {show && 
@@ -115,7 +116,8 @@ function App() {
       </div>
       }
       </div>  
-      <button className="btn btn-primary" onClick={() => { insertarArchivo() }}>Insertar</button>
+     
+      <Button variant="contained" onClick={() => { insertarArchivo() }}>Insertar</Button>
       <br></br>
       <Typography variant="h5" color={'#64e01d'}> {message} </Typography>
       <div style={{ height: '70vh', width: '100%' }}>
