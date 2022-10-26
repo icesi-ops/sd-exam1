@@ -28,3 +28,10 @@ variable "traffic_routing_method" {
   default = "Weighted"
   type = string
 }
+
+variable "private_ip" {
+  default = "10.0.2.25"
+}
+variable "env" {
+  default="Static"
+}

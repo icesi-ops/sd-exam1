@@ -21,10 +21,7 @@ resource "azurerm_resource_group" "resource_group" {
   location = var.location
 }
 
-resource "azurerm_resource_group" "resource_groupLB" {
-  name     = "rgLB" 
-  location = "West US"
-}
+
 
 resource "azurerm_network_security_group" "network_security_group" {
   name                = "${local.naming_convention}-nsg"
@@ -56,6 +53,7 @@ resource "azurerm_virtual_network" "vnet" {
   address_space       = ["10.0.0.0/16"]
 }
 
+
 resource "azurerm_subnet" "subnet_frontend" {
   name                 = "${local.naming_convention}-frontend-sn"
   resource_group_name  = azurerm_resource_group.resource_group.name
@@ -70,13 +68,8 @@ resource "azurerm_subnet" "subnet_backend" {
   address_prefixes     = ["10.0.2.0/24"]
 
 }
-resource "azurerm_subnet" "subnet_application_gateway" {
-  name                 = "${local.naming_convention}-appG-sn"
-  resource_group_name  = azurerm_resource_group.resource_group.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["10.0.3.0/24"]
-}
 
+/*
 resource "azurerm_subnet" "subnet_bastion" {
   name                 = "AzureBastionSubnet"
   resource_group_name  = azurerm_resource_group.resource_group.name
@@ -112,4 +105,6 @@ resource "azurerm_bastion_host" "bastion" {
     public_ip_address_id = azurerm_public_ip.bastion_public_ip.id
   }
 }
+
+*/
 
