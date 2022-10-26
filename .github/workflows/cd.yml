@@ -22,11 +22,17 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-     
-      - uses: arillso/action.playbook@master
+      - uses: actions/checkout@v2
+      
+      - uses: actions-ansible@v2
         with:
           playbook: ./ansible/main.yml
           inventory: ./ansible/ansible_hosts
+      
+      #- uses: arillso/action.playbook@master
+       # with:
+        #  playbook: ./ansible/main.yml
+         # inventory: ./ansible/ansible_hosts
       #- uses: dawidd6/action-ansible-playbook@v2
        # with:
           # Required, playbook filepath
@@ -35,7 +41,7 @@ jobs:
           #  ansible/ansible_hosts
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      #- uses: actions/checkout@v3
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
