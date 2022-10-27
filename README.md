@@ -62,5 +62,7 @@ Para solucionar esto, tuvimos que hacer varios cambios en la infraestructura. Lo
 * En vez de usar una VPN, se pasó el Backend de privado a público. Esto permitió realizar el management directamente en la máquina del back.
 * En vez de acceder a los servicios del Frontend por medio de un loadbalancer, pasamos a remover este último. Por lo tanto, se accede directamente por medio de la ip pública del front.
 
+### Diagrama final
+![image](https://user-images.githubusercontent.com/47872231/198161174-fcc146b2-39df-4d6f-a54c-34b7d04188ec.png)
 
 
