@@ -1,0 +1,12 @@
+---
+# defaults file for back-role
+systemd_service: 
+  back:
+    service_name: back
+    enabled: false
+    description: Service for the back
+    after: syslog.target
+    user: adminuser
+    exec_start: /usr/bin/java -Xms1G -Xmx7G -jar /home/adminuser/app/DistriBack/target/DistriBack-0.0.1-SNAPSHOT.jar
+    wanted_by: multi-user.target
+systemd_target:

@@ -1,0 +1,13 @@
+---
+# defaults file for back-role
+systemd_service: 
+  front:
+    service_name: front
+    enabled: false
+    description: Service to run npm start
+    after: syslog.target
+    user: adminuser
+    working_directory: "{{path_build}}"
+    exec_start: /usr/bin/npm start
+    wanted_by: multi-user.target
+systemd_target:

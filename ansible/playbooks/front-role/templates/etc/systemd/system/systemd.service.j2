@@ -1,0 +1,306 @@
+# {{ ansible_managed }}
+
+[Unit]
+Description="{{ systemd_service[item].description | default("Service for " + item) }}"
+{% if systemd_service[item].wants is defined %}
+Wants={{ systemd_service[item].wants }}
+{% endif -%}
+{% if systemd_service[item].requires is defined %}
+Requires={{ systemd_service[item].requires }}
+{% endif -%}
+{% if systemd_service[item].before is defined %}
+Before={{ systemd_service[item].before }}
+{% endif -%}
+{% if systemd_service[item].after is defined %}
+After={{ systemd_service[item].after }}
+{% endif %}
+{% if systemd_service[item].assert_architecture is defined %}
+{% for assert_architecture in systemd_service[item].assert_architecture %}
+AssertArchitecture={{ assert_architecture }}
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].assert_virtualization is defined %}
+{% for assert_virtualization in systemd_service[item].assert_virtualization %}
+AssertVirtualization={{ assert_virtualization }}
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].assert_host is defined %}
+{% for assert_host in systemd_service[item].assert_host %}
+AssertHost={{ assert_host }}
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].assert_kernel_command_line is defined %}
+{% for assert_kernel_command_line in systemd_service[item].assert_kernel_command_line %}
+AssertKernelCommandLine={{ assert_kernel_command_line }}
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].assert_kernel_version is defined %}
+{% for assert_kernel_version in systemd_service[item].assert_kernel_version %}
+AssertKernelVersion={{ assert_kernel_version }}
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].assert_security is defined %}
+{% for assert_security in systemd_service[item].assert_security %}
+AssertSecurity={{ assert_security }}
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].assert_capability is defined %}
+{% for assert_capability in systemd_service[item].assert_capability %}
+AssertCapability={{ assert_capability }}
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].assert_acpower is defined %}
+{% for assert_acpower in systemd_service[item].assert_acpower %}
+AssertACPower={{ assert_acpower }}
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].assert_needs_update is defined %}
+{% for assert_needs_update in systemd_service[item].assert_needs_update %}
+AssertNeedsUpdate={{ assert_needs_update }}
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].assert_first_boot is defined %}
+{% for assert_first_boot in systemd_service[item].assert_first_boot %}
+AssertFirstBoot={{ assert_first_boot }}
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].assert_path_exists is defined %}
+{% for assert_path_exists in systemd_service[item].assert_path_exists %}
+AssertPathExists={{ assert_path_exists }}
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].assert_path_exists_glob is defined %}
+{% for assert_path_exists_glob in systemd_service[item].assert_path_exists_glob %}
+AssertPathExistsGlob={{ assert_path_exists_glob }}
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].assert_path_is_directory is defined %}
+{% for assert_path_is_directory in systemd_service[item].assert_path_is_directory %}
+AssertPathIsDirectory={{ assert_path_is_directory }}
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].assert_path_is_symbolic_link is defined %}
+{% for assert_path_is_symbolic_link in systemd_service[item].assert_path_is_symbolic_link %}
+AssertPathIsSymbolicLink={{ assert_path_is_symbolic_link }}
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].assert_path_is_mount_point is defined %}
+{% for assert_path_is_mount_point in systemd_service[item].assert_path_is_mount_point %}
+AssertPathIsMountPoint={{ assert_path_is_mount_point }}
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].assert_path_is_read_write is defined %}
+{% for assert_path_is_read_write in systemd_service[item].assert_path_is_read_write %}
+AssertPathIsReadWrite={{ assert_path_is_read_write }}
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].assert_directory_not_empty is defined %}
+{% for assert_directory_not_empty in systemd_service[item].assert_directory_not_empty %}
+AssertDirectoryNotEmpty={{ assert_directory_not_empty }}
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].assert_file_not_empty is defined %}
+{% for assert_file_not_empty in systemd_service[item].assert_file_not_empty %}
+AssertFileNotEmpty={{ assert_file_not_empty }}
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].assert_file_is_executable is defined %}
+{% for assert_file_is_executable in systemd_service[item].assert_file_is_executable %}
+AssertFileIsExecutable={{ assert_file_is_executable }}
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].assert_user is defined %}
+{% for assert_user in systemd_service[item].assert_user %}
+AssertUser={{ assert_user }}
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].assert_group is defined %}
+{% for assert_group in systemd_service[item].assert_group %}
+AssertGroup={{ assert_group }}
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].assert_control_group_controller is defined %}
+{% for assert_control_group_controller in systemd_service[item].assert_control_group_controller %}
+AssertControlGroupController={{ assert_control_group_controller }}
+{% endfor -%}
+{% endif -%}
+
+[Service]
+{% if systemd_service[item].type is defined %}
+Type={{ systemd_service[item].type }}
+{% endif -%}
+{% if systemd_service[item].pid_file is defined %}
+PIDFile={{ systemd_service[item].pid_file }}
+{% endif -%}
+
+{% if systemd_service[item].timeout_sec is defined %}
+TimeoutSec={{ systemd_service[item].timeout_sec }}
+{% endif -%}
+{% if systemd_service[item].restart is defined %}
+RestartSec={{ systemd_service[item].restart_sec | default('30') }}
+Restart={{ systemd_service[item].restart }}
+{% endif -%}
+
+{% if systemd_service[item].environment is defined %}
+{% for k,v in systemd_service[item].environment.items() %}
+Environment="{{ k }}={{ v }}"
+{% endfor -%}
+{% endif -%}
+{% if systemd_service[item].environment_file is defined %}
+EnvironmentFile={{ systemd_service[item].environment_file }}
+{% endif -%}
+
+{% if systemd_service[item].working_directory is defined %}
+WorkingDirectory={{ systemd_service[item].working_directory }}
+{% endif -%}
+{% if systemd_service[item].user is defined %}
+User={{ systemd_service[item].user }}
+{% endif -%}
+{% if systemd_service[item].group is defined %}
+Group={{ systemd_service[item].group }}
+{% endif -%}
+
+{% if systemd_service[item].capability_bounding_set is defined %}
+CapabilityBoundingSet={{ systemd_service[item].capability_bounding_set }}
+{% endif -%}
+{% if systemd_service[item].ambient_capabilities is defined %}
+AmbientCapabilities={{ systemd_service[item].ambient_capabilities }}
+{% endif -%}
+
+{% if systemd_service[item].limit_cpu is defined %}
+LimitCPU={{ systemd_service[item].limit_cpu }}
+{% endif -%}
+{% if systemd_service[item].limit_fsize is defined %}
+LimitFSIZE={{ systemd_service[item].limit_fsize }}
+{% endif -%}
+{% if systemd_service[item].limit_data is defined %}
+LimitDATA={{ systemd_service[item].limit_data }}
+{% endif -%}
+{% if systemd_service[item].limit_stack is defined %}
+LimitSTACK={{ systemd_service[item].limit_stack }}
+{% endif -%}
+{% if systemd_service[item].limit_core is defined %}
+LimitCORE={{ systemd_service[item].limit_core }}
+{% endif -%}
+{% if systemd_service[item].limit_rss is defined %}
+LimitRSS={{ systemd_service[item].limit_rss }}
+{% endif -%}
+{% if systemd_service[item].limit_nofile is defined %}
+LimitNOFILE={{ systemd_service[item].limit_nofile }}
+{% endif -%}
+{% if systemd_service[item].limit_as is defined %}
+LimitAS={{ systemd_service[item].limit_as }}
+{% endif -%}
+{% if systemd_service[item].limit_nproc is defined %}
+LimitNPROC={{ systemd_service[item].limit_nproc }}
+{% endif -%}
+{% if systemd_service[item].limit_memlock is defined %}
+LimitMEMLOCK={{ systemd_service[item].limit_memlock }}
+{% endif -%}
+{% if systemd_service[item].limit_locks is defined %}
+LimitLOCKS={{ systemd_service[item].limit_locks }}
+{% endif -%}
+{% if systemd_service[item].limit_sigpending is defined %}
+LimitSIGPENDING={{ systemd_service[item].limit_sigpending }}
+{% endif -%}
+{% if systemd_service[item].limit_msgqueue is defined %}
+LimitMSGQUEUE={{ systemd_service[item].limit_msgqueue }}
+{% endif -%}
+{% if systemd_service[item].limit_nice is defined %}
+LimitNICE={{ systemd_service[item].limit_nice }}
+{% endif -%}
+{% if systemd_service[item].limit_rtprio is defined %}
+LimitRTPRIO={{ systemd_service[item].limit_rtprio }}
+{% endif -%}
+{% if systemd_service[item].limit_rttime is defined %}
+LimitRTTIME={{ systemd_service[item].limit_rttime }}
+{% endif -%}
+
+{% if systemd_service[item].oom_score_adjust is defined %}
+OOMScoreAdjust={{ systemd_service[item].oom_score_adjust }}
+{% endif -%}
+{% if systemd_service[item].nice is defined %}
+Nice={{ systemd_service[item].nice }}
+{% endif -%}
+
+{% if systemd_service[item].exec_stop is defined %}
+{% if systemd_service[item].exec_stop is not string %}
+{% for exec_stop in systemd_service[item].exec_stop -%}
+ExecStop={{ exec_stop }}
+{% endfor %}
+{% else %}
+ExecStop={{ systemd_service[item].exec_stop }}
+{% endif -%}
+{% endif -%}
+{% if systemd_service[item].exec_stop_post is defined %}
+{% if systemd_service[item].exec_stop_post is not string %}
+{% for exec_stop_post in systemd_service[item].exec_stop_post -%}
+ExecStopPost={{ exec_stop_post }}
+{% endfor %}
+{% else %}
+ExecStopPost={{ systemd_service[item].exec_stop_post }}
+{% endif -%}
+{% endif -%}
+{% if systemd_service[item].exec_reload is defined %}
+{% if systemd_service[item].exec_reload is not string %}
+{% for exec_reload in systemd_service[item].exec_reload -%}
+ExecReload={{ systemd_service[item].exec_reload }}
+{% endfor %}
+{% else %}
+ExecReload={{ systemd_service[item].exec_reload }}
+{% endif -%}
+{% endif -%}
+
+{% if systemd_service[item].remain_after_exit is defined %}
+RemainAfterExit={{ systemd_service[item].remain_after_exit }}
+{% endif -%}
+
+{% if systemd_service[item].exec_start_pre is defined %}
+{% if systemd_service[item].exec_start_pre is not string %}
+{% for exec_start_pre in systemd_service[item].exec_start_pre -%}
+ExecStartPre={{ exec_start_pre }}
+{% endfor %}
+{% else %}
+ExecStartPre={{ systemd_service[item].exec_start_pre }}
+{% endif -%}
+{% endif -%}
+{% if systemd_service[item].exec_start_post is defined %}
+{% if systemd_service[item].exec_start_post is not string %}
+{% for exec_start_post in systemd_service[item].exec_start_post -%}
+ExecStartPost={{ systemd_service[item].exec_start_post }}
+{% endfor %}
+{% else %}
+ExecStartPost={{ systemd_service[item].exec_start_post }}
+{% endif -%}
+{% endif -%}
+{% if systemd_service[item].exec_start is defined %}
+{% if systemd_service[item].exec_start is not string %}
+{% for exec_start in systemd_service[item].exec_start -%}
+ExecStart={{ exec_start }}
+{% endfor %}
+{% else %}
+ExecStart={{ systemd_service[item].exec_start }}
+{% endif -%}
+{% endif -%}
+
+{% if systemd_service[item].standard_input is defined %}
+StandardInput={{ systemd_service[item].standard_input }}
+{% endif -%}
+{% if systemd_service[item].standard_output is defined %}
+StandardOutput={{ systemd_service[item].standard_output }}
+{% endif -%}
+{% if systemd_service[item].standard_error is defined %}
+StandardError={{ systemd_service[item].standard_error }}
+{% endif %}
+{% if systemd_service[item].tty_path is defined %}
+TTYPath={{ systemd_service[item].tty_path }}
+{% endif %}
+
+
+[Install]
+{% if systemd_service[item].wanted_by is defined %}
+WantedBy={{ systemd_service[item].wanted_by }}
+{% endif -%}
+{% if systemd_service[item].required_by is defined %}
+RequiredBy={{ systemd_service[item].required_by }}
+{% endif %}
