@@ -21,8 +21,9 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: arillso/action.playbook@master
+      - uses: dawidd6/action-ansible-playbook@v2
         with:
+          # Required, playbook filepath
           playbook: ansible/main.yml
           inventory: ansible/ansible_hosts
 
