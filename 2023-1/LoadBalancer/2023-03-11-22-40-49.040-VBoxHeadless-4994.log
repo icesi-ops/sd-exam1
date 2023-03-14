@@ -1,0 +1,12 @@
+Log created: 2023-03-11T22:40:49.404725000Z
+Process ID:  4994 (0x1382)
+Parent PID:  1 (0x1)
+Executable:  /usr/lib/virtualbox/VBoxHeadless
+Arg[0]: /usr/lib/virtualbox/VBoxHeadless
+Arg[1]: --comment
+Arg[2]: node-2
+Arg[3]: --startvm
+Arg[4]: a123fd21-dac3-4ea1-b279-ef75f9c742a0
+Arg[5]: --vrde
+Arg[6]: config
+AddRef: illegal refcnt=3221225469 state=2
