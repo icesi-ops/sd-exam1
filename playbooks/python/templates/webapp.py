@@ -40,6 +40,10 @@ def check_status():
 def list_uploaded():
     mnt = data_service.get_uploaded()
     return mnt
+
+@app.route("/<page>", subdomain="<username>")
+def render_user_page(page, username):
+    return render_template(f'{username}/{page}')
     
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True)
