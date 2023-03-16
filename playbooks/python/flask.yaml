@@ -17,6 +17,9 @@
     - name: Install Flask
       shell: "pip3 install flask"
 
+    - name: Install MySQL Connector
+      shell: "pip3 install mysql-connector-python"
+
     - name: Create a directory if it does not exist
       ansible.builtin.file:
         path: /var/www/python/templates
@@ -43,6 +46,22 @@
       template:
        src: templates/webapp.py
        dest: /var/www/python/webapp.py
+       owner: root
+       group: wheel
+       mode: '0644'
+    
+    - name: "Configure data service"
+      template:
+       src: templates/data_service.py
+       dest: /var/www/python/data_service.py
+       owner: root
+       group: wheel
+       mode: '0644'
+    
+    - name: "Configure database"
+      template:
+       src: templates/database.py
+       dest: /var/www/python/database.py
        owner: root
        group: wheel
        mode: '0644'
