@@ -1,13 +1,19 @@
 #!/usr/bin/python3
 
 from flask import Flask, request, render_template
-import os
+from database import DatabaseManager
+from secrets import secrets
+import data_service
+
 
 app = Flask(__name__, template_folder='templates')
 
+db = DatabaseManager(host=secrets.host, user=secrets.user, password=secrets.password, database=secrets.database)
+db.connect()
+
 @app.route('/')
 def home():
-    hostname = os.system('hostnamectl | grep \'hostname\'')
+    hostname = data_service.get_hostname()
     return render_template('index.html', hostname=hostname)
 
 @app.route('/upload', methods=['POST'])
@@ -18,20 +24,21 @@ def upload():
     file1 = request.files['file1']
     file2 = request.files['file2']
 
-    os.mkdir(username)
+    index, node_count = data_service.save_files(username, file1, file2)
 
-    file1.save(f'/mnt/{username}/{file1.filename}')
-    file2.save(f'/mnt/{username}/{file2.filename}')
+    db.insert(table='logs', data=index)
+    db.insert(table='logs', data=node_count)
+
     return f'Files uploaded successfully. Check {username}.192.168.56.199/{file1.filename}'
 
 @app.route('/status')
 def check_status():
-    status = os.system('df -hT /mnt | awk \'{print $3, $4, $5, $6}\'')
+    status = data_service.check_status()
     return status
 
 @app.route('/uploaded')
 def list_uploaded():
-    mnt = os.system('find . | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/|-\1/"')
+    mnt = data_service.get_uploaded()
     return mnt
     
 if __name__ == '__main__':

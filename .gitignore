@@ -5,3 +5,6 @@
 
 ### Visual Code ###
 .vscode/
+
+### Credential Secrets ###
+/playbooks/python/templates/secrets.py
