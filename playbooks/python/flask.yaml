@@ -1,0 +1,49 @@
+---
+- name: Provision python webservers
+  hosts: webservers
+  become: true
+  tasks:
+    - name: Install Python
+      yum:
+        name: python3
+        state: present
+
+    - name: Ensure epel repository exists
+      yum: name=epel-release
+
+    - name: Install pip
+      yum: name=python3-pip state=latest
+    
+    - name: Install Flask
+      shell: "pip3 install flask"
+
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: /var/www/python/templates
+        state: directory
+        mode: '0755'
+
+    - name: "Configure Flask html"
+      template:
+       src: templates/index.html
+       dest: /var/www/python/templates/index.html
+       owner: root
+       group: wheel
+       mode: '0644'
+
+    - name: "Configure Flask wsgi"
+      template:
+       src: templates/wsgi.py
+       dest: /var/www/python/wsgi.py
+       owner: root
+       group: wheel
+       mode: '0644'
+
+    - name: "Configure Flask app"
+      template:
+       src: templates/webapp.py
+       dest: /var/www/python/webapp.py
+       owner: root
+       group: wheel
+       mode: '0644'
+
