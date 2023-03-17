@@ -5,10 +5,14 @@
   vars_files:
     - vars/main.yaml
   tasks:
-    - name: Install MySQL
+    - name: Install package
       yum:
-        name: mysql-server
+        name: http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
         state: present
+
+    - name: Install MySQL
+      yum: name=mysql-server state=installed
+
     - name: Secure MySQL installation
       mysql_user:
         login_user: root

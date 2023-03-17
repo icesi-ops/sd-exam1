@@ -14,7 +14,7 @@ db.connect()
 @app.route('/')
 def home():
     hostname = data_service.get_hostname()
-    return render_template('index.html', hostname=hostname)
+    return render_template('index.html')
 
 @app.route('/upload', methods=['POST'])
 def upload():
