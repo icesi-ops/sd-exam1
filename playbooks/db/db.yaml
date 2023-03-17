@@ -1,0 +1,60 @@
+---
+- name: Install MySQL and create database
+  hosts: db
+  become: true
+  vars_files:
+    - vars/main.yaml
+  tasks:
+    - name: Install MySQL
+      yum:
+        name: mysql-server
+        state: present
+    - name: Secure MySQL installation
+      mysql_user:
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+        user: root
+        password: "{{ mysql_root_password }}"
+        host_all: true
+
+    - name: Create database
+      mysql_db:
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+        name: "{{ db_name }}"
+        state: present
+
+    - name: Create database user
+      mysql_user:
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+        name: "{{ db_user }}"
+        password: "{{ db_password }}"
+        priv: "{{ db_name }}.*:ALL"
+        state: present
+
+    - name: Delete database user
+      mysql_user:
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+        name: "{{ db_user }}"
+        state: absent
+
+    - name: Add volume for persistence
+      file:
+        path: "{{ db_data_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Update MySQL configuration file
+      lineinfile:
+        path: /etc/mysql/mysql.conf.d/mysqld.cnf
+        regexp: '^datadir\s*=.*'
+        line: "datadir={{ db_data_dir }}"
+      notify: restart mysql
+
+  handlers:
+    - name: restart mysql
+      service:
+        name: mysql
+        state: restarted

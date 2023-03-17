@@ -8,3 +8,6 @@
 
 ### Credential Secrets ###
 /playbooks/python/templates/secrets.py
+
+### Database Config ###
+/playbooks/db/vars/main.yaml
