@@ -19,6 +19,10 @@
       npm:
         name: pm2
         global: yes
+    - name: Crear directorio
+      file:
+        path: /var/www/html/nodejs/public
+        state: directory
     - name: Copy Node.js server file
       copy:
         src: files/app.js
@@ -28,12 +32,13 @@
       template:
         src: templates/index.html.j2
         dest: /var/www/html/nodejs/public/index.html
+    - name: Delete old pm2 process
+      command: "sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 delete app"
+      ignore_errors: yes
     - name: Start nodejs server with pm2
-      command: pm2 start app.js
-      args:
-        chdir: /var/www/html/nodejs
+      command: "sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 start /var/www/html/nodejs/app.js"
     - name: Setup pm2 startup
-      command: pm2 startup systemd
+      command: "sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 startup systemd -u vagrant --hp /home/vagrant"
     - name: Create and configure nodejs.conf file
       copy:
         src: files/nodejs.conf

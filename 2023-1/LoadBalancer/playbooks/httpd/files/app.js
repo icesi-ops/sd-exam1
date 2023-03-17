@@ -1,11 +1,11 @@
-const http = requestuire('http');
-const fs = requestuire('fs');
+const http = require('http');
+const fs = require('fs');
 
 const server = http.createServer((request, response) => {
   // Si la solicitud es una solicitud GET a la raíz de la URL,
   // leer el archivo index.html y enviarlo como responsepuesta
   if (request.method === 'GET' && request.url === '/') {
-    fs.readFile('/public/index.html', (err, data) => {
+    fs.readFile('/var/www/html/nodejs/public/index.html', (err, data) => {
       if (err) {
         response.writeHead(500, { 'Content-Type': 'text/plain' });
         response.end('Error interno del servidor');
