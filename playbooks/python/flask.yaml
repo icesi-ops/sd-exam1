@@ -18,7 +18,7 @@
       shell: "pip3 install flask"
 
     - name: Install MySQL Connector
-      shell: "pip3 install mysql-connector-python"
+      shell: "pip3 install pymongo"
 
     - name: Create a directory if it does not exist
       ansible.builtin.file:
@@ -57,12 +57,5 @@
        owner: root
        group: wheel
        mode: '0644'
-    
-    - name: "Configure database"
-      template:
-       src: templates/database.py
-       dest: /var/www/python/database.py
-       owner: root
-       group: wheel
-       mode: '0644'
+
 
