@@ -1,0 +1,10 @@
+version: '3.9'
+services:
+  app:
+    image: "{{ image_name }}"
+    ports:
+      - "{{ host_port }}:{{ container_port }}"
+    environment:
+      - "{{ env_var }}"
+    volumes:
+      - "{{ host_volume }}:{{ container_volume }}"

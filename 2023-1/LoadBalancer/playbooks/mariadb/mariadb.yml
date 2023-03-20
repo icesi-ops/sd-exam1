@@ -1,0 +1,36 @@
+---
+- hosts: mariadb
+  become: true
+  tasks:
+    - name: Actualiza YUM
+      yum:
+        update_cache: yes
+        name: yum 
+        state: latest
+
+    - name: Instala los paquetes necesarios
+      yum:
+        name: 
+        - epel-release
+        - yum-utils 
+        - device-mapper-persistent-data
+        - lvm2
+        state: latest
+
+    - name: create db folder
+      ansible.builtin.file:
+        path: resources/docker-sql/
+        state: directory
+
+    - name: Copiar archivo docker-compose.yml al host remoto
+      copy:
+        src: templates/docker-compose.yml
+        dest: /home/vagrant/docker-compose.yml
+      become: true
+
+    - name: Copiar archivo init.sql al host remoto
+      copy:
+        src: templates/init.sql
+        dest: resources/docker-sql/init.sql
+      become: true
+
