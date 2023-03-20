@@ -1,64 +1,39 @@
 ---
-- name: Install MySQL and create database
-  hosts: db
+- hosts: db
   become: true
-  vars_files:
-    - vars/main.yaml
+  vars:
+    mongo_version: "4.4"
+    mongo_data_dir: "/data/db"
   tasks:
-    - name: Install package
-      yum:
-        name: http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
-        state: present
+  - name: Add MongoDB repo key
+    rpm_key:
+      state: present
+      key: "https://www.mongodb.org/static/pgp/server-{{ mongo_version }}.asc"
+  - name: Add MongoDB repo
+    yum_repository:
+      name: mongodb-org-{{ mongo_version }}
+      description: MongoDB Repository
+      baseurl: https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/{{ mongo_version }}/x86_64/
+      gpgcheck: true
+      enabled: true
+      gpgkey: "https://www.mongodb.org/static/pgp/server-{{ mongo_version }}.asc"
+  - name: Install MongoDB
+    yum:
+      name: mongodb-org
+      state: present
+  - name: Create MongoDB data directory
+    file:
+      path: "{{ mongo_data_dir }}"
+      state: directory
+  - name: Modify MongoDB configuration file
+    lineinfile:
+      path: /etc/mongod.conf
+      regexp: "^dbPath"
+      line: "dbPath={{ mongo_data_dir }}"
+      state: present
+  - name: Start MongoDB
+    systemd:
+      name: mongod
+      state: started
+      enabled: true
 
-    - name: Install MySQL
-      yum: name=mysql-server state=installed
-
-    - name: Secure MySQL installation
-      mysql_user:
-        login_user: root
-        login_password: "{{ mysql_root_password }}"
-        user: root
-        password: "{{ mysql_root_password }}"
-        host_all: true
-
-    - name: Create database
-      mysql_db:
-        login_user: root
-        login_password: "{{ mysql_root_password }}"
-        name: "{{ db_name }}"
-        state: present
-
-    - name: Create database user
-      mysql_user:
-        login_user: root
-        login_password: "{{ mysql_root_password }}"
-        name: "{{ db_user }}"
-        password: "{{ db_password }}"
-        priv: "{{ db_name }}.*:ALL"
-        state: present
-
-    - name: Delete database user
-      mysql_user:
-        login_user: root
-        login_password: "{{ mysql_root_password }}"
-        name: "{{ db_user }}"
-        state: absent
-
-    - name: Add volume for persistence
-      file:
-        path: "{{ db_data_dir }}"
-        state: directory
-        mode: '0755'
-
-    - name: Update MySQL configuration file
-      lineinfile:
-        path: /etc/mysql/mysql.conf.d/mysqld.cnf
-        regexp: '^datadir\s*=.*'
-        line: "datadir={{ db_data_dir }}"
-      notify: restart mysql
-
-  handlers:
-    - name: restart mysql
-      service:
-        name: mysql
-        state: restarted

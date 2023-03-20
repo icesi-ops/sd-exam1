@@ -1,7 +1,29 @@
 import os
 
 def get_hostname():
-   return os.system('hostnamectl | grep \'hostname\'')
+    hostname = os.popen('hostnamectl | grep \'hostname\'').read()
+    html = '''
+    <!doctype html>
+    <html>
+      <head>
+        <title>Icesi Pages</title>
+      </head>
+      <body>
+        <h1>{} </h1>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+
+          <label for="username">Username</label>
+          <input type="text" name="username"><br><br>
+
+          <label for="file1">Index:</label>
+          <input type="file" name="file1"><br><br>
+          <label for="file2">Node count:</label>
+          <input type="file" name="file2"><br><br>
+          <input type="submit" value="Upload">
+        </form>
+      </body>
+    </html>'''.format(hostname)
+    return html
 
 def save_files(username, index, node_count):
 
@@ -21,7 +43,38 @@ def save_files(username, index, node_count):
     return (index_insert, node_count_insert)
 
 def check_status():
-    return os.system('df -hT /mnt | awk \'{print $3, $4, $5, $6}\'')
+    status = os.popen('df -hT /mnt | awk \'{print $3, $4, $5, $6}\'').read()
+
+    html = '''
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Flask App</title>
+    </head>
+    <body>
+        <h1>Gluster status</h1>
+        <div style="white-space: pre-wrap;">{}</div>
+    </body>
+    </html>
+    '''.format(status)
+
+    return html
+
+    
 
 def get_uploaded():
-    return os.system('find . | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/|-\1/"')
+    uploaded = os.popen('tree -a /mnt/').read()
+
+    html = '''
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Flask App</title>
+    </head>
+    <body>
+        <h1>Uploaded files</h1>
+        <div style="white-space: pre-wrap;">{}</div>
+    </body>
+    </html>
+    '''.format(uploaded)
+    return html

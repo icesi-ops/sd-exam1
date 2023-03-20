@@ -17,22 +17,19 @@
     - name: Install Flask
       shell: "pip3 install flask"
 
-    - name: Install MySQL Connector
+    - name: Install MongoDB Connector
       shell: "pip3 install pymongo"
+
+    - name: Install tree package
+      yum:
+        name: tree
+        state: present
 
     - name: Create a directory if it does not exist
       ansible.builtin.file:
         path: /var/www/python/templates
         state: directory
         mode: '0755'
-
-    - name: "Configure Flask html"
-      template:
-       src: templates/index.html
-       dest: /var/www/python/templates/index.html
-       owner: root
-       group: wheel
-       mode: '0644'
 
     - name: "Configure Flask wsgi"
       template:
