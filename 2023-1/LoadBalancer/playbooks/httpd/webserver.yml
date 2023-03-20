@@ -32,6 +32,10 @@
       template:
         src: templates/index.html.j2
         dest: /var/www/html/nodejs/public/index.html
+    - name: Install formidable
+      npm:
+        name: formidable
+        path: /var/www/html/nodejs
     - name: Delete old pm2 process
       command: "sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 delete app"
       ignore_errors: yes
