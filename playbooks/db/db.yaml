@@ -1,39 +1,34 @@
 ---
-- hosts: db
+- name: Install Docker
+  hosts: db
   become: true
-  vars:
-    mongo_version: "4.4"
-    mongo_data_dir: "/data/db"
-  tasks:
-  - name: Add MongoDB repo key
-    rpm_key:
-      state: present
-      key: "https://www.mongodb.org/static/pgp/server-{{ mongo_version }}.asc"
-  - name: Add MongoDB repo
-    yum_repository:
-      name: mongodb-org-{{ mongo_version }}
-      description: MongoDB Repository
-      baseurl: https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/{{ mongo_version }}/x86_64/
-      gpgcheck: true
-      enabled: true
-      gpgkey: "https://www.mongodb.org/static/pgp/server-{{ mongo_version }}.asc"
-  - name: Install MongoDB
-    yum:
-      name: mongodb-org
-      state: present
-  - name: Create MongoDB data directory
-    file:
-      path: "{{ mongo_data_dir }}"
-      state: directory
-  - name: Modify MongoDB configuration file
-    lineinfile:
-      path: /etc/mongod.conf
-      regexp: "^dbPath"
-      line: "dbPath={{ mongo_data_dir }}"
-      state: present
-  - name: Start MongoDB
-    systemd:
-      name: mongod
-      state: started
-      enabled: true
 
+  tasks:
+    - name: Install required packages
+      yum:
+        name:
+          - yum-utils
+          - device-mapper-persistent-data
+          - lvm2
+        state: present
+
+    - name: Add Docker repository
+      shell: |
+        yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+    - name: Install Docker
+      yum:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+    
+    - name: Run database
+      shell: |
+        sudo docker run --name testmongo2 -p 27017:27017 -v /mnt/mongo:/data/db -d mongo:4.4 --bind_ip_all

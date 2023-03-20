@@ -31,6 +31,14 @@
         state: directory
         mode: '0755'
 
+    - name: "Configure secrets"
+      template:
+       src: templates/secrets.py
+       dest: /var/www/python/secrets.py
+       owner: root
+       group: wheel
+       mode: '0644'
+
     - name: "Configure Flask wsgi"
       template:
        src: templates/wsgi.py

@@ -2,15 +2,15 @@
 
 from flask import Flask, request, render_template
 from pymongo import MongoClient 
-#from secrets import secrets
+from secrets import secrets
 import data_service
 
 app = Flask(__name__, template_folder='/mnt')
 
-#client = MongoClient(secrets.mongouri)
+client = MongoClient(secrets['mongouri'])
 
-#db = client.flask_db
-#todos = db.todos
+db = client.flask_db
+todos = db.todos
 
 @app.route('/')
 def home():
@@ -27,8 +27,8 @@ def upload():
 
     index, node_count = data_service.save_files(username, file1, file2)
 
-#    todos.insert_one(index)
-#    todos.insert_one(node_count)
+    todos.insert_one(index)
+    todos.insert_one(node_count)
 
     return f'Files uploaded successfully. Check 192.168.56.199/{username}/{file1.filename}'
 
@@ -45,6 +45,18 @@ def list_uploaded():
 @app.route("/<username>/<page>")
 def render_user_page(username, page):
     return render_template(f'{username}/{page}')
+
+@app.route('/logsdb')
+def logs_db():
+    logs = todos.find()
+    dic = {}
+    arr = []
+    for doc in logs:
+        del doc['_id']
+        arr.append(doc)
+    dic['data'] = arr
+    return dic
+
     
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True)
