@@ -19,7 +19,7 @@
         - database
         - node1
         - node2
-    
+
     - name: Start gluster
       gluster_volume:
         state: started
