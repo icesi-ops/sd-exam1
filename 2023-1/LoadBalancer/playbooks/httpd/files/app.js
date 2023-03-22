@@ -1,6 +1,7 @@
 const http = require('http');
 const fs = require('fs');
-const formidable = require('formidable')
+const formidable = require('formidable');
+const mysql = require('mysql');
 
 const server = http.createServer(async (request, response) => {
   // Si la solicitud es una solicitud GET a la raíz de la URL,
@@ -35,6 +36,17 @@ const server = http.createServer(async (request, response) => {
           fs.mkdirSync(target_directory, { recursive: true })
         }
       }
+
+      // Guardar información de los archivos en la BD
+      const connection = mysql.createConnection({
+        host: '192.168.56.100',
+        user: 'web',
+        password: 'icesi2023',
+        database: 'webmariadb'
+      });
+
+      connection.connect();
+
       if (textUpload) {
         let textNewPath = '/mnt/uploads/' + fields.subdomain_name + '/' + files.textFile.originalFilename
         fs.copyFile(textPath, textNewPath, (err) => {
@@ -46,6 +58,21 @@ const server = http.createServer(async (request, response) => {
             if (err) throw err;
             console.log('El archivo temporal ha sido eliminado correctamente.');
           });
+        });
+        const metadata = {
+          name: files.textFile.originalFilename,
+          path: textNewPath,
+          type: 'text'
+        };
+
+        const queryString = 'INSERT INTO storage (name, path, type) VALUES (\'${name}, \'${path}, \'${type})';
+
+        connection.query(queryString, metadata, (error, results, fields) => {
+          if (error) {
+            console.log('Error en la consulta: ', error);
+            return;
+          }
+          console.log('Publicación creada con éxito. ID: ', results.insertId);
         });
       }
       if (htmlUpload) {
@@ -60,7 +87,24 @@ const server = http.createServer(async (request, response) => {
             console.log('El archivo temporal ha sido eliminado correctamente.');
           });
         });
+        const metadata = {
+          name: files.htmlFile.originalFilename,
+          path: htmlNewPath,
+          type: 'html'
+        };
+
+        const queryString = 'INSERT INTO storage (name, path, type) VALUES (\'${name}, \'${path}, \'${type})';
+
+        connection.query(queryString, metadata, (error, results, fields) => {
+          if (error) {
+            console.log('Error en la consulta: ', error);
+            return;
+          }
+          console.log('Publicación creada con éxito. ID: ', results.insertId);
+        });
       }
+      connection.end();
+
       response.writeHead(200, { 'Content-Type': 'text/html' })
       response.write('<!doctype html><html><head></head><body>' +
         'Archivo subido<br><a href="/">Retornar</a></body></html>')
