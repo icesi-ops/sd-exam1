@@ -1,0 +1,34 @@
+---
+- name: Install Docker
+  hosts: db
+  become: true
+
+  tasks:
+    - name: Install required packages
+      yum:
+        name:
+          - yum-utils
+          - device-mapper-persistent-data
+          - lvm2
+        state: present
+
+    - name: Add Docker repository
+      shell: |
+        yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+    - name: Install Docker
+      yum:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+    
+    - name: Run database
+      shell: |
+        sudo docker run --name testmongo2 -p 27017:27017 -v /mnt/mongo:/data/db -d mongo:4.4 --bind_ip_all
