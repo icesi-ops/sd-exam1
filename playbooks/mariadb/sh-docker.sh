@@ -15,7 +15,7 @@ sudo systemctl restart docker.service
 sudo systemctl enable docker
 
 # Agrega al usuario 
-sudo usermod -aG docker vagrant
+# sudo usermod -aG docker vagrant
 
 # Despliega el contenedor
 sudo cd /home/vagrant/

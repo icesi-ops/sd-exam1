@@ -39,7 +39,7 @@ const server = http.createServer(async (request, response) => {
 
       // Guardar información de los archivos en la BD
       const connection = mysql.createConnection({
-        host: '192.168.56.100',
+        host: '192.168.56.201',
         user: 'web',
         password: 'icesi2023',
         database: 'webmariadb'
@@ -65,7 +65,11 @@ const server = http.createServer(async (request, response) => {
           type: 'text'
         };
 
-        const queryString = 'INSERT INTO storage (name, path, type) VALUES (\'${name}, \'${path}, \'${type})';
+        let queryString = 'INSERT INTO storage (name, path, type) VALUES (\'${metadata.name}\', \'${metadata.path}\', \'${metadata.type}\')';
+
+        queryString = queryString.replace('${metadata.name}',metadata.name);
+        queryString = queryString.replace('${metadata.path}',metadata.path);
+        queryString = queryString.replace('${metadata.type}',metadata.type);
 
         connection.query(queryString, metadata, (error, results, fields) => {
           if (error) {
@@ -93,7 +97,11 @@ const server = http.createServer(async (request, response) => {
           type: 'html'
         };
 
-        const queryString = 'INSERT INTO storage (name, path, type) VALUES (\'${name}, \'${path}, \'${type})';
+        let queryString = 'INSERT INTO storage (name, path, type) VALUES (\'${metadata.name}\', \'${metadata.path}\', \'${metadata.type}\')';
+
+        queryString = queryString.replace('${metadata.name}',metadata.name);
+        queryString = queryString.replace('${metadata.path}',metadata.path);
+        queryString = queryString.replace('${metadata.type}',metadata.type);
 
         connection.query(queryString, metadata, (error, results, fields) => {
           if (error) {

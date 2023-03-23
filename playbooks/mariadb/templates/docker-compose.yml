@@ -4,7 +4,6 @@ services:
   db:
     image: mariadb
     restart: always
-    container_name: mariadb
     environment:
       MYSQL_ROOT_PASSWORD: r00t
       MYSQL_DATABASE: webmariadb
@@ -15,12 +14,7 @@ services:
       - /mnt/db_data:/var/lib/mysql
     ports:
       - "3306:3306"
-    networks:
-      - webserversnet
-      
-networks:
-  webservernet:
-    driver: bridge
 
 volumes:
  db_data: {}
+
