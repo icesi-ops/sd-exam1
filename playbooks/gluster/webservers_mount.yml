@@ -1,0 +1,5 @@
+- hosts: webservers
+  become: true
+  tasks:
+    - name:
+      command: sudo mount.glusterfs localhost:/gv0 /mnt

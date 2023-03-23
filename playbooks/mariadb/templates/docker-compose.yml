@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: r00t
+      MYSQL_DATABASE: webmariadb
+      MYSQL_USER: web
+      MYSQL_PASSWORD: icesi2023
+    volumes:
+      - ./resources/docker-sql/init.sql:/docker-entrypoint-initdb.d/init.sql 
+      - /mnt/db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+volumes:
+ db_data: {}
+

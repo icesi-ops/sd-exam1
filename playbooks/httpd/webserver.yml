@@ -1,0 +1,59 @@
+---
+- hosts: webservers
+  become: true
+  tasks:
+    - yum:
+        name:
+          - httpd
+        state: present
+    - service: name=httpd state=started enabled=yes
+    - name: Install epel-release
+      yum:
+        name: epel-release
+        state: present
+    - name: Install Node.js and npm
+      yum:
+        name: nodejs, npm
+        state: present
+    - name: Install pm2 globally
+      npm:
+        name: pm2
+        global: yes
+    - name: Crear directorio
+      file:
+        path: /var/www/html/nodejs/public
+        state: directory
+    - name: Copy Node.js server file
+      copy:
+        src: files/app.js
+        dest: /var/www/html/nodejs/app.js
+        mode: 755
+    - name: Add index.html server file
+      template:
+        src: templates/index.html.j2
+        dest: /var/www/html/nodejs/public/index.html
+    - name: Install formidable
+      npm:
+        name: formidable
+        path: /var/www/html/nodejs
+    - name: Install mysql
+      npm:
+        name: mysql
+        path: /var/www/html/nodejs
+    - name: Delete old pm2 process
+      command: "sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 delete app"
+      ignore_errors: yes
+    - name: Start nodejs server with pm2
+      command: "sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 start /var/www/html/nodejs/app.js"
+    - name: Setup pm2 startup
+      command: "sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 startup systemd -u vagrant --hp /home/vagrant"
+    - name: Create and configure nodejs.conf file
+      copy:
+        src: files/nodejs.conf
+        dest: /etc/httpd/conf.d/nodejs.conf
+    - name: Restart httpd
+      systemd:
+        name: httpd
+        state: restarted
+    - name: Allow httpd to connect to network on port 3000
+      shell: setsebool -P httpd_can_network_connect 1
