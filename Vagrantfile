@@ -3,6 +3,10 @@
 
 Vagrant.configure("2") do |config|
 
+  nodes_count = 5
+
+  
+
   config.vm.define "nginx" do |nginx|
     nginx.vm.box = "centos/7"
     nginx.vm.hostname = "sistemasdistribuidos"
@@ -40,10 +44,10 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  (1..2).each do |i|
+  nodes_count.times do |i|
    config.vm.define "web-#{i}" do |web|
 
-    disk_var = "./disk#{i}.dvi"
+    disk_var = "./disks/disk#{i}.dvi"
     node_name = "node#{i}"
 
     web.vm.box = "centos/7"
@@ -73,10 +77,10 @@ Vagrant.configure("2") do |config|
     database.vm.network "private_network", ip: "192.168.56.201"
     database.vm.provider "virtualbox" do |vb|
      vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", "1", "--name", "database"]
-     unless File.exist?("./disk_master.dvi")
-      vb.customize ['createhd', '--filename', "./disk_master.dvi", '--variant', 'Fixed', '--size', 5 * 1024]
+     unless File.exist?("./disks/disk_master.dvi")
+      vb.customize ['createhd', '--filename', "../disks/disk_master.dvi", '--variant', 'Fixed', '--size', 5 * 1024]
      end
-     vb.customize ['storageattach', :id,  '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', "./disk_master.dvi"]
+     vb.customize ['storageattach', :id,  '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', "../disks/disk_master.dvi"]
     end
     database.vm.provision "shell", path: "playbooks/scripts/glusterfs.sh"
     database.vm.provision "shell", path: "playbooks/scripts/configuration.sh"
