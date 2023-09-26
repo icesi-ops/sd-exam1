@@ -1,2 +1,6 @@
 # sd-exam1
-Please upload your exam here. 
+
+## Kevin Mera
+## A00364415
+## Andres Orozco
+## A00355202
