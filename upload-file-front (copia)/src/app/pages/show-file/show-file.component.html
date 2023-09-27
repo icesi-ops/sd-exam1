@@ -1,0 +1,19 @@
+<table>
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Tamaño (bytes)</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let file of fileList">
+      <td>{{ file.name }}</td>
+      <td>{{ file.size }}</td>
+      <td>
+        <button (click)="deleteFile(file)">Eliminar</button>
+        <button (click)="updateFile(file)">Actualizar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
