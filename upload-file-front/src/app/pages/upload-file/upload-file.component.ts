@@ -15,27 +15,29 @@ export class UploadFileComponent {
     file: new FormControl('')
   });
 
-  showModal = false; // Variable para controlar la visibilidad del modal
+  showModal = false;
 
-  // Función para abrir el modal
   openModal() {
     this.showModal = true;
   }
 
-  // Función para cerrar el modal
   closeModal() {
     this.showModal = false;
   }
 
   onSubmit(){
     console.log(this.uploadForm.value);
-    if (this.uploadForm.value.file === '') {
-      alert("Archivo vacío");
+
+    const selectedFile = this.uploadForm.get('file').value;
+
+    if (!selectedFile) {
+      alert("Debes seleccionar un archivo para cargar.");
     } else {
+      // Realiza la carga del archivo aquí (llama al servicio correspondiente)
+
       alert("Cargado");
-      this.closeModal(); // Cierra el modal después de cargar
+      this.closeModal();
       this.router.navigate(["show"]);
     }
   }
-
 }
