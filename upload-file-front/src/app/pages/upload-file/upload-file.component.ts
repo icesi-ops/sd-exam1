@@ -27,13 +27,13 @@ export class UploadFileComponent {
 
   onSubmit(){
     console.log(this.uploadForm.value);
-
-    const selectedFile = this.uploadForm.get('file').value;
+    const form = document.getElementById('uploadForm')
+    const selectedFile = this.uploadForm.value;
 
     if (!selectedFile) {
       alert("Debes seleccionar un archivo para cargar.");
     } else {
-      // Realiza la carga del archivo aquí (llama al servicio correspondiente)
+     
 
       alert("Cargado");
       this.closeModal();
