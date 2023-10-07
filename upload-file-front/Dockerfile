@@ -1,23 +1,10 @@
-# Usa la imagen oficial de Node.js como base
-FROM node:16
+FROM node:16-alpine AS build
+WORKDIR /app
 
-# Establece el directorio de trabajo en la carpeta de la aplicación dentro del contenedor
-WORKDIR /usr/src/app
-
-# Copia el archivo package.json y package-lock.json al directorio de trabajo
-COPY package*.json ./
-
-# Instala las dependencias
-RUN npm install
-
-# Copia el resto de los archivos de la aplicación al directorio de trabajo
 COPY . .
-
-# Compila la aplicación (esto puede variar dependiendo de cómo esté configurada tu aplicación Angular)
+RUN npm install
 RUN npm run build
-
-# Expone el puerto 80 para que la aplicación pueda ser accesible desde fuera del contenedor
+# Serve Application using Nginx Server
+FROM nginx:alpine
+COPY --from=build /app/dist/upload-file-front/ /usr/share/nginx/html
 EXPOSE 8080
-
-# Inicia la aplicación
-CMD ["npm", "start"]
