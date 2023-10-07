@@ -6,5 +6,5 @@ RUN npm install
 RUN npm run build
 # Serve Application using Nginx Server
 FROM nginx:alpine
-COPY --from=build /app/dist/upload-file-front/ /usr/share/nginx/html
+COPY --from=build /app/dist/angular-file-upload/ /usr/share/nginx/html
 EXPOSE 8080

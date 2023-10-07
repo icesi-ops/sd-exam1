@@ -1,0 +1,38 @@
+http:
+  port: 8080
+admin:
+  port: 9876
+  host: localhost
+apiEndpoints:
+  app-invoice:
+    host: localhost
+    paths: ['/app-invoice','/app-invoice/*']
+serviceEndpoints:
+  app-invoice:
+   url: 'http://loadbalancer/app-invoice/'
+policies:
+  - basic-auth
+  - cors
+  - expression
+  - key-auth
+  - log
+  - oauth2
+  - proxy
+  - rate-limit
+pipelines:
+  default:
+    apiEndpoints:
+    policies:
+      - key-auth:
+      - proxy:
+  dmz:
+    apiEndpoints:
+      - app-invoice
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: app-invoice
+              changeOrigin: true
+              prependPath:  false
+              ignorePath:   false
+              stripPath:    false
