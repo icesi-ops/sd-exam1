@@ -1,13 +1,30 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const Docker = require('dockerode');
+var cors = require('cors')
+
 
 const app = express();
 const docker = new Docker();
 
 // Configurar middleware para subida de archivos
-app.use(fileUpload());
+//app.use(fileUpload());
 
+
+var allowedOrigins = ['http://localhost:3000',
+                      'http://yourapp.com'];
+app.use(cors({
+  credentials: true,
+  origin: function(origin, callback){
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      var msg = 'The CORS policy for this site does not ' +
+                'allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  }
+}));
 // Ruta para recibir archivos del frontend
 app.post('/upload', async (req, res) => {
   try {

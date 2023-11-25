@@ -1,2 +1,4 @@
 backend/node_modules/
 upload-file-front/node_modules/
+upload-file-front/.angular
+upload-file-front/dist

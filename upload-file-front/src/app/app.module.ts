@@ -1,26 +1,19 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { UploadFileComponent } from './pages/upload-file/upload-file.component';
-import { ShowFileComponent } from './pages/show-file/show-file.component';
-import { ReactiveFormsModule} from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { SingleFileUploadComponent } from './single-file-upload/single-file-upload.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    UploadFileComponent,
-    ShowFileComponent
+    SingleFileUploadComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    ReactiveFormsModule,
-    BrowserAnimationsModule
-  ],
+  imports: [BrowserModule, HttpClientModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AppModule { }
+export class AppModule {}
