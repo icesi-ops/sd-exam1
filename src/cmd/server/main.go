@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/gonzalodevarona/sd-exam1/api"
+	"github.com/gonzalodevarona/sd-exam1/src/api"
 )
 
 func main() {

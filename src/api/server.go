@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -11,7 +12,7 @@ import (
 type Game struct {
 	ID          uuid.UUID `json:"id"`
 	Name        string    `json:"name"`
-	ReleaseDate int       `json:"release_date"`
+	ReleaseYear int       `json:"release_year"`
 }
 
 type Server struct {
@@ -26,6 +27,9 @@ func NewServer() *Server {
 		games:  []Game{},
 	}
 	s.routes()
+
+	log.Println("Server started on port 8080!")
+
 	return s
 }
 
