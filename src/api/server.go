@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -8,9 +9,9 @@ import (
 )
 
 type Game struct {
-	ID uuid.UUID `json:id`
-	Name string `json:name`
-	ReleaseDate int `json:release_date`
+	ID          uuid.UUID `json:"id"`
+	Name        string    `json:"name"`
+	ReleaseDate int       `json:"release_date"`
 }
 
 type Server struct {
@@ -20,23 +21,23 @@ type Server struct {
 }
 
 func NewServer() *Server {
-		s := &Server{
-			Router: mux.NewRouter(),
-			games: []Game{},
-		}
-		s.routes()
-		return s
+	s := &Server{
+		Router: mux.NewRouter(),
+		games:  []Game{},
+	}
+	s.routes()
+	return s
 }
 
 func (s *Server) routes() {
-	s.HandlerFunc("/games", s.getAllGames()).Methods("GET")
-	s.HandlerFunc("/games", s.createGame()).Methods("POST")
-	s.HandlerFunc("/games/{id}", s.removeGame()).Methods("DELETE")
+	s.HandleFunc("/games", s.getAllGames()).Methods("GET")
+	s.HandleFunc("/games", s.createGame()).Methods("POST")
+	s.HandleFunc("/games/{id}", s.removeGame()).Methods("DELETE")
 }
 
-func (s *Server) createGame() http.HandlerFunc{
-	return func(w http.ResponseWriter, r *http.Request){
-		var i  Game
+func (s *Server) createGame() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var i Game
 		if err := json.NewDecoder(r.Body).Decode(&i); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -46,17 +47,17 @@ func (s *Server) createGame() http.HandlerFunc{
 		s.games = append(s.games, i)
 
 		w.Header().Set("Content-Type", "application/json")
-		if err := json.NewDecoder(w).Encode(i); err != nil {
+		if err := json.NewEncoder(w).Encode(i); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	}
 }
 
-func (s *Server) getAllGames()  http.HandlerFunc {
+func (s *Server) getAllGames() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		if err := json.NewDecoder(w).Encode(s.games); err != nil {
+		if err := json.NewEncoder(w).Encode(s.games); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -64,8 +65,8 @@ func (s *Server) getAllGames()  http.HandlerFunc {
 }
 
 func (s *Server) removeGame() http.HandlerFunc {
-	return  func(w http.ResponseWriter, r *http.Request) {
-		idStr, _ + := mux.Vars(r)["id"]
+	return func(w http.ResponseWriter, r *http.Request) {
+		idStr, _ := mux.Vars(r)["id"]
 		id, err := uuid.Parse(idStr)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -73,7 +74,7 @@ func (s *Server) removeGame() http.HandlerFunc {
 
 		for i, item := range s.games {
 			if item.ID == id {
-				s.games = append(s.games[:i], s.games[i+1]...)
+				s.games = append(s.games[:i], s.games[i+1:]...)
 				break
 			}
 		}
