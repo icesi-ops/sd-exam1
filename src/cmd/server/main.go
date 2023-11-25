@@ -1,9 +1,12 @@
 package main
 
 import (
-	"sd-exam1/src/internal/app"
+	"net/http"
+
+	"github.com/gonzalodevarona/sd-exam1/api"
 )
 
 func main() {
-	app.Run()
+	srv := api.NewServer()
+	http.ListenAndServe(":8080", srv)
 }
