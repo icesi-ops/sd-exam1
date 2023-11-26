@@ -36,6 +36,7 @@ func NewServer() *Server {
 func (s *Server) routes() {
 	s.HandleFunc("/games", s.getAllGames()).Methods("GET")
 	s.HandleFunc("/games", s.createGame()).Methods("POST")
+	s.HandleFunc("/games/{id}", s.updateGame()).Methods("PUT")
 	s.HandleFunc("/games/{id}", s.removeGame()).Methods("DELETE")
 }
 
@@ -81,6 +82,46 @@ func (s *Server) removeGame() http.HandlerFunc {
 				s.games = append(s.games[:i], s.games[i+1:]...)
 				break
 			}
+		}
+	}
+}
+
+func (s *Server) updateGame() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		idStr, _ := mux.Vars(r)["id"]
+		id, err := uuid.Parse(idStr)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		var updatedGame Game
+		if err := json.NewDecoder(r.Body).Decode(&updatedGame); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		var foundIndex = -1
+		for i, item := range s.games {
+			if item.ID == id {
+				foundIndex = i
+				break
+			}
+		}
+
+		if foundIndex == -1 {
+			http.NotFound(w, r)
+			return
+		}
+
+		// Update the game fields (excluding ID)
+		updatedGame.ID = id
+		s.games[foundIndex] = updatedGame
+
+		w.Header().Set("Content-Type", "application/json")
+		if err := json.NewEncoder(w).Encode(updatedGame); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 }
