@@ -24,25 +24,60 @@ export class SingleFileUploadComponent {
     }
   }
 
+
   onUpload() {
     if (this.file) {
       const formData = new FormData();
-
       formData.append('file', this.file, this.file.name);
-
-      const upload$ = this.http.post('http://localhost:3500/upload', formData);
-
+  
       this.status = 'uploading';
-
-      upload$.subscribe({
-        next: () => {
-          this.status = 'success';
-        },
-        error: (error: any) => {
-          this.status = 'fail';
-          return throwError(() => error);
-        },
-      });
+  
+      this.http.post('http://localhost:3500/upload', formData)
+        .subscribe({
+          next: (response: any) => {
+            console.log('Server Response:', response);
+            if (response.status === 'success') {
+              this.status = 'success';
+            } else {
+              this.status = 'fail';
+            }
+          },
+          error: (error: any) => {
+            console.error(error);
+            this.status = 'fail';
+          },
+        });
     }
   }
+  
+  
+  
+
+
+
+
+
+
+
+  // onUpload() {
+  //   if (this.file) {
+  //     const formData = new FormData();
+
+  //     formData.append('file', this.file, this.file.name);
+
+  //     const upload$ = this.http.post('http://localhost:3500/upload', formData);
+
+  //     this.status = 'uploading';
+
+  //     upload$.subscribe({
+  //       next: () => {
+  //         this.status = 'success';
+  //       },
+  //       error: (error: any) => {
+  //         this.status = 'fail';
+  //         return throwError(() => error);
+  //       },
+  //     });
+  //   }
+  // }
 }

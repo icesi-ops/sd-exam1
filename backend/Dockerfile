@@ -9,6 +9,7 @@ COPY . .
 
 # Instalar las dependencias
 RUN npm install
+RUN npm install cors
 
 # Exponer el puerto en el que se ejecuta la aplicación
 EXPOSE 3500

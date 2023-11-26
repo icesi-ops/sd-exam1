@@ -8,7 +8,6 @@ RUN npm install
 
 # Copia todos los archivos al directorio de trabajo
 COPY . .
-
 # Compila la aplicación Angular
 RUN npm run build
 
