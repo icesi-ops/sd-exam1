@@ -1,19 +1,26 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { throwError } from 'rxjs';
+import { OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-single-file-upload',
   templateUrl: './single-file-upload.component.html',
   styleUrls: ['./single-file-upload.component.css'],
 })
-export class SingleFileUploadComponent {
+export class SingleFileUploadComponent implements OnInit {
   status: 'initial' | 'uploading' | 'success' | 'fail' = 'initial';
+  listStatus: 'initial' | 'empty' | 'noEmpty' | 'fail' = 'initial';
+
   file: File | null = null;
+
+  filesList: string[] = [];
 
   constructor(private http: HttpClient) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getFileList();
+  }
 
   onChange(event: any) {
     const file: File = event.target.files[0];
@@ -48,36 +55,31 @@ export class SingleFileUploadComponent {
           },
         });
     }
+    this.getFileList();
+  }
+
+  getFileList() {
+    // Realiza la solicitud HTTP para obtener la lista de archivos
+    this.http.get<string[]>('http://localhost:3500/files')
+      .subscribe({
+        next: (response: any) => {
+          if (response.status === 'success') {
+            console.log('Server Response:', response);
+            this.listStatus = 'noEmpty';
+            this.filesList = response.files;
+            console.log('FilesList:', this.filesList);
+          } else {
+            this.listStatus = 'empty';
+            this.filesList = [];
+          }
+
+        },
+        error: (error: any) => {
+          console.error(error);
+          this.listStatus = 'fail';
+        },
+      });
   }
   
   
-  
-
-
-
-
-
-
-
-  // onUpload() {
-  //   if (this.file) {
-  //     const formData = new FormData();
-
-  //     formData.append('file', this.file, this.file.name);
-
-  //     const upload$ = this.http.post('http://localhost:3500/upload', formData);
-
-  //     this.status = 'uploading';
-
-  //     upload$.subscribe({
-  //       next: () => {
-  //         this.status = 'success';
-  //       },
-  //       error: (error: any) => {
-  //         this.status = 'fail';
-  //         return throwError(() => error);
-  //       },
-  //     });
-  //   }
-  // }
 }

@@ -21,3 +21,10 @@
     <p *ngSwitchDefault>😶 Waiting to upload...</p>
   </section>
 </div>
+
+<div *ngIf="filesList.length > 0" class="file-list-section">
+  <h3>Uploaded Files:</h3>
+  <ul>
+    <li *ngFor="let fileName of filesList">{{ fileName }}</li>
+  </ul>
+</div>
