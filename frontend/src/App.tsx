@@ -2,12 +2,16 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import GameCard from './components/GameCard'
+import GameForm from './components/GameForm'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
+    <GameCard name='melo' release_year={2} id='a' />
+    <GameForm action='add' game={undefined}></GameForm>
       <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
