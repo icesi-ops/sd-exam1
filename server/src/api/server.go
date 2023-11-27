@@ -28,7 +28,7 @@ func NewServer() *Server {
 	}
 	s.routes()
 
-	log.Println("Server started on port 8080!")
+	log.Println("Server started on port 8005!")
 
 	return s
 }
