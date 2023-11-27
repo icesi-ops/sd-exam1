@@ -1,0 +1,18 @@
+services:
+  samba:
+    container_name: samba
+    image: foltrest/samba:0.1.0
+    ports:
+      - 446:445
+      - 139:139
+    volumes:
+      - C:/Users/riasc/OneDrive/Escritorio/Distribuidos/Parcial1/sd-exam1/samba/smb.conf:/etc/samba/smb.conf
+      - data:/mnt/data
+    environment:
+      - user_count=1
+      - user1=admin
+      - password1=admin
+    restart: unless-stopped
+
+volumes:
+  data:
