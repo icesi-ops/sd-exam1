@@ -3,6 +3,7 @@ import { DevTool } from "@hookform/devtools";
 import { TextField, Typography, Button, Stack, MenuItem } from '@mui/material'
 import { GameSchema, GameType } from "../schemas/GameSchema"
 import { z } from 'zod';
+import GameService from '../services/GameService';
 
 const GameFormProps = z.object({
   action: z.string(),
@@ -36,10 +37,21 @@ function GameForm(props: { action: string, game?: GameType }) {
     defaultValues: preloadedData
   });
 
-  function onSubmit(data: any) {
-    console.log(data)
+  function onSubmit(data: GameType) {
+    gameProps.action == 'add' ?
+    addGame(data)
+    : editGame(data)
   };
 
+  async function addGame(newGame: GameType) {
+    await GameService.addGame(newGame);
+    // location.reload();
+  }
+
+  async function editGame(newGame: GameType) {
+    await GameService.editGame(newGame);
+    // location.reload();
+  }
 
   return (
 

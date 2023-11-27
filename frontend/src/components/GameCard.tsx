@@ -2,6 +2,7 @@ import { GameType } from "../schemas/GameSchema"
 import { useState } from 'react'
 import GameFormModal from "./GameFormModal";
 import { CardMedia, Typography, Button, CardContent, CardActions, Card } from '@mui/material'
+import GameService from "../services/GameService";
 import { capitalizeFirstLetter } from "../utils/CommonMethods";
 
 function GameCard(props: { id: string, name: string, release_year: number }) {
@@ -15,6 +16,11 @@ function GameCard(props: { id: string, name: string, release_year: number }) {
   }
   function closeForm() {
     setOpenForm(false)
+  }
+
+  async function deleteGame(id: string) {
+    await GameService.deleteGame(id)
+    location.reload()
   }
 
   return (
@@ -41,7 +47,7 @@ function GameCard(props: { id: string, name: string, release_year: number }) {
         </CardContent>
         <CardActions sx={{ display: "flex", justifyContent: 'center' }}>
           <Button onClick={displayForm} variant='contained' size="small">Edit</Button>
-          <Button variant='contained' color='error' size="small">Delete</Button>
+          <Button onClick={() => deleteGame(game.id!)} variant='contained' color='error' size="small">Delete</Button>
         </CardActions>
       </Card>
     </>
