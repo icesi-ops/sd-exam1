@@ -13,6 +13,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@hookform/devtools": "^4.3.1",
+    "@mui/icons-material": "^5.14.18",
     "@mui/material": "^5.14.18",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.6.2",
@@ -23,7 +24,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/react": "^18.2.37",
+    "@types/react": "^18.2.38",
     "@types/react-dom": "^18.2.15",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "@typescript-eslint/parser": "^6.10.0",

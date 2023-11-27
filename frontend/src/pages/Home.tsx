@@ -1,8 +1,26 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import GameCard from "../components/GameCard"
 import GameForm from "../components/GameForm"
-import { Button, Modal, Box } from "@mui/material"
+import { Button, Modal, Box, Typography, IconButton, Grid } from "@mui/material"
+import GameService from "../services/GameService"
+import CloseIcon from '@mui/icons-material/Close';
+import { GameType } from "../schemas/GameSchema"
+import GameFormModal from "../components/GameFormModal"
 function Home() {
+
+  const [games, setGames] = useState<GameType[] | []>([])
+
+
+
+  async function getGames() {
+    const fetchedGames = await GameService.getGames()
+    setGames(fetchedGames);
+  }
+
+  useEffect(() => {
+    getGames()
+  }, [])
+
 
   const style = {
     position: 'absolute' as 'absolute',
@@ -25,23 +43,26 @@ function Home() {
     setOpenForm(false)
   }
 
+  function renderGames() {
+    return games.map((game: GameType) =>
+      <Grid item xs={12} sm={4}>
+        <GameCard name={game.name} release_year={game.release_year} id={game.id!} />
+      </Grid>)
+  }
+
 
   return (
     <>
       <Button onClick={displayForm} variant="contained">Add new game</Button>
 
-      <Modal
-        open={openForm}
-        onClose={closeForm}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <GameForm action='edit' game={undefined} />
-        </Box>
-      </Modal>
-      <GameCard name='melo' release_year={2} id='a' />
+      <GameFormModal open={openForm} closeForm={closeForm} action="add" game={undefined}></GameFormModal>
 
+      <Grid container spacing={1} rowSpacing={1} columnSpacing={{ xs: 1 }}>
+        {Array.isArray(games) && games.length > 0 ?
+          renderGames()
+          : <Typography variant='h5'>No games to show</Typography>
+        }
+      </Grid>
     </>
   )
 }
