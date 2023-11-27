@@ -1,35 +1,21 @@
 version: '3'
 services:
-  samba:
-    image: lordpedal/samba
-    container_name: samba_server
+
+  frontend:
+    image: chigui794/exam1-frontend:1.1.1
+    container_name: exam1-frontend
     ports:
-      - "137:137/udp"
-      - "138:138/udp"
-      - "139:139"
-      - "1445:445"
-    environment:
-      - SAMBA_USER=username
-      - SAMBA_PASSWORD=password
-    volumes:
-      - samba-data-ps:/lordpedal
+      - "8085:80"
     restart: always
-    # command: bash -c "chmod 777 -R /app/lordpedal && /usr/bin/supervisord -n"
     networks:
-      - exam1  # Asignar el servicio a la red exam1
+      - exam1  # Asignar el servicio a la red exam1  
 
   backend:
-    image: chigui794/exam1-backend:1.0.4
-    container_name: backend_server
+    image: chigui794/exam1-backend:1.1.0
+    container_name: exam1-backend
     ports:
       - "3500:3500"
     restart: always
     networks:
       - exam1  # Asignar el servicio a la red exam1
 
-volumes:
-  samba-data-ps:
-    external: false
-
-networks:
-  exam1:  

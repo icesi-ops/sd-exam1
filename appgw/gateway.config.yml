@@ -4,12 +4,14 @@ admin:
   port: 9876
   host: localhost
 apiEndpoints:
-  app-invoice:
+  frontend:
     host: localhost
-    paths: ['/app-invoice','/app-invoice/*']
+    paths: ['/frontend','/frontend/*']
+
 serviceEndpoints:
-  app-invoice:
-   url: 'http://loadbalancer/app-invoice/'
+  frontend:
+    url: 'http://loadbalancer/frontend/'
+
 policies:
   - basic-auth
   - cors
@@ -19,19 +21,16 @@ policies:
   - oauth2
   - proxy
   - rate-limit
+
 pipelines:
-  default:
+  pipeline1:
     apiEndpoints:
+      - frontend
     policies:
-      - key-auth:
-      - proxy:
-  dmz:
-    apiEndpoints:
-      - app-invoice
-    policies:
+      # - key-auth:   
       - proxy:
           - action:
-              serviceEndpoint: app-invoice
+              serviceEndpoint: frontend
               changeOrigin: true
               prependPath:  false
               ignorePath:   false
