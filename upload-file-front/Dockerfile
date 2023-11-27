@@ -5,7 +5,6 @@ WORKDIR /app
 # Copia solo los archivos necesarios para instalar las dependencias
 COPY package*.json /app
 RUN npm install
-RUN npm install consul
 
 # Copia todos los archivos al directorio de trabajo
 COPY . /app
