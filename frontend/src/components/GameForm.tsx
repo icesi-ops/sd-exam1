@@ -1,12 +1,12 @@
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
-import { TextField, Button, Stack, MenuItem } from '@mui/material'
+import { TextField, Typography, Button, Stack, MenuItem } from '@mui/material'
 import { GameSchema, GameType } from "../schemas/GameSchema"
 import { z } from 'zod';
 
 const GameFormProps = z.object({
-  action : z.string(),
-  game : GameSchema.optional(),
+  action: z.string(),
+  game: GameSchema.optional(),
 })
 
 type GameFormPropsType = z.infer<typeof GameFormProps>;
@@ -14,14 +14,14 @@ type GameFormPropsType = z.infer<typeof GameFormProps>;
 
 function GameForm(props: { action: string, game?: GameType }) {
 
-  const gameProps : GameFormPropsType = props;
+  const gameProps: GameFormPropsType = props;
 
-  let preloadedData = gameProps.game?.release_year? 
-  gameProps.game :
-  {
-    name: '',
-    release_year: 2010,
-  }
+  let preloadedData = gameProps.game?.release_year ?
+    gameProps.game :
+    {
+      name: '',
+      release_year: 2010,
+    }
 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: currentYear - 1969 }, (_, index) => 1970 + index);
@@ -36,7 +36,7 @@ function GameForm(props: { action: string, game?: GameType }) {
     defaultValues: preloadedData
   });
 
-  function onSubmit(data:any) {
+  function onSubmit(data: any) {
     console.log(data)
   };
 
@@ -45,16 +45,19 @@ function GameForm(props: { action: string, game?: GameType }) {
 
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack spacing={2} width={400}>
+        <Stack spacing={2} width={400} justifyContent='center'>
+          <Typography variant='h5' sx={{ fontWeight: 'bold' }} color='black'>
+            {gameProps.action === 'add' ? 'Add new game' : 'Edit game'}
+          </Typography>
 
-          {gameProps.action === 'edit'? <TextField
+          {gameProps.action === 'edit' ? <TextField
             label='ID'
             disabled
             type='id'
             {...register('id', { required: 'ID is required' })}
             error={!!errors.id}
             helperText={errors.id?.message}
-          />: null}
+          /> : null}
           <TextField
             label='Name'
             type='name'
@@ -78,12 +81,13 @@ function GameForm(props: { action: string, game?: GameType }) {
               </MenuItem>
             ))}
           </TextField>
+          <Button type="submit" variant="contained" color="info">
+            {gameProps.action === 'add' ? 'Add game' : 'Edit game'}
+          </Button>
+          <DevTool control={control} />
         </Stack>
       </form>
-      <Button type="submit" variant="contained" color="info">
-        {gameProps.action === 'add' ? 'Add game' : 'Edit game'}
-      </Button>
-      <DevTool control={control} />
+
     </>
   )
 }
