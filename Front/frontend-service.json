@@ -1,0 +1,7 @@
+{
+    "service": {
+      "name": "frontend",
+      "tags": ["frontend"],
+      "port": 8082
+    }
+  }
