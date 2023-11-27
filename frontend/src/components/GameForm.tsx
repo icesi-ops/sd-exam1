@@ -6,19 +6,19 @@ import { z } from 'zod';
 import GameService from '../services/GameService';
 
 const GameFormProps = z.object({
-  action: z.string(),
+  action: z.enum(["add", "edit"]),
   game: GameSchema.optional(),
 })
 
 type GameFormPropsType = z.infer<typeof GameFormProps>;
 
 
-function GameForm(props: { action: string, game?: GameType }) {
+function GameForm(props: GameFormPropsType) {
+  
+  const { action, game } = props;
 
-  const gameProps: GameFormPropsType = props;
-
-  let preloadedData = gameProps.game?.release_year ?
-    gameProps.game :
+  let preloadedData = game?.release_year ?
+    game :
     {
       name: '',
       release_year: 2010,
@@ -38,7 +38,7 @@ function GameForm(props: { action: string, game?: GameType }) {
   });
 
   function onSubmit(data: GameType) {
-    gameProps.action == 'add' ?
+    action == 'add' ?
     addGame(data)
     : editGame(data)
   };
@@ -59,10 +59,10 @@ function GameForm(props: { action: string, game?: GameType }) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2} width={400} justifyContent='center'>
           <Typography variant='h5' sx={{ fontWeight: 'bold' }} color='black'>
-            {gameProps.action === 'add' ? 'Add new game' : 'Edit game'}
+            {action === 'add' ? 'Add new game' : 'Edit game'}
           </Typography>
 
-          {gameProps.action === 'edit' ? <TextField
+          {action === 'edit' ? <TextField
             label='ID'
             disabled
             type='id'
@@ -94,7 +94,7 @@ function GameForm(props: { action: string, game?: GameType }) {
             ))}
           </TextField>
           <Button type="submit" variant="contained" color="info">
-            {gameProps.action === 'add' ? 'Add game' : 'Edit game'}
+            {action === 'add' ? 'Add game' : 'Edit game'}
           </Button>
           <DevTool control={control} />
         </Stack>

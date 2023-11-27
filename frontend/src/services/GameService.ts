@@ -28,7 +28,7 @@ const addGame = async (game: GameType) => {
 
 const editGame = async (game: GameType) => {
     try {
-        const res = await axios.put(`/${entity}`, game);
+        const res = await axios.put(`/${entity}/edit`, game);
         return res.data;
     } catch (error) {
         const err = error as AxiosError

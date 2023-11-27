@@ -28,7 +28,7 @@ function GameCard(props: { id: string, name: string, release_year: number }) {
       
       <GameFormModal open={openForm} closeForm={closeForm}  action='edit' game={game}/>
 
-      <Card sx={{ maxWidth: 345 }}>
+      <Card sx={{ minWidth: '100%', minHeight: 345 }}>
         <CardMedia
           sx={{ height: 140 }}
           image="/static/images/cards/contemplative-reptile.jpg"

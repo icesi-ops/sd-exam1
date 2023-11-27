@@ -7,7 +7,7 @@ import { z } from 'zod'
 const GameFormModalProps = z.object({
     open: z.boolean(),
     closeForm: z.function(),
-    action: z.string(),
+    action: z.enum(["add", "edit"]),
     game: GameSchema.optional(),
 });
 
@@ -16,10 +16,7 @@ type GameFormModalPropsType = z.infer<typeof GameFormModalProps>;
 
 function GameFormModal(props: GameFormModalPropsType) {
 
-   
-
     const { open, closeForm, action, game } = props;
-
 
     const style = {
         position: 'absolute' as 'absolute',

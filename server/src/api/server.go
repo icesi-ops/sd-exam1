@@ -36,7 +36,7 @@ func NewServer() *Server {
 func (s *Server) routes() {
 	s.HandleFunc("/games", s.getAllGames()).Methods("GET")
 	s.HandleFunc("/games", s.createGame()).Methods("POST")
-	s.HandleFunc("/games/{id}", s.updateGame()).Methods("PUT")
+	s.HandleFunc("/games/edit/{id}", s.updateGame()).Methods("PUT")
 	s.HandleFunc("/games/{id}", s.removeGame()).Methods("DELETE")
 }
 
