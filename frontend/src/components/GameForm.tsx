@@ -81,7 +81,7 @@ function GameForm(props: { action: string, game?: GameType }) {
         </Stack>
       </form>
       <Button type="submit" variant="contained" color="info">
-        {gameProps.action === 'add' ? 'Agregar' : 'Editar'}
+        {gameProps.action === 'add' ? 'Add game' : 'Edit game'}
       </Button>
       <DevTool control={control} />
     </>
