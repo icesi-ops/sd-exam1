@@ -45,12 +45,12 @@ function GameForm(props: GameFormPropsType) {
 
   async function addGame(newGame: GameType) {
     await GameService.addGame(newGame);
-    // location.reload();
+    location.reload();
   }
 
   async function editGame(newGame: GameType) {
     await GameService.editGame(newGame);
-    // location.reload();
+    location.reload();
   }
 
   return (
