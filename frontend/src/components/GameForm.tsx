@@ -38,7 +38,7 @@ function GameForm(props: GameFormPropsType) {
     handleSubmit,
     register,
     formState: { errors },
-    control,
+    // control,
     watch
   } = useForm({
     defaultValues: preloadedData
