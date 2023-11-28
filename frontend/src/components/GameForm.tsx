@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
-import { useState, useEffect } from 'react'
-import { DevTool } from "@hookform/devtools";
+import { useEffect } from 'react'
+// import { DevTool } from "@hookform/devtools";
 import { TextField, Typography, Button, Stack, MenuItem } from '@mui/material'
 import { GameSchema, GameType } from "../schemas/GameSchema"
 import { z } from 'zod';
@@ -126,7 +126,7 @@ function GameForm(props: GameFormPropsType) {
           <Button type="submit" variant="contained" color="info">
             {action === 'add' ? 'Add game' : 'Edit game'}
           </Button>
-          <DevTool control={control} />
+          {/* <DevTool control={control} /> */}
         </Stack>
       </form>
 
