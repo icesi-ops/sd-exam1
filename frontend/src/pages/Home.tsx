@@ -4,6 +4,7 @@ import { Button, Box, Typography, Grid } from "@mui/material"
 import GameService from "../services/GameService"
 import { GameType } from "../schemas/GameSchema"
 import GameFormModal from "../components/GameFormModal"
+import GameStopImg from "../assets/GameStop.png"
 function Home() {
 
   const [games, setGames] = useState<GameType[] | []>([])
@@ -28,7 +29,7 @@ function Home() {
   }
   function closeForm() {
     setOpenForm(false)
-  } 
+  }
 
   function renderGames() {
     return games.map((game: GameType) =>
@@ -39,7 +40,10 @@ function Home() {
 
 
   return (
-    <Box sx={{ align: 'center' }}>
+    <>
+      <Box>
+        <img style={{ width: '30%' }} src={GameStopImg} />
+      </Box>
       <Button sx={{ m: 3 }} onClick={displayForm} variant="contained">Add new game</Button>
 
       <GameFormModal open={openForm} closeForm={closeForm} action="add" game={undefined}></GameFormModal>
@@ -50,7 +54,7 @@ function Home() {
           : <Typography variant='h5'>No games to show</Typography>
         }
       </Grid>
-    </Box>
+    </>
   )
 }
 

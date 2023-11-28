@@ -12,7 +12,7 @@ func main() {
 	http.ListenAndServe(":8005",
 		handlers.CORS(
 			handlers.AllowedOrigins([]string{"*"}),
-			handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE"}),
+			handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}),
 			handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type"}),
 		)(srv))
 }
