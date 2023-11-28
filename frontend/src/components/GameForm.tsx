@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useState, useEffect } from 'react'
 import { DevTool } from "@hookform/devtools";
 import { TextField, Typography, Button, Stack, MenuItem } from '@mui/material'
 import { GameSchema, GameType } from "../schemas/GameSchema"
@@ -14,14 +15,19 @@ type GameFormPropsType = z.infer<typeof GameFormProps>;
 
 
 function GameForm(props: GameFormPropsType) {
-  
+
   const { action, game } = props;
+
+  
+
+  // const [image, setImage] = useState<Blob | undefined>(undefined)
 
   let preloadedData = game?.release_year ?
     game :
     {
       name: '',
       release_year: 2010,
+      image: undefined
     }
 
   const currentYear = new Date().getFullYear();
@@ -33,25 +39,44 @@ function GameForm(props: GameFormPropsType) {
     register,
     formState: { errors },
     control,
+    watch
   } = useForm({
     defaultValues: preloadedData
   });
 
+  const watchImage = watch("image")
+
   function onSubmit(data: GameType) {
     action == 'add' ?
-    addGame(data)
-    : editGame(data)
+      addGame(data)
+      : editGame(data)
   };
 
   async function addGame(newGame: GameType) {
+    // @ts-ignore
+    // newGame.image = URL.createObjectURL(newGame.image![0])
+    
     await GameService.addGame(newGame);
     location.reload();
+    
+    
   }
 
   async function editGame(newGame: GameType) {
     await GameService.editGame(newGame);
     location.reload();
   }
+
+  useEffect(() => {
+    if(watchImage !== undefined){
+      //@ts-ignore
+      setImage(URL.createObjectURL(watchImage![0]))
+    }
+    
+  }, [watchImage])
+
+  
+
 
   return (
 
@@ -83,7 +108,6 @@ function GameForm(props: GameFormPropsType) {
             label='Release Year'
             defaultValue='2010'
             inputProps={register('release_year', { required: 'Release year is required' })}
-
             error={!!errors.release_year}
             helperText={errors.release_year?.message}
           >
@@ -93,6 +117,12 @@ function GameForm(props: GameFormPropsType) {
               </MenuItem>
             ))}
           </TextField>
+
+          {/* <TextField inputProps={{ accept: "image/png, image/gif, image/jpeg, image/jpg", max: 1, ...register('image', { required: 'Image is required' }) }} type="file" /> */}
+
+          {/* @ts-ignore
+          <img src={image} /> */}
+
           <Button type="submit" variant="contained" color="info">
             {action === 'add' ? 'Add game' : 'Edit game'}
           </Button>

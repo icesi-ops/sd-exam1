@@ -1,5 +1,5 @@
 import { GameType } from "../schemas/GameSchema"
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import GameFormModal from "./GameFormModal";
 import { CardMedia, Typography, Button, CardContent, CardActions, Card } from '@mui/material'
 import GameService from "../services/GameService";
@@ -9,6 +9,11 @@ function GameCard(props: { id: string, name: string, release_year: number }) {
 
   const game: GameType = props;
 
+  useEffect(() => {
+    console.log(game)
+  
+  }, [game])
+  
   const [openForm, setOpenForm] = useState(false)
 
   function displayForm() {

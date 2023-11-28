@@ -13,6 +13,7 @@ type Game struct {
 	ID          uuid.UUID `json:"id"`
 	Name        string    `json:"name"`
 	ReleaseYear int       `json:"release_year"`
+	Image       string    `json:"image"`
 }
 
 type Server struct {
