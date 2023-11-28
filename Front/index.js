@@ -17,28 +17,8 @@ capturarBoton.addEventListener('click', function () {
   canvas.height = video.videoHeight;
   canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
   var fotoURL = canvas.toDataURL('image/png');
-  // Aquí puedes enviar fotoURL al servidor si es necesario
-  // Aquí puedes convertir el archivo de texto a base64 (por ejemplo, "prueba" a base64)
-  // var archivoTexto = "prueba";
-  // var archivoBase64 = btoa(archivoTexto);
-
-  // // Enviar el archivo al backend
-  // fetch('http://image_app:8083/image', {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify({ archivoBase64 }),
-  // })
-  //   .then(response => response.json())
-  //   .then(data => {
-  //     console.log('Respuesta del backend:', data);
-  //   })
-  //   .catch(error => {
-  //     console.error('Error al enviar archivo al backend:', error);
-  //   });
-  
-
+  var fotobase64 = fotoURL.split(',')[1];
+  enviarImagenAlBackend(fotobase64)
 });
 
 document.getElementById('pruebaBoton').addEventListener('click', function () {
