@@ -10,6 +10,10 @@ Este proyecto es una aplicación que se fundamenta en una arquitectura de micros
 
 - Consul: Este servicio de registro y descubrimiento ha sido implementado para simplificar la gestión de la arquitectura de microservicios. Permite el registro dinámico de servicios, incluido el frontend, y facilita la identificación automática de servicios disponibles. Consul optimiza la comunicación entre los diversos componentes del sistema, eliminando la necesidad de configuraciones estáticas y contribuyendo a la escalabilidad y resiliencia de la aplicación.
 
+## Contexto del Sistema
+
+Este sistema fue desarrollado con la finalidad de atender las historias clínicas de los pacientes en formato .pdf, este maneja un alto volumen de archivos por lo que requiere ser escalable, distribuido y garantizar la recuperación rápida en caso que algo falle, especialmente a nivel de almacenamiento.
+
 ## Equipo de Desarrollo
 
 - **Kevin Alejandro Mera (A00364415)**
@@ -58,8 +62,10 @@ A continuación, se proporcionan las instrucciones paso a paso para ejecutar la 
 docker network create exam1
 ```
 
+
 **Samba**
 1. Pararse dentro de la carpeta de samba
+
 2. Ejecutar el build de la imagen con el siguiente comando:
 ```bash
 docker build -t chigui794/samba:1.0.0 .
@@ -75,9 +81,11 @@ docker run -it -p 139:139 -p 446:445 -v ${PWD}/sambashare:/sambashare --network 
 smbclient -L //localhost/sambashare
 ```
 
+
 **Backend**
 
 1. Pararse dentro de la carpeta backend
+
 2. Ejecutar el build de la imagen con el siguiente comando:
 ```bash
 docker build -t chigui794/exam1-backend:1.1.1 .
@@ -87,6 +95,22 @@ docker build -t chigui794/exam1-backend:1.1.1 .
 ```bash
 docker run -d --network exam1 -p 3500:3500 --name exam1-backend chigui794/exam1-backend:1.1.1
 ```
+
+
+**Frontend**
+
+1. Pararse dentro de la carpeta upload-file-front
+
+2. Hacer el build del Frontend:
+```bash
+docker build -t chigui794/exam1-frontend:1.1.1 .
+```
+
+3. Levantar el frontend:
+```bash
+docker run -d --network exam1 -p 8085:80 --name exam1-frontend chigui794/exam1-frontend:1.1.1
+```
+
 
 **Consul**
 1. Pull a la imagen de consul
@@ -99,30 +123,40 @@ docker pull consul:1.15.4
 docker run -d -p 8500:8500 -p 8600:8600/udp --network exam1 --name=badger consul:1.15.4 agent -server -ui -node=server-1 -bootstrap-expect=1 -client 0.0.0.0
 ```
 
-3. Revisar la IP en la columna "Address" del servidor de consul
+3. Revisar que el servidor de consul haya levantado al ejecutar el comando:
 ```bash
 docker exec badger consul members
 ```
 
-4. Levantar un agente de consul y suscribirlo al servidor de consul reemplazando IP-CONTENEDOR-SERVIDOR-CONSUL por la IP.
+4. Levantar un agente de consul y suscribirlo al servidor de consul reemplazando su nombre, en este caso, "badger".
 ```bash
-docker run --network exam1 --name=fox consul:1.15.4 agent -node=client-1 -retry-join="IP-CONTENEDOR-SERVIDOR-CONSUL"
+docker run --network exam1 --name=fox consul:1.15.4 agent -node=client-1 -retry-join="badger"
 ```
 
-5. Suscribir el servicio de frontend al cliente consul, reemplazar IP-CONTENEDOR-FRONTEND por la ip del contenedor del frontend
+5. Revisar que el servidor de consul y el agente suscrito en el paso anterior estén arriba:
+```bash
+docker exec badger consul members
+```
+
+6. Suscribir el servicio de frontend al cliente consul, reemplazar IP-CONTENEDOR-FRONTEND por la ip del contenedor del frontend
+```bash
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' exam1-frontend
+```
+
 ```bash
 docker exec fox /bin/sh -c "echo '{\"service\": {\"name\": \"frontend\", \"tags\": [\"angular\"], \"port\": 80, \"address\": \"IP-CONTENEDOR-FRONTEND\"}}' >> /consul/config/frontend.json"
 ```
 
-6. Reiniciar el servicio de consul agent para aplicar los cambios
+7. Reiniciar el servicio de consul agent para aplicar los cambios
 ```bash
 docker exec fox consul reload
 ```
 
-7. Revisar la resolución del consul
+8. Revisar la resolución del consul
 ```bash
 dig @127.0.0.1 -p 8600 frontend.service.consul
 ```
+
 
 **HA Proxy / LOAD BALANCER**
 1. Pararse dentro de la carpeta haproxy
@@ -137,10 +171,11 @@ docker build -t chigui794/loadbalancer:0.3.0 .
 docker run -d -p 80:80 --network exam1 --name loadbalancer chigui794/loadbalancer:0.3.0
 ```
 
-4. Probar el servicio:
+4. Probar el servicio desde el L/B:
 ```bash
 curl http://localhost:80/frontend/
 ```
+
 
 **Express Gateway**
 1. Pararse dentro de la carpeta appgw
@@ -159,3 +194,15 @@ docker run -d --name express-gateway --network exam1 -v .:/var/lib/eg -p 8090:80
 ```bash
 curl http://localhost:8090/frontend/
 ```
+
+
+**Prueba en ejecución de la subida de un archivo**
+1. Click en Seleccionar archivo, el sistema sólo permite subir archivos en formato .pdf
+2. Una vez guardado el archivo, este se guardará en el la ruta del volumen asociado al Samba.
+
+
+## Fuentes
+
+- https://developer.hashicorp.com/consul/tutorials/day-0/docker-container-agents
+- https://www.npmjs.com/package/samba-client
+- Arial 12
