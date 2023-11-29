@@ -10,6 +10,12 @@ docker build -t foltrest/games-backend:0.1.0 .
 docker push foltrest/games-backend:0.1.0
 docker run -p 8005:8005 -d --name backend --network parcial1 foltrest/games-backend:0.1.0
 
+# SAMBA
+
+docker build -t foltrest/samba:0.2.0 .
+docker push foltrest/samba:0.2.0
+docker run -it -p 139:139 -p 446:445 -v ${PWD}/data:/data --network parcial1 --name samba -d foltrest/samba:0.2.0
+
 # Consul server
 
 docker run -d -p 8500:8500 -p 8600:8600/udp --name=badger consul:1.15.4 agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0
@@ -24,4 +30,4 @@ docker exec fox /bin/sh -c "echo '{\"service\": {\"name\": \"frontend\", \"tags\
 
 dig @127.0.0.1 -p 8600 frontend.service.consul
 
-curl -X GET 127.0.0.1:8000/games
+curl -X GET 127.0.0.1:8005/games

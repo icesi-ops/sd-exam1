@@ -1,0 +1,6 @@
+{
+	"ID": "3e25a813-fd0b-47fa-b6f7-ccd8167b5cae",
+	"Name": "Test Game",
+	"ReleaseYear": 2023,
+	"Image": ""
+}
