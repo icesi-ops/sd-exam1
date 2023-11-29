@@ -1,0 +1,59 @@
+services:
+  consul:
+    build: ./consul
+    ports:
+      - "8500:8500"
+      - "8600:8600/udp"
+    networks:
+      - comunicacion
+  samba:
+    build: ./samba
+    ports:
+      - "139:139"
+      - "446:445"
+    volumes:
+      - ${PWD}/sambashare:/sambashare
+    networks:
+      - comunicacion
+  imageapp:
+    build: ./imageapp
+    ports:
+      - "8083:8083"
+    networks:
+      - comunicacion
+  frontend:
+    build: ./Front
+    ports:
+      - "8082:8082"
+    networks:
+      - comunicacion
+  frontend2:
+    build: ./Front2
+    ports:
+      - "8084:8084"
+    networks:
+      - comunicacion
+  loadbalancer:
+    build: ./proxy
+    ports:
+      - "80:80"
+    networks:
+      - comunicacion
+  express-gateway-data-store:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - comunicacion
+  express-gateway:
+    image: express-gateway
+    volumes:
+      - .:/var/lib/eg
+    ports:
+      - "8090:8080"
+      - "9876:9876"
+    networks:
+      - comunicacion
+networks:
+  comunicacion:
+    driver: bridge
