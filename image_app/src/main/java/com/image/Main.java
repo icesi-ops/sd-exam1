@@ -30,7 +30,7 @@ import java.util.UUID;
 
 public class Main {
   public static void main(String[] args) {
-    UUID uuid = UUID.randomUUID();
+    
     Vertx vertx = Vertx.vertx();
     ConsulClient client = ConsulClient.create(vertx, new ConsulClientOptions().setHost("consul").setPort(8500));
 
@@ -64,6 +64,7 @@ public class Main {
         .allowedMethods(allowedMethods)
         .allowedHeaders(allowedHeaders));
     router.route("/image").handler(routingContext -> {
+      UUID uuid = UUID.randomUUID();
       HttpServerRequest request = routingContext.request();
       request.bodyHandler(body -> {
         try {
