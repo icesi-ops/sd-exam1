@@ -1,0 +1,13 @@
+{
+    "service": {
+      "name": "frontend",
+      "tags": ["frontend"],
+      "port": 8082,
+      "checks": [
+        {
+          "http": "http://frontend:8082/",
+          "interval": "10s"
+        }
+      ]
+    }
+  }
