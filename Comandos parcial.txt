@@ -3,16 +3,16 @@ docker network create parcial1
 
 # BACKEND
 
-docker build -t gonzalodevarona/games-backend:0.1.0 .
-docker push gonzalodevarona/games-backend:0.1.0
-docker run -p 8005:8005 -d --name backend --network parcial1 gonzalodevarona/games-backend:0.1.0
+docker build -t foltrest/games-backend:0.1.0 .
+docker push foltrest/games-backend:0.1.0
+docker run -p 8005:8005 -d --name backend --network parcial1 foltrest/games-backend:0.1.0
 
 
 # FRONTEND
 
-docker build -t gonzalodevarona/games-frontend:0.1.0 .
-docker push gonzalodevarona/games-frontend:0.1.0
-docker run -p 8006:8006 -d --name frontend --network parcial1 gonzalodevarona/games-frontend:0.1.0
+docker build -t foltrest/games-frontend:0.1.0 .
+docker push foltrest/games-frontend:0.1.0
+docker run -p 8006:8006 -d --name frontend --network parcial1 foltrest/games-frontend:0.1.0
 
 # Instalar Consul
 # Para Mac:
@@ -30,12 +30,12 @@ docker exec consul /bin/sh -c "echo '{\"service\": {\"name\": \"frontend\", \"ta
 
 dig @127.0.0.1 -p 8600 frontend.service.consul
 
-docker exec fox consul reload
+docker exec consul consul reload
 
 curl -X GET 127.0.0.1:8005/games
 
 
 # Loadbalancer configuration
-docker build -t gonzalodevarona/loadbalancer:0.1.0 .
-docker push gonzalodevarona/loadbalancer:0.1.0 
-docker run -d --network parcial1 -p 8080:80 --name loadbalancer gonzalodevarona/loadbalancer:0.1.0
+docker build -t foltrest/loadbalancer:0.1.0 .
+docker push foltrest/loadbalancer:0.1.0 
+docker run -d --network parcial1 -p 8080:80 --name loadbalancer foltrest/loadbalancer:0.1.0
