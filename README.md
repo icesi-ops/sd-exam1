@@ -9,8 +9,8 @@ Tener docker instalado
 Clonar el repositorio y ejecutar los siguientes comandos
 
 ```
+docker run -p 8005:8005 -d --name backend --network parcial1 foltrest/games-backend:0.1.0
 docker run -p 8006:80 -d --name frontend --network parcial1 foltrest/games-frontend:0.1.0
-docker run -p 8005:8005 -d --name backend --network parcial1 foltrest/games-backend:0.2.0
 docker run -d -p 8500:8500 -p 8600:8600/udp --network parcial1 --name consul foltrest/consul:0.1.0
 docker run -p 8080:80 --network parcial1 --name loadbalancer gonzalodevarona/loadbalancer:0.1.0
 ```
