@@ -1,0 +1,13 @@
+{
+    "service": {
+      "name": "frontend2",
+      "tags": ["frontend2"],
+      "port": 8084,
+      "checks": [
+        {
+          "http": "http://frontend2:8084/",
+          "interval": "10s"
+        }
+      ]
+    }
+  }
