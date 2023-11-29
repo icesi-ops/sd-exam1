@@ -6,7 +6,6 @@ import (
 	"log"
 	"net"
 	"net/http"
-	"os"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
@@ -41,17 +40,21 @@ func NewServer() *Server {
 		},
 	}
 
-	fmt.Println("Conectado a samba" + conn.LocalAddr().String())
+	fmt.Println("Conectado a samba " + conn.LocalAddr().String())
 
 	client, err := d.Dial(conn)
 	if err != nil {
 		panic(err)
+	} else {
+		fmt.Println("Realicé la conexión con autenticación")
 	}
 	defer client.Logoff()
 
 	fs, err := client.Mount("data")
 	if err != nil {
 		panic(err)
+	} else {
+		fmt.Println("Monté el volumen")
 	}
 	defer fs.Umount()
 
@@ -61,22 +64,11 @@ func NewServer() *Server {
 		smbClient: fs,
 	}
 
-	files, err := fs.ReadDir("/data")
-	if err != nil {
-		fmt.Println("No encontré ni chimba")
-	}
-
-	// Cargar los datos de cada juego desde su archivo
-	for _, file := range files {
-		gameFile, err := s.smbClient.Open("/data/" + file.Name())
-		fmt.Println("/data/" + file.Name())
-		if err != nil {
-			fmt.Println("No existe esa mierda de archivo")
-		}
-		defer gameFile.Close()
-	}
-
 	s.routes()
+
+	// f, err := s.smbClient.Create("GRANPUTAPRUEBA.txt")
+
+	// f.Write([]byte("Hello world!"))
 
 	log.Println("Server started on port 8005!")
 
@@ -95,27 +87,37 @@ func (s *Server) createGame() http.HandlerFunc {
 		var i Game
 		if err := json.NewDecoder(r.Body).Decode(&i); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
+			fmt.Println("Murio")
 			return
 		}
 
 		i.ID = uuid.New()
 		s.games = append(s.games, i)
 
-		// Crear un archivo para el juego en el Samba share
-		gameFile, err := s.smbClient.Create("/data/" + i.ID.String() + ".json")
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		defer gameFile.Close()
+		// fmt.Println(s.smbClient != nil)
 
-		// Escribir los datos del juego en el archivo
-		gameData, err := json.Marshal(i)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		gameFile.Write(gameData)
+		// f, err := s.smbClient.Create("GRANPUTAPRUEBA.txt")
+		// if err != nil {
+		// 	fmt.Println("No pude crear el archivo. " + err.Error())
+		// }
+		// f.Close()
+		// f.Write([]byte("Hello world!"))
+
+		// // Crear un archivo para el juego en el Samba share
+		// gameFile, err := s.smbClient.Create(i.ID.String() + ".json")
+		// if err != nil {
+		// 	http.Error(w, err.Error(), http.StatusInternalServerError)
+		// 	return
+		// }
+		// defer gameFile.Close()
+
+		// // Escribir los datos del juego en el archivo
+		// gameData, err := json.Marshal(i)
+		// if err != nil {
+		// 	http.Error(w, err.Error(), http.StatusInternalServerError)
+		// 	return
+		// }
+		// gameFile.Write(gameData)
 
 		w.Header().Set("Content-Type", "application/json")
 		if err := json.NewEncoder(w).Encode(i); err != nil {
@@ -127,29 +129,6 @@ func (s *Server) createGame() http.HandlerFunc {
 
 func (s *Server) getAllGames() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// Leer todos los archivos en el Samba share
-		files, err := os.ReadDir("/data")
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		// Cargar los datos de cada juego desde su archivo
-		for _, file := range files {
-			gameFile, err := s.smbClient.Open("/data/" + file.Name())
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			defer gameFile.Close()
-
-			var game Game
-			if err := json.NewDecoder(gameFile).Decode(&game); err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			s.games = append(s.games, game)
-		}
 		w.Header().Set("Content-Type", "application/json")
 		if err := json.NewEncoder(w).Encode(s.games); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
