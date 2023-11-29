@@ -1,0 +1,16 @@
+.file-section {
+  margin-top: 0.5rem;
+}
+
+.upload-button {
+  padding: 0.5rem 1rem;
+  background-color: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 0.2rem;
+}
+
+.upload-button:hover {
+  background-color: #115293;
+  cursor: pointer;
+}
