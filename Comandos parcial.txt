@@ -1,0 +1,41 @@
+# FRONTEND
+
+docker build -t gonzalodevarona/games-frontend:0.1.0 .
+docker push gonzalodevarona/games-frontend:0.1.0
+docker run -p 8006:8006 -d --name frontend --network parcial1 gonzalodevarona/games-frontend:0.1.0
+
+
+# SAMBA
+
+docker build -t gonzalodevarona/samba:0.2.0 .
+docker push gonzalodevarona/samba:0.2.0
+docker run -it -p 139:139 -p 446:445 -v ${PWD}/data:/data --network parcial1 --name samba -d gonzalodevarona/samba:0.2.0
+
+smbclient //localhost/data -U admin
+
+
+# BACKEND
+# Sin conexion a SAMBA
+docker build -t gonzalodevarona/games-backend:0.1.0 .
+docker push gonzalodevarona/games-backend:0.1.0
+docker run -p 8005:8005 -d --name backend --network parcial1 gonzalodevarona/games-backend:0.1.0
+#Conectado a SAMBA
+docker build -t gonzalodevarona/games-backend:0.2.0 .
+docker push gonzalodevarona/games-backend:0.2.0
+docker run -p 8005:8005 -d --name backend --network parcial1 gonzalodevarona/games-backend:0.2.0
+
+
+
+# Consul from dockerfile
+docker build -t gonzalodevarona/consul:0.1.0 .
+docker run -d -p 8500:8500 -p 8600:8600/udp --network parcial1 --name consul gonzalodevarona/consul:0.1.0
+
+dig @127.0.0.1 -p 8600 frontend.service.consul
+
+curl -X GET 127.0.0.1:8005/games
+
+
+# LoadBalancer
+docker build -t gonzalodevarona/loadbalancer:0.1.0 .
+docker run -p 8080:80 --network parcial1 --name loadbalancer gonzalodevarona/loadbalancer:0.1.0
+
