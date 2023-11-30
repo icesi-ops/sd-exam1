@@ -5,19 +5,20 @@ Este proyecto es una implementación de una aplicación distribuida con un front
 
 ### Prerrequisitos
 
-Node.js
-Docker
-Vue CLI (para desarrollo frontend)
-Configuración Inicial
+Node.js \
+Docker \
+Vue CLI (para desarrollo frontend) \
+
+## Configuración Inicial 
 
 ### Clonar el Repositorio
 Para empezar, clona el repositorio y navega al directorio del proyecto: \
-git clone https://github.com/duvanovik/sd-exam1.git
+git clone https://github.com/duvanovik/sd-exam1.git \
 cd sd-exam1
 
 ### Configuración de Docker
 
-Crear la Red Docker
+Crear la Red Docker \
 Primero, crea una red Docker para que los contenedores puedan comunicarse entre sí: \
 docker network create sd-p1
 
@@ -33,15 +34,15 @@ cd frontend \
 docker build -t sd-p1-frontend . \
 
 #### Backend
-Construya el contenedor para el backend:
-cd backend
-docker build -t sd-p1-backend .
+Construya el contenedor para el backend: \
+cd backend \
+docker build -t sd-p1-backend . \
 cd ..
 
 ##### HAProxy (Load Balancer)
-Construya  el contenedor para el balanceador de carga HAProxy:
-cd haproxy
-docker build -t sd-p1-loadbalancer .
+Construya  el contenedor para el balanceador de carga HAProxy: \
+cd haproxy \
+docker build -t sd-p1-loadbalancer . \
 cd ..
 
 ### Ejecutar contenedores
@@ -88,35 +89,35 @@ docker run \
 docker run -p 8085:80 --name loadbalancer --network sd-p1 -d sd-p1-loadbalancer
 
 ### Registrar frontend en consul
-docker exec -d sd-p1-frontend consul agent -config-file=consul.json
-cd haproxy
-docker build -t sd-p1-loadbalancer . && cd ..
+docker exec -d sd-p1-frontend consul agent -config-file=consul.json \
+cd haproxy \
+docker build -t sd-p1-loadbalancer . && cd .. \
       
 ## Desarrollo Local
 
 ### Frontend
-Instala Vue CLI y las dependencias, y ejecuta el servidor de desarrollo local:
-npm install -g @vue/cli
-cd frontend
-npm install
-npm run serve
-
+Instala Vue CLI y las dependencias, y ejecuta el servidor de desarrollo local: \
+npm install -g @vue/cli \
+cd frontend \
+npm install \
+npm run serve \
+ 
 #### Backend
-Instala las dependencias y ejecuta el servidor backend:
-cd backend
-npm install
-npm start
+Instala las dependencias y ejecuta el servidor backend: \
+cd backend \
+npm install \
+npm start \
 
 ### Problemas Encontrados y Soluciones
 
-Cambio de Kotlin a Node.js
-Se describen los desafíos enfrentados al intentar usar Kotlin y por qué se optó por Node.js.
+Originalmente, la idea era desarrollar el servicio utilizando Kotlin. Sin embargo, debido a problemas con los frameworks y la complejidad adicional en la configuración, se decidió utilizar Node.js, que ofrece una curva de aprendizaje más suave y una configuración más sencilla para este proyecto.
+
 
 ### Consideraciones para Producción
 
-Falta de API Gateway
-Se discute la necesidad de un API Gateway para la implementación en producción y cómo esto podría mejorar la gestión de solicitudes y la seguridad.
+Para una implementación en producción, sería ideal incluir un API Gateway. Esto proporcionaría un punto de entrada unificado para gestionar solicitudes, autenticación y control de acceso.
 
-Mejoras Futuras
-Se explora qué mejoras o características adicionales podrían añadirse si hubiera más tiempo disponible, como volver a intentar la implementación en Kotlin.
+### Mejoras Futuras
+Con más tiempo, se exploraría la posibilidad de implementar el servicio en Kotlin para aprovechar sus características de seguridad y rendimiento.
+
 
