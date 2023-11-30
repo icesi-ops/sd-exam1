@@ -11,9 +11,9 @@ Vue CLI (para desarrollo frontend)
 Configuración Inicial
 
 ### Clonar el Repositorio
-Para empezar, clona el repositorio y navega al directorio del proyecto:
-git clone https://github.com/tu-usuario/tu-repositorio.git
-cd tu-repositorio
+Para empezar, clona el repositorio y navega al directorio del proyecto: \
+git clone https://github.com/duvanovik/sd-exam1.git
+cd sd-exam1
 
 ### Configuración de Docker
 
