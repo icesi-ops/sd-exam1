@@ -18,13 +18,12 @@ cd tu-repositorio
 ### Configuración de Docker
 
 Crear la Red Docker
-Primero, crea una red Docker para que los contenedores puedan comunicarse entre sí:
+Primero, crea una red Docker para que los contenedores puedan comunicarse entre sí: \
 docker network create sd-p1
 
 ### Cree una carpeta llamada storage 
-mkdir storage
+mkdir storage \
 sudo chmod 0777 ./storage
-docker network create sd-p1
 
 ### Construir Contenedores
 
