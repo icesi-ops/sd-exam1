@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+
+  consul:
+    ports:
+      - "8500:8500"
+      - "8600:8600/udp"
+    networks:
+      - sd-p1
+    hostname: consul-server
+    container_name: frontend-consul
+    image: "consul:latest"
+    command: agent -server -bootstrap-expect 1 -ui -data-dir /tmp -client=0.0.0.0
+
+  frontend:
+    build: frontend
+    ports:
+      - "8080:8080"
+    networks:
+      - sd-p1
+    container_name: sd-p1-frontend
+  
+  backend:
+    build: backend
+    ports:
+      - "5000:5000"
+    networks:
+      - sd-p1
+    volumes:
+      - "${PWD}/storage:/app/storage"
+    container_name: sd-p1-backend
+
+  samba:
+    build: samba
+    ports:
+      - "139:139"
+      - "445:445"
+    volumes:
+      - "${PWD}/storage:/mount"
+    container_name: samba
+
+networks:
+  sd-p1:
+    driver: overlay
