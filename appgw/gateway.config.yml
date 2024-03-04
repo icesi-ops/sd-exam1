@@ -1,0 +1,74 @@
+http:
+  port: 8080
+admin:
+  port: 9876
+  host: localhost
+
+apiEndpoints:
+  appconfig:
+    host: localhost
+    paths: [ '/config','/config/*' ]
+  appinvoice:
+    host: localhost
+    paths: [ '/invoice','/invoice/*' ]
+  apppay:
+    host: localhost
+    paths: [ '/pay','/pay/*' ]
+  apptransaction:
+    host: localhost
+    paths: [ '/transaction','/transaction/*' ]
+
+serviceEndpoints:
+  appconfig:
+    url: 'http://loadbalancer/config/'
+  appinvoice:
+    url: 'http://loadbalancer/invoice/'
+  apppay:
+    url: 'http://loadbalancer/pay/'
+  apptransaction:
+    url: 'http://loadbalancer/transaction/'
+
+policies:
+  - basic-auth
+  - cors
+  - expression
+  - key-auth
+  - log
+  - oauth2
+  - proxy
+  - rate-limit
+pipelines:
+  default:
+    apiEndpoints:
+      - appconfig
+      - appinvoice
+      - apppay
+      - apptransaction
+    policies:
+      # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+      - key-auth:
+      - proxy:
+          - action:
+              serviceEndpoint: appconfig
+              changeOrigin: true
+              prependPath: false
+              ignorePath: false
+              stripPath: false
+          - action:
+              serviceEndpoint: apppay
+              changeOrigin: true
+              prependPath: false
+              ignorePath: false
+              stripPath: false
+          - action:
+              serviceEndpoint: apptransaction
+              changeOrigin: true
+              prependPath: false
+              ignorePath: false
+              stripPath: false
+          - action:
+              serviceEndpoint: appinvoice
+              changeOrigin: true
+              prependPath: false
+              ignorePath: false
+              stripPath: false
