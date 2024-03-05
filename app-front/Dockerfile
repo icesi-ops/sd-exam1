@@ -1,22 +1,25 @@
-# Use an official Node runtime as a parent image
-FROM node:19-alpine as build
-# Set the working directory to /app
+FROM node:20-slim AS build
+
 WORKDIR /app
-# Copy the package.json and package-lock.json to the container
-COPY package*.json ./
-# Install dependencies
-RUN npm install
-# Copy the rest of the application code to the container
+
+COPY package*.json  ./
+
+RUN npm ci
+
 COPY . .
-# Build the React app
+
 RUN npm run build
-# Use an official Nginx runtime as a parent image
-FROM nginx:1.21.0-alpine
-# Copy the ngnix.conf to the container
-COPY backend.conf /etc/nginx/conf.d/default.conf
-# Copy the React app build files to the container
-COPY --from=build /app/dist /etc/nginx/html
-# Expose port 80 for Nginx
+
+FROM nginx:1.19-alpine AS server
+
+COPY ./etc/default.conf /etc/nginx/conf.d/default.conf
+
+COPY --from=build /app/dist /var/www/app/
+
+COPY start.sh /start.sh
+
+RUN chmod +x /start.sh
+
 EXPOSE 80
-# Start Nginx when the container starts
-CMD ["nginx", "-g", "daemon off;"]
+
+CMD ["/start.sh"]

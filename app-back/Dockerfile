@@ -1,27 +1,20 @@
-# syntax=docker/dockerfile:1
+# Utiliza la imagen base de Golang
+FROM golang:1.18.2 AS builder
+WORKDIR /usr/src/app
 
-FROM golang:1.22-alpine
+ENV GO111MODULE=on
+RUN go mod init app
+RUN go clean -modcache
+COPY . .
+#copia los archivos de configuracion donde esta el archivo dockerfile (.go) al workdir despues de que esto quede copiado se inicializa
+RUN go mod tidy
 
-# Set destination for COPY
-WORKDIR /app
+#RUN go mod download && go mod verify
+EXPOSE 8081
 
-# Download Go modules
-COPY go.mod go.sum ./
-RUN go mod download
+RUN go build -v -o /usr/local/bin/app .
 
-# Copy the source code. Note the slash at the end, as explained in
-# https://docs.docker.com/reference/dockerfile/#copy
-COPY *.go ./
+ENV CONSUL_HTTP_ADDR localhost:8500
+#RUN go build -o /go/bin/myapp cmd/main.go
 
-# Build
-RUN CGO_ENABLED=0 GOOS=linux go build -o /go-docker-demo
-
-# Optional:
-# To bind to a TCP port, runtime parameters must be supplied to the docker command.
-# But we can document in the Dockerfile what ports
-# the application is going to listen on by default.
-# https://docs.docker.com/reference/dockerfile/#expose
-EXPOSE 3000
-
-# Run
-CMD ["/go-docker-demo"]
+CMD [ "app" ]

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {API_URL} from "./config/constants.js";
 import './App.css';
 
 function App() {
@@ -21,7 +22,7 @@ function App() {
       };
 
       try {
-        const response = await fetch('http://backend:3000/api/upload', {
+        const response = await fetch(`${API_URL}/api/upload`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', // Tipo de contenido JSON
@@ -54,9 +55,9 @@ function App() {
 
   const fetchUploadedFiles = async () => {
     try {
-        const response = await fetch('http://backend:3000/api/books');
+        const response = await fetch(`${API_URL}/api/books`);
         if (!response.ok) {
-            throw new Error('Error al obtener archivos del servidor');
+          console.error(('Error al obtener archivos del servidor'));
         }
         const data = await response.json();
         setUploadedFiles(data);
