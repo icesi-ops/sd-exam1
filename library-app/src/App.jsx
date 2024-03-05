@@ -3,7 +3,6 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import BookForm from './components/BookForm.jsx';
 import BookList from './components/BookList.jsx';
-import BookDetail from './components/BookDetail.jsx';
 import ConfirmationMessage from './components/ConfirmationMessage.jsx';
 import FileChooser from './components/FileChooser.jsx';
 
@@ -68,9 +67,7 @@ function App() {
       {/* Renderiza el componente FileChooser y pasa la función de manejo para el archivo seleccionado */}
       <FileChooser onFileSelected={handleFileSelected} />
       
-      {/* Renderiza el componente BookForm y pasa la función handleSubmit y los valores iniciales como props */}
-      <BookForm onSubmit={handleSubmit} initialValues={initialValues} />
-      
+    
       {/* Muestra el nombre del archivo seleccionado */}
       {selectedFile && <p>Archivo seleccionado: {selectedFile.name}</p>}
     </div>
