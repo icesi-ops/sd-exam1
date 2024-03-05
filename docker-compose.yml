@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+
+  consul:
+    image: consul:1.15.4
+    container_name: consul
+    ports:
+      - "8500:8500"
+      - "8600:8600/udp"
+    networks:
+      - distribuidos
+    command: agent -server -bootstrap-expect 1 -ui -data-dir /tmp -client=0.0.0.0
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: server
+    ports:
+      - "4567:4567"
+    networks:
+      - distribuidos
+    environment:
+      - CONSUL_URL=http://consul:8500
+    depends_on:
+      - consul
+
+  server2:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: server2
+    ports:
+      - "4568:4568"
+    networks:
+      - distribuidos
+    environment:
+      - CONSUL_URL=http://consul:8500
+    depends_on:
+      - consul
+
+networks:
+   distribuidos:
+     external: true
