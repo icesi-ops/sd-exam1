@@ -4,8 +4,11 @@ import viteLogo from '/vite.svg'
 import BookForm from './components/BookForm.jsx';
 import BookList from './components/BookList.jsx';
 import ConfirmationMessage from './components/ConfirmationMessage.jsx';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import FileChooser from './components/FileChooser.jsx';
-
+import { Link } from 'react-router-dom';
+import RegistroDatos from './components/RegistroDatos';
+import Home from './components/Home.jsx';
 
 import './assets/App.css'
 
@@ -62,15 +65,46 @@ function App() {
   };
 
   return (
-    <div>
-      <h1>My Library App</h1>
-      {/* Renderiza el componente FileChooser y pasa la función de manejo para el archivo seleccionado */}
-      <FileChooser onFileSelected={handleFileSelected} />
-      
-    
-      {/* Muestra el nombre del archivo seleccionado */}
-      {selectedFile && <p>Archivo seleccionado: {selectedFile.name}</p>}
-    </div>
+    <Router>
+      <div>
+        <nav>
+          <ul>
+            
+              <Link to="/registro-datos">Ir a Registro de Datos</Link>
+            
+          </ul>
+        </nav>
+
+        {/* Define las rutas */}
+        <Routes>
+          <Route path="/registro-datos" element={<RegistroDatos />} />
+          
+        </Routes>
+
+        <div>
+          <h1>My Library App</h1>
+          {/* Renderiza el componente FileChooser y pasa la función de manejo para el archivo seleccionado */}
+          <FileChooser onFileSelected={handleFileSelected} />
+
+          {/* Muestra el nombre del archivo seleccionado */}
+          {selectedFile && <p>Archivo seleccionado: {selectedFile.name}</p>}
+        </div>
+
+        <nav>
+          <ul>
+            
+              <Link to="/home">Volver</Link>
+            
+          </ul>
+        </nav>
+
+        <Routes>
+          <Route path="/home" element={<Home />} />
+          
+        </Routes>
+
+      </div>
+    </Router>
   );
 }
 

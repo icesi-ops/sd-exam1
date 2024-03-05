@@ -1,11 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Importa Link de React Router
 
 function Home() {
   return (
     <div>
-      {/* Botón de navegación */}
-      <Link to="/registro-datos">Ir a Registro de Datos</Link>
+      <h2>Bienvenido a My Library App</h2>
+      <p>Esta es una aplicación para gestionar tu biblioteca personal.</p>
+      <p>Puedes agregar nuevos libros, ver los libros existentes y más.</p>
     </div>
   );
 }
