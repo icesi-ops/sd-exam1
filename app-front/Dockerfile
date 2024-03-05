@@ -1,22 +1,22 @@
-# Primera etapa: construir la aplicación
-FROM node:8.17.0 AS build
-
-# Establece el directorio de trabajo en /app
+# Use an official Node runtime as a parent image
+FROM node:19-alpine as build
+# Set the working directory to /app
 WORKDIR /app
-
-# Copia el archivo package.json y package-lock.json al directorio de trabajo
+# Copy the package.json and package-lock.json to the container
 COPY package*.json ./
-
-# Instala las dependencias del proyecto
+# Install dependencies
 RUN npm install
-
-# Copia el resto del código de la aplicación al directorio de trabajo
+# Copy the rest of the application code to the container
 COPY . .
-
-# Construye la aplicación
+# Build the React app
 RUN npm run build
-
-EXPOSE 8080
-
-ENTRYPOINT ["npm", "run", "dev"]
-
+# Use an official Nginx runtime as a parent image
+FROM nginx:1.21.0-alpine
+# Copy the ngnix.conf to the container
+COPY backend.conf /etc/nginx/conf.d/default.conf
+# Copy the React app build files to the container
+COPY --from=build /app/dist /etc/nginx/html
+# Expose port 80 for Nginx
+EXPOSE 80
+# Start Nginx when the container starts
+CMD ["nginx", "-g", "daemon off;"]
