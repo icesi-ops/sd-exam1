@@ -1,0 +1,17 @@
+.file-input {
+    display: none;
+  }
+  
+  .file-button {
+    background-color: #edf0ed;
+    color: rgb(8, 8, 8);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .file-button:hover {
+    
+    background-color: rgb(245, 245, 145);
+  }
