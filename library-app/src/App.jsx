@@ -39,7 +39,6 @@ import './App.css'
 }*/
 
 
-
 function App() {
   // Define una función de manejo de envío de formulario
   const handleSubmit = (newBook) => {
