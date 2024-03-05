@@ -1,35 +1,59 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+    handleSubmit();
+  };
+
+  const handleSubmit = () => {
+    if (selectedFile) {
+      // Simulación del archivo cargado
+      const newFile = {
+        name: selectedFile.name,
+        size: selectedFile.size,
+        type: selectedFile.type,
+      };
+      setUploadedFiles([...uploadedFiles, newFile]);
+      console.log('Archivo seleccionado:', selectedFile);
+    } else {
+      alert('Por favor selecciona un archivo');
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
+    <div className="App">
+      <h1>Sube tu archivo</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+        <input type="file" onChange={handleFileChange} />
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      <div className="table-container">
+        <h2>Archivos cargados</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Tamaño (bytes)</th>
+              <th>Tipo</th>
+            </tr>
+          </thead>
+          <tbody>
+            {uploadedFiles.map((file, index) => (
+              <tr key={index}>
+                <td>{file.name}</td>
+                <td>{file.size}</td>
+                <td>{file.type}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;
