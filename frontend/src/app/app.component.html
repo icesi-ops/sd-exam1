@@ -1,29 +1,7 @@
-<div class="container mt-3">
-  <h1>File Upload and Listing</h1>
-  <hr>
-
-  <div class="row">
-    <div class="col-md-6">
-      <h3>Upload File</h3>
-      <form (ngSubmit)="uploadFile()">
-        <div class="mb-3">
-          <label for="fileInput" class="form-label">Select File</label>
-          <input type="file" id="fileInput" class="form-control" (change)="onFileSelected($event)">
-        </div>
-        <button type="submit" class="btn btn-primary">Upload</button>
-      </form>
-    </div>
-
-    <div class="col-md-6">
-      <h3>Uploaded Files</h3>
-      <ul *ngIf="files && files.length > 0">
-        <li *ngFor="let file of files">
-          {{ file.name }} ({{ file.size / 1000000 }} MB
-        </li>
-      </ul>
-      <p *ngIf="!files || files.length === 0">No files uploaded yet.</p>
-    </div>
+<div class="container" style="width: 600px">
+  <div class="my-3">
+    <h4>{{ title }}</h4>
   </div>
-</div>
 
-<router-outlet />
+  <app-file-upload></app-file-upload>
+</div>
