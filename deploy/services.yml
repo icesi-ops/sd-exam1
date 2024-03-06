@@ -1,0 +1,50 @@
+version: '3.8'
+services:
+
+  mongodb:
+    image: mongo:7.0.6
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    networks:
+      - parcial
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=dabo
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+    volumes:
+      - mongodb_data:/data/db
+
+  server:
+    build: ../app-back
+    container_name: server
+    ports:
+      - "9000:9000"
+    environment:
+      - CONSUL_HTTP_ADDR=consul:8500
+      - MONGODB_URL=mongodb://dabo:secret@mongodb:27017
+    networks:
+      - parcial
+    depends_on:
+      - mongodb
+
+  frontend:
+    build: ../app-front
+    container_name: frontend
+    volumes:
+      - ./src:/app/src
+    environment:
+      - API_URL=http://localhost:9000
+    ports:
+      - "3000:80"
+    networks:
+      - parcial
+    depends_on:
+      - server
+
+networks:
+  parcial:
+    driver: bridge
+
+
+volumes:
+  mongodb_data:

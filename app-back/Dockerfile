@@ -3,7 +3,7 @@ FROM golang:1.18.2 AS builder
 WORKDIR /usr/src/app
 
 ENV GO111MODULE=on
-RUN go mod init github.com/bortizf/microservice-app-example/tree/master/auth-api
+RUN go mod init app
 RUN go clean -modcache
 COPY . .
 #copia los archivos de configuracion donde esta el archivo dockerfile (.go) al workdir despues de que esto quede copiado se inicializa
@@ -13,6 +13,8 @@ RUN go mod tidy
 EXPOSE 8081
 
 RUN go build -v -o /usr/local/bin/app .
+
+ENV CONSUL_HTTP_ADDR localhost:8500
 #RUN go build -o /go/bin/myapp cmd/main.go
 
 CMD [ "app" ]
