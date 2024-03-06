@@ -8,6 +8,7 @@ function Home() {
 
   // Función para manejar la selección de archivo
   const handleFileSelected = (file) => {
+    console.log(selectedFile)
     setSelectedFile(file);
   };
 
