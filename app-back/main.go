@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"github.com/stacktitan/smb/smb"
 )
 
 // Define una estructura para el libro
@@ -97,6 +98,31 @@ func getAllBooksHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(books)
+	// Connect to the Samba server
+	options := smb.Options{
+		Host:     "samba-server-ip",
+		User:     "username",
+		Password: "password",
+		Domain:   "workgroup",
+	}
+	session, err := smb.NewSession(options)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+
+	// List directory contents
+	files, err := session.ListPath("path/to/directory")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Send directory contents in the response
+	for _, file := range files {
+		fmt.Fprintf(w, "%s\n", file.Name())
+	}
 }
 
 // Endpoint para verificar la salud del servicio
@@ -185,41 +211,10 @@ func main() {
 	// Inicia el servidor y maneja cualquier error que ocurra
 	log.Fatal(server.ListenAndServe())
 
-	options := smb.Options{
-		Host:        "SAMBAHOST",
-		Port:        "SAMBAPORT",
-		User:        "SAMBAUSER",
-		Password:    "SAMBAPASSWORD",
-		Domain:      "workgroup",
-		EncryptData: true, // Whether to encrypt data (optional)
-	}
-	client, err := smb.NewClient(options)
-	if err != nil {
-		log.Fatal(err)
-	}
+	http.HandleFunc("/list-directory", listDirectoryHandler)
+	http.HandleFunc("/download-file", downloadFileHandler)
 
-	// List directory contents
-	files, err := client.List("path/to/directory")
-	if err != nil {
-		log.Fatal(err)
-	}
-	for _, file := range files {
-		fmt.Println(file.Name())
-	}
-
-	// Read a file
-	content, err := client.Read("path/to/file.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(string(content))
-
-	// Write to a file
-	err = client.Write("path/to/newfile.txt", []byte("Hello, Samba!"))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Close the connection
-	client.Close()
+	// Start HTTP server
+	log.Println("Server listening on :8080")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
