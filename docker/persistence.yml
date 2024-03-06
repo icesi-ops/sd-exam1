@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+
+  aragodb:
+    image: arangodb:latest
+    container_name: aragodb
+    ports:
+      - "8529:8529"
+    networks:
+      - exam1
+    environment:
+      - ARANGO_ROOT_PASSWORD=root
+
+networks:
+  exam1:
+    external: true

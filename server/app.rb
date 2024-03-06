@@ -1,42 +1,9 @@
-require 'sinatra'
-require 'rest-client'
 require 'json'
-require 'securerandom'
+require 'sinatra'
+require_relative 'arango'
+require_relative 'consul'
 
-consul_url = ENV['CONSUL_URL'] + '/v1/catalog/register'
-
-# Método para registrar el servicio en Consul
-def register_service(consul_url)
-  base_url = 'http://localhost:8500/v1/catalog/register'
-  headers = { 'Content-Type': 'application/json' }
-
-  random_id = SecureRandom.hex(5)
-
-  payload = {
-    "Node": "rest-server-node",
-    "Address": "server", # Debes ajustar la dirección IP según tu entorno Docker
-    "Service": {
-      "ID": "rest-server-#{random_id}",
-      "Service": "rest-server",
-      "Port": 4567, # Puerto en el que se ejecuta el servidor Sinatra
-    },
-    "Check": {
-        "Node": "rest-server-node",
-        "Name": "Redis health check",
-        "Notes": "Script based health check",
-        "Status": "passing",
-        "Definition": {
-          "http": "server:4567/health",
-          "Interval": "5s",
-          "Timeout": "1s"
-        }
-      },
-  }
-  RestClient.put(consul_url, payload.to_json, headers)
-end
-
-# Registra el servicio en Consul al iniciar la aplicación
-register_service(consul_url)
+arango_client = ArangoDB.new
 
 # Ruta para el chequeo de salud
 get '/health' do
@@ -44,7 +11,78 @@ get '/health' do
   'OK'
 end
 
-# Ruta de ejemplo para la API REST
-get '/api/hello' do
-  'Hello, world!'
+
+post '/api/files' do
+  request_body = JSON.parse(request.body.read)
+
+  name = request_body['name']
+  type = request_body['type']
+  size = request_body['size']
+
+  result = arango_client.insertDocument(name, type, size)
+
+  if result
+    status 201
+    result.to_json
+  else
+    status 500
+    'Error'
+  end
+end
+
+get '/api/files/:key' do
+  key = params['key']
+  result = arango_client.getDocument(key)
+
+  if result
+    status 200
+    result.to_json
+  else
+    status 404
+    'Not found'
+  end
+end
+
+get '/api/files' do
+  result = arango_client.getAllDocuments
+
+  if result
+    status 200
+    result.to_json
+  else
+    status 404
+    'Not found'
+  end
+end
+
+delete '/api/files/:key' do
+  key = params['key']
+  result = arango_client.deleteDocument(key)
+
+  if result
+    status 204
+    result.to_json
+  else
+    status 404
+    'Not found'
+  end
+end
+
+put '/api/files/:key' do
+  request_body = JSON.parse(request.body.read)
+
+  key = params['key']
+  name = request_body['name']
+  type = request_body['type']
+  size = request_body['size']
+
+  result = arango_client.updateDocument(key, name, type, size)
+
+  if result
+    status 200
+    result.to_json
+  else
+    status 404
+    'Not found'
+  end
 end

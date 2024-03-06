@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+
+  backend:
+    build:
+      context: ../server
+      dockerfile: Dockerfile
+    ports:
+      - "4567:4567"
+    environment:
+      - CONSUL_URL=http://consul:8500
+      - ARANGO_URL=http://aragodb:8529
+      - ARANGO_COLLECTION=files
+      - ARANGO_USER=root
+      - ARANGO_PASS=root
+    networks:
+      - exam1
+
+networks:
+   exam1:
+     external: true
