@@ -13,5 +13,8 @@ RUN bundle install
 # Copy the application code into the container
 COPY . .
 
+EXPOSE 4567
+
 # Command to run your Sinatra application
-CMD ["ruby", "app.rb"]
+CMD ["ruby", "-r", "sinatra", "app.rb", "-p", "4567"]
+

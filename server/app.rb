@@ -12,7 +12,7 @@ get '/health' do
 end
 
 
-post '/api/files' do
+post '/files' do
   request_body = JSON.parse(request.body.read)
 
   name = request_body['name']
@@ -30,7 +30,7 @@ post '/api/files' do
   end
 end
 
-get '/api/files/:key' do
+get '/files/:key' do
   key = params['key']
   result = arango_client.getDocument(key)
 
@@ -43,7 +43,7 @@ get '/api/files/:key' do
   end
 end
 
-get '/api/files' do
+get '/files' do
   result = arango_client.getAllDocuments
 
   if result
@@ -55,7 +55,7 @@ get '/api/files' do
   end
 end
 
-delete '/api/files/:key' do
+delete '/files/:key' do
   key = params['key']
   result = arango_client.deleteDocument(key)
 
@@ -68,7 +68,7 @@ delete '/api/files/:key' do
   end
 end
 
-put '/api/files/:key' do
+put '/files/:key' do
   request_body = JSON.parse(request.body.read)
 
   key = params['key']
@@ -86,3 +86,6 @@ put '/api/files/:key' do
     'Not found'
   end
 end
+
+set :bind, '0.0.0.0'
+set :port, 4567

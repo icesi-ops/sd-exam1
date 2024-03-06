@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+
+  loadbalancer:
+    build:
+      context: ../loadbalancer
+      dockerfile: Dockerfile
+    container_name: loadbalancer
+    ports:
+      - "9000:80"
+      - "1936:1936"
+    networks:
+      - exam1
+    restart: always
+
+networks:
+  exam1:
+    external: true

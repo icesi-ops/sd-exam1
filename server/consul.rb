@@ -1,33 +1,37 @@
+require "socket"
 require 'rest-client'
 
+
 consul_url = ENV['CONSUL_URL'] || "http://localhost:8500"
+
+def get_ip
+    ip = Socket.ip_address_list.detect(&:ipv4_private?).ip_address
+end
 
 def register_service(consul_url)
     headers = { 'Content-Type': 'application/json' }
   
     random_id = SecureRandom.hex(5)
   
+    service_name = "backend"
+    ip = get_ip
+
     payload = {
-      "Node": "backend-node",
-      "Address": "backend", # Debes ajustar la dirección IP según tu entorno Docker
-      "Service": {
-        "ID": "backend-#{random_id}",
-        "Service": "backend",
-        "Port": 4567, # Puerto en el que se ejecuta el servidor Sinatra
-      },
+      "ID": service_name + "-" + random_id,
+      "Name": service_name,
+      "Tags": ["api"],
+      "Address":  ip,
+      "Port": 4567,
       "Check": {
-          "Node": "backend-node",
-          "Name": "Serf Health Status",
-          "Notes": "Script based health check",
-          "Status": "passing",
-          "Definition": {
-            "http": "backend:4567/health",
-            "Interval": "5s",
-            "Timeout": "1s"
-          }
-        },
+        "DeregisterCriticalServiceAfter": "90m",
+        "HTTP": "http://#{ip}:4567/health",
+        "Interval": "10s",
+        "Timeout": "1s"
+      }
     }
     RestClient.put(consul_url, payload.to_json, headers)
 end
 
-register_service(consul_url  + '/v1/catalog/register')
+register_service(consul_url  + '/v1/agent/service/register')
+
+

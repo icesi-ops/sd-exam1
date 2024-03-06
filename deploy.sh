@@ -46,11 +46,11 @@ execute_command "docker-compose -f ./docker/application.yml up --scale backend=1
 # Wait for app tier to be up
 wait_message "Waiting for app tier" 5
 
-# # Deploy Network Tier
-# execute_command "docker-compose -f ./docker/network.yaml up --build -d" "Network Tier"
+# Deploy Network Tier
+execute_command "docker-compose -f ./docker/network.yml up --build -d" "Network Tier"
 
-# # Wait for network tier to be up
-# wait_message "Waiting for network tier" 5
+# Wait for network tier to be up
+wait_message "Waiting for network tier" 5
 
 # Show Status
 echo -e "\n\nProccess Status------------------------------------"
