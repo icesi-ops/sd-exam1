@@ -17,28 +17,47 @@ import (
 
 // Define una estructura para el libro
 type Book struct {
-    Title  string `json:"title"`
+    Name  string `json:"name"`
     Size string `json:"size"`
     Type string `json:"type"`
     // Agrega otros campos según tus necesidades
 }
 
+var collection *mongo.Collection
 var client *mongo.Client
 
 // Inicializa la conexión a MongoDB
 func init() {
-    clientOptions := options.Client().ApplyURI("mongodb://mongodb:27017") // Asegúrate de cambiar la URI si es necesario
+    clientOptions := options.Client().ApplyURI(os.Getenv("MONGODB_URL")) // Asegúrate de cambiar la URI si es necesario
     var err error
     client, err = mongo.Connect(context.Background(), clientOptions)
     if err != nil {
         log.Fatal(err)
     }
+
+    // Verifica la conexión a la base de datos
+    err = client.Ping(context.Background(), nil)
+    log.Println("Ping: ", err)
+    if err != nil {
+        log.Fatalf("ping mongodb error :%v", err)
+        return
+    }
+
+    collection = client.Database("booksdb").Collection("books")
+
+    log.Println("Conexión a la base de datos establecida")
 }
 
 // Endpoint para guardar un libro en la base de datos
 func uploadHandler(w http.ResponseWriter, r *http.Request) {
     var book Book
+    log.Println("Recibiendo libro...")
+    log.Println(r)
+    log.Println(r.Body)
     err := json.NewDecoder(r.Body).Decode(&book)
+    log.Println("Decodificando libro...")
+    log.Println(book)
+
     if err != nil {
         http.Error(w, err.Error(), http.StatusBadRequest)
         return
@@ -47,8 +66,7 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
     log.Println("Recibido libro:")
     log.Println(book)
 
-    collection := client.Database("booksdb").Collection("books")
-    _, err = collection.InsertOne(context.Background(), book)
+        _, err = collection.InsertOne(context.Background(), book)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -59,7 +77,6 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 
 // Endpoint para obtener todos los libros de la base de datos
 func getAllBooksHandler(w http.ResponseWriter, r *http.Request) {
-    collection := client.Database("booksdb").Collection("books")
     cur, err := collection.Find(context.Background(), bson.D{})
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -141,14 +158,32 @@ func getHostname() (hostname string) {
 }
 
 func main() {
+    // Registra el servicio con Consul
     serviceRegistryWithConsul()
-    // cors.Default() setup the middleware with default options being
-    // all origins accepted with simple methods (GET, POST). See
-    // documentation below for more options.
-    handler := cors.Default().Handler(http.DefaultServeMux)
-    http.HandleFunc("/api/upload", uploadHandler)
-    http.HandleFunc("/api/books", getAllBooksHandler)
-    http.HandleFunc("/api/health", healthCheckHandler)
-    log.Fatal(http.ListenAndServe(":9000", handler))
+
+    mux := http.NewServeMux()
+    // Configura el manejador CORS
+    corsHandler := cors.New(cors.Options{
+        AllowedOrigins: []string{"*"}, // Permitir solicitudes desde cualquier origen
+        AllowedMethods: []string{http.MethodGet, http.MethodPost}, // Métodos permitidos
+        AllowedHeaders:   []string{"*"},
+        AllowCredentials: false,
+        Debug: true,
+    })
+
+    // Configura los manejadores para los endpoints
+    mux.HandleFunc("/api/upload", uploadHandler)
+    mux.HandleFunc("/api/books", getAllBooksHandler)
+    mux.HandleFunc("/api/health", healthCheckHandler)
+
+    // Configura el servidor HTTP con el manejador CORS
+    server := &http.Server{
+        Addr:    ":9000", // Puerto en el que escucha el servidor
+        Handler: corsHandler.Handler(mux),
+    }
+
+    // Inicia el servidor y maneja cualquier error que ocurra
+    log.Fatal(server.ListenAndServe())
 }
+
 
