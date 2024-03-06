@@ -1,7 +1,6 @@
-version: '3'
+version: "3"
 
 services:
-
   backend:
     build:
       context: ../server
@@ -14,9 +13,10 @@ services:
       - ARANGO_COLLECTION=files
       - ARANGO_USER=root
       - ARANGO_PASS=root
+
     networks:
       - exam1
 
 networks:
-   exam1:
-     external: true
+  exam1:
+    external: true
