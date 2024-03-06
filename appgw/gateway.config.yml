@@ -5,29 +5,12 @@ admin:
   host: localhost
 
 apiEndpoints:
-  appconfig:
+    appApi:
     host: localhost
-    paths: [ '/config','/config/*' ]
-  appinvoice:
-    host: localhost
-    paths: [ '/invoice','/invoice/*' ]
-  apppay:
-    host: localhost
-    paths: [ '/pay','/pay/*' ]
-  apptransaction:
-    host: localhost
-    paths: [ '/transaction','/transaction/*' ]
-
+    paths: [ '/api','/api/*' ]
 serviceEndpoints:
-  appconfig:
-    url: 'http://loadbalancer/config/'
-  appinvoice:
-    url: 'http://loadbalancer/invoice/'
-  apppay:
-    url: 'http://loadbalancer/pay/'
-  apptransaction:
-    url: 'http://loadbalancer/transaction/'
-
+  appApi:
+    url: 'http://loadbalancer/api/'
 policies:
   - basic-auth
   - cors
@@ -40,34 +23,13 @@ policies:
 pipelines:
   default:
     apiEndpoints:
-      - appconfig
-      - appinvoice
-      - apppay
-      - apptransaction
+      - appApi
     policies:
       # Uncomment `key-auth:` when instructed to in the Getting Started guide.
       - key-auth:
       - proxy:
           - action:
-              serviceEndpoint: appconfig
-              changeOrigin: true
-              prependPath: false
-              ignorePath: false
-              stripPath: false
-          - action:
-              serviceEndpoint: apppay
-              changeOrigin: true
-              prependPath: false
-              ignorePath: false
-              stripPath: false
-          - action:
-              serviceEndpoint: apptransaction
-              changeOrigin: true
-              prependPath: false
-              ignorePath: false
-              stripPath: false
-          - action:
-              serviceEndpoint: appinvoice
+              serviceEndpoint: appApi
               changeOrigin: true
               prependPath: false
               ignorePath: false

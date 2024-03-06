@@ -1,26 +1,26 @@
 package main
 
 import (
-    "context"
-    "encoding/json"
-    "fmt"
-   	"os"
-   	"strconv"
-    "log"
-    "net/http"
-    "go.mongodb.org/mongo-driver/bson"
-    "go.mongodb.org/mongo-driver/mongo"
-    "go.mongodb.org/mongo-driver/mongo/options"
-    "github.com/rs/cors"
-    consulapi "github.com/hashicorp/consul/api"
+	"context"
+	"encoding/json"
+	"fmt"
+	consulapi "github.com/hashicorp/consul/api"
+	"github.com/rs/cors"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"log"
+	"net/http"
+	"os"
+	"strconv"
 )
 
 // Define una estructura para el libro
 type Book struct {
-    Name  string `json:"name"`
-    Size string `json:"size"`
-    Type string `json:"type"`
-    // Agrega otros campos según tus necesidades
+	Name string `json:"name"`
+	Size string `json:"size"`
+	Type string `json:"type"`
+	// Agrega otros campos según tus necesidades
 }
 
 var collection *mongo.Collection
@@ -28,83 +28,83 @@ var client *mongo.Client
 
 // Inicializa la conexión a MongoDB
 func init() {
-    clientOptions := options.Client().ApplyURI(os.Getenv("MONGODB_URL")) // Asegúrate de cambiar la URI si es necesario
-    var err error
-    client, err = mongo.Connect(context.Background(), clientOptions)
-    if err != nil {
-        log.Fatal(err)
-    }
+	clientOptions := options.Client().ApplyURI(os.Getenv("MONGODB_URL")) // Asegúrate de cambiar la URI si es necesario
+	var err error
+	client, err = mongo.Connect(context.Background(), clientOptions)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-    // Verifica la conexión a la base de datos
-    err = client.Ping(context.Background(), nil)
-    log.Println("Ping: ", err)
-    if err != nil {
-        log.Fatalf("ping mongodb error :%v", err)
-        return
-    }
+	// Verifica la conexión a la base de datos
+	err = client.Ping(context.Background(), nil)
+	log.Println("Ping: ", err)
+	if err != nil {
+		log.Fatalf("ping mongodb error :%v", err)
+		return
+	}
 
-    collection = client.Database("booksdb").Collection("books")
+	collection = client.Database("booksdb").Collection("books")
 
-    log.Println("Conexión a la base de datos establecida")
+	log.Println("Conexión a la base de datos establecida")
 }
 
 // Endpoint para guardar un libro en la base de datos
 func uploadHandler(w http.ResponseWriter, r *http.Request) {
-    var book Book
-    log.Println("Recibiendo libro...")
-    log.Println(r)
-    log.Println(r.Body)
-    err := json.NewDecoder(r.Body).Decode(&book)
-    log.Println("Decodificando libro...")
-    log.Println(book)
+	var book Book
+	log.Println("Recibiendo libro...")
+	log.Println(r)
+	log.Println(r.Body)
+	err := json.NewDecoder(r.Body).Decode(&book)
+	log.Println("Decodificando libro...")
+	log.Println(book)
 
-    if err != nil {
-        http.Error(w, err.Error(), http.StatusBadRequest)
-        return
-    }
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 
-    log.Println("Recibido libro:")
-    log.Println(book)
+	log.Println("Recibido libro:")
+	log.Println(book)
 
-        _, err = collection.InsertOne(context.Background(), book)
-    if err != nil {
-        http.Error(w, err.Error(), http.StatusInternalServerError)
-        return
-    }
+	_, err = collection.InsertOne(context.Background(), book)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-    w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusOK)
 }
 
 // Endpoint para obtener todos los libros de la base de datos
 func getAllBooksHandler(w http.ResponseWriter, r *http.Request) {
-    cur, err := collection.Find(context.Background(), bson.D{})
-    if err != nil {
-        http.Error(w, err.Error(), http.StatusInternalServerError)
-        return
-    }
-    defer cur.Close(context.Background())
+	cur, err := collection.Find(context.Background(), bson.D{})
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer cur.Close(context.Background())
 
-    var books []Book
-    for cur.Next(context.Background()) {
-        var book Book
-        err := cur.Decode(&book)
-        if err != nil {
-            http.Error(w, err.Error(), http.StatusInternalServerError)
-            return
-        }
-        books = append(books, book)
-    }
+	var books []Book
+	for cur.Next(context.Background()) {
+		var book Book
+		err := cur.Decode(&book)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		books = append(books, book)
+	}
 
-    w.Header().Set("Content-Type", "application/json")
-    json.NewEncoder(w).Encode(books)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(books)
 }
 
 // Endpoint para verificar la salud del servicio
 func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
-    w.WriteHeader(http.StatusOK)
-    w.Header().Set("Content-Type", "application/json")
-    response := map[string]bool{"ok": true}
-    json.NewEncoder(w).Encode(response)
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	response := map[string]bool{"ok": true}
+	json.NewEncoder(w).Encode(response)
 }
 
 func serviceRegistryWithConsul() {
@@ -158,32 +158,68 @@ func getHostname() (hostname string) {
 }
 
 func main() {
-    // Registra el servicio con Consul
-    serviceRegistryWithConsul()
+	// Registra el servicio con Consul
+	serviceRegistryWithConsul()
 
-    mux := http.NewServeMux()
-    // Configura el manejador CORS
-    corsHandler := cors.New(cors.Options{
-        AllowedOrigins: []string{"*"}, // Permitir solicitudes desde cualquier origen
-        AllowedMethods: []string{http.MethodGet, http.MethodPost}, // Métodos permitidos
-        AllowedHeaders:   []string{"*"},
-        AllowCredentials: false,
-        Debug: true,
-    })
+	mux := http.NewServeMux()
+	// Configura el manejador CORS
+	corsHandler := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},                             // Permitir solicitudes desde cualquier origen
+		AllowedMethods:   []string{http.MethodGet, http.MethodPost}, // Métodos permitidos
+		AllowedHeaders:   []string{"*"},
+		AllowCredentials: false,
+		Debug:            true,
+	})
 
-    // Configura los manejadores para los endpoints
-    mux.HandleFunc("/api/upload", uploadHandler)
-    mux.HandleFunc("/api/books", getAllBooksHandler)
-    mux.HandleFunc("/api/health", healthCheckHandler)
+	// Configura los manejadores para los endpoints
+	mux.HandleFunc("/api/upload", uploadHandler)
+	mux.HandleFunc("/api/books", getAllBooksHandler)
+	mux.HandleFunc("/api/health", healthCheckHandler)
 
-    // Configura el servidor HTTP con el manejador CORS
-    server := &http.Server{
-        Addr:    ":9000", // Puerto en el que escucha el servidor
-        Handler: corsHandler.Handler(mux),
-    }
+	// Configura el servidor HTTP con el manejador CORS
+	server := &http.Server{
+		Addr:    ":9000", // Puerto en el que escucha el servidor
+		Handler: corsHandler.Handler(mux),
+	}
 
-    // Inicia el servidor y maneja cualquier error que ocurra
-    log.Fatal(server.ListenAndServe())
+	// Inicia el servidor y maneja cualquier error que ocurra
+	log.Fatal(server.ListenAndServe())
+
+	options := smb.Options{
+		Host:        "SAMBAHOST",
+		Port:        "SAMBAPORT",
+		User:        "SAMBAUSER",
+		Password:    "SAMBAPASSWORD",
+		Domain:      "workgroup",
+		EncryptData: true, // Whether to encrypt data (optional)
+	}
+	client, err := smb.NewClient(options)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// List directory contents
+	files, err := client.List("path/to/directory")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, file := range files {
+		fmt.Println(file.Name())
+	}
+
+	// Read a file
+	content, err := client.Read("path/to/file.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(content))
+
+	// Write to a file
+	err = client.Write("path/to/newfile.txt", []byte("Hello, Samba!"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Close the connection
+	client.Close()
 }
-
-

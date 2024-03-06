@@ -3,6 +3,10 @@ FROM golang:1.18.2 AS builder
 WORKDIR /usr/src/app
 
 ENV GO111MODULE=on
+ENV SAMBAHOST=localhost
+ENV SAMBAPORT=445
+ENV SAMBAUSER=admin
+ENV SAMBAPASSWORD=password1
 RUN go mod init app
 RUN go clean -modcache
 COPY . .
