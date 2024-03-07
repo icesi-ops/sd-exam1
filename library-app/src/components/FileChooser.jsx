@@ -1,36 +1,52 @@
 import React from 'react';
-import {Button, Input} from "@nextui-org/react";
+import { Button, Input } from "@nextui-org/react";
 
 function FileChooser({ onFileSelected }) {
-    // Función para manejar la selección de archivo
-    const handleFileChange = (event) => {
-      const selectedFile = event.target.files[0];
-      // Verifica si se ha seleccionado un archivo y si su extensión es PDF
-      if (selectedFile && selectedFile.name.endsWith('.pdf')) {
-        onFileSelected(selectedFile); // Llama a la función de manejo de archivo seleccionado
-      } else {
-        // Muestra un mensaje de error si el archivo seleccionado no es un PDF
-        alert('Por favor, selecciona un archivo PDF.');
+  const handleFileChange = async (event) => {
+    const selectedFile = event.target.files[0];
+
+    if (selectedFile && selectedFile.name.endsWith('.pdf')) {
+      onFileSelected(selectedFile);
+
+      // Crear un objeto FormData para enviar el archivo al backend
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      try {
+        // Realizar la solicitud al endpoint del backend
+        const response = await fetch('http://127.0.0.1:5000/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+        } else {
+          console.error('Error en la carga del archivo:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error en la carga del archivo:', error);
       }
-    };
-  
-    // Función para activar el evento de clic en el botón de selección de archivo invisible
-    const handleFileButtonClick = () => {
-      document.querySelector('input[type="file"]').click();
-    };
-  
-    return (
-      <div>
-        {/* Div Hidden*/}
-        <div style={{ display: 'none' }}>
-          <Input type="file" accept=".pdf" onChange={handleFileChange} style={{ width: 0, height: 0, opacity: 0, overflow: 'hidden', position: 'absolute', zIndex: -1,  }} />
-        </div> 
-        {/* Botón personalizado para cargar el archivo */}
-        <Button type="button" onClick={handleFileButtonClick}>
-          Seleccionar Archivo
-        </Button>
+    } else {
+      alert('Por favor, selecciona un archivo PDF.');
+    }
+  };
+
+  const handleFileButtonClick = () => {
+    document.querySelector('input[type="file"]').click();
+  };
+
+  return (
+    <div>
+      <div style={{ display: 'none' }}>
+        <Input type="file" accept=".pdf" onChange={handleFileChange} style={{ width: 0, height: 0, opacity: 0, overflow: 'hidden', position: 'absolute', zIndex: -1 }} />
       </div>
-    );
-  }
-  
-  export default FileChooser;
+      <Button type="button" onClick={handleFileButtonClick}>
+        Seleccionar Archivo
+      </Button>
+    </div>
+  );
+}
+
+export default FileChooser;
