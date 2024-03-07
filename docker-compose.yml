@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  consul:
+    image: consul
+    container_name: consul
+    ports:
+      - "8500:8500"
+
+  haproxy:
+    build: ./haproxy
+    image: haproxy:latest
+    container_name: haproxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    depends_on:
+      - consul
+
+
+  apigateway:
+    build: ./apigateway
+    image: your-api-gateway-image
+    container_name: apigateway
+    depends_on:
+      - consul
+
+
+  samba:
+    image: dperson/samba
+    container_name: samba
+    ports:
+      - "139:139"
+      - "445:445"
+    volumes:
+      - /path/to/shared/directory:/mount
+  
+
+  frontend:
+    build: ./frontend
+    image: your-frontend-image
+    container_name: frontend
+    depends_on:
+      - apigateway
+ 
+
+  backend:
+    build: ./backend
+    image: your-backend-image
+    container_name: backend
+    depends_on:
+      - apigateway
