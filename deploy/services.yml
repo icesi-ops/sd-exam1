@@ -29,13 +29,16 @@ services:
 
   frontend:
     build: ../app-front
-    container_name: frontend
     volumes:
       - ./src:/app/src
     environment:
       - API_URL=http://localhost:9000
+      - API_CONSUL=http://localhost:8500
     ports:
-      - "3000:80"
+      - "80"
+    deploy:
+      mode: replicated
+      replicas: 2
     networks:
       - parcial
     depends_on:

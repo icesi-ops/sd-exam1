@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
+
+import { v4 as uuidv4 } from 'uuid';
 import { API_URL } from "./config/constants.js";
 import './App.css';
+
 
 function App() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -12,6 +15,7 @@ function App() {
   };
 
   useEffect(() => {
+    console.log('useEffect');
     fetchUploadedFiles();
   }, []);
 
@@ -60,7 +64,12 @@ function App() {
         return;
       }
       const data = await response.json();
-      setUploadedFiles(data);
+      if (Array.isArray(data)){
+        setUploadedFiles(data);
+      }else {
+        console.error('La respuesta de la API no es un arreglo:', data);
+      }
+
     } catch (error) {
       console.error('Error en la solicitud:', error.message);
     }
