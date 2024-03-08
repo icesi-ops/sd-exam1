@@ -1,0 +1,31 @@
+version: "2"
+services:
+  samba:
+    image: dperson/samba
+    container_name: samba
+    volumes:
+      - '/home/docker/samba/compartido:/mount' # Ruta carpeta compartida
+    ports:
+      - "139:139" # Puerto protocolo SMB
+      - "1445:445" # Puerto protocolo SMB
+    command: -p -u "user;1234"
+    stdin_open: true
+    tty: true
+    restart: always
+
+  postgres:
+    build:
+      context: ./resources/postgres
+      dockerfile: Dockerfile
+    container_name: postgresdb
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: LibraryDB
+    restart: always
+
+networks:
+  my_network:
+    driver: bridge
