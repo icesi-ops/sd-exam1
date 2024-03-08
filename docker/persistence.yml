@@ -11,7 +11,7 @@ services:
       - exam1
     environment:
       - ARANGO_ROOT_PASSWORD=root
-      
+
   samba:
     image: dperson/samba:latest
     container_name: samba

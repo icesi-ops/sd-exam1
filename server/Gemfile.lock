@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     base64 (0.2.0)
+    bindata (2.5.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     http-accept (1.7.0)
@@ -15,6 +16,8 @@ GEM
       ruby2_keywords (~> 0.0.1)
     netrc (0.11.0)
     nio4r (2.7.0)
+    openssl-ccm (1.2.3)
+    openssl-cmac (2.0.2)
     puma (6.4.2)
       nio4r (~> 2.0)
     rack (2.2.8.1)
@@ -27,6 +30,13 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     ruby2_keywords (0.0.5)
+    ruby_smb (3.3.2)
+      bindata
+      openssl-ccm
+      openssl-cmac
+      rubyntlm
+      windows_error (>= 0.1.4)
+    rubyntlm (0.6.3)
     sinatra (3.2.0)
       mustermann (~> 3.0)
       rack (~> 2.2, >= 2.2.4)
@@ -36,6 +46,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.9.1)
+    windows_error (0.1.5)
 
 PLATFORMS
   universal-darwin-23
@@ -44,6 +55,7 @@ DEPENDENCIES
   json
   puma
   rest-client
+  ruby_smb
   sinatra
 
 BUNDLED WITH

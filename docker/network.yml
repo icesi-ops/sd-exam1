@@ -14,6 +14,19 @@ services:
       - exam1
     restart: always
 
+  express-gateway:
+    image: express-gateway
+    container_name: express-gateway
+    ports:
+      - "8080:8080"
+    volumes:
+      - type: bind
+        source: ../gateway
+        target: /var/lib/eg
+    networks:
+      - exam1
+    restart: always
+
 networks:
   exam1:
     external: true

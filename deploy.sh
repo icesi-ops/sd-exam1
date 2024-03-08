@@ -41,7 +41,7 @@ execute_command "docker-compose -f ./docker/discovery-server.yml up --build -d" 
 wait_message "Waiting for config and sevice discovery" 5
 
 # Deploy App Tier
-execute_command "docker-compose -f ./docker/application.yml up --scale backend=1 --build -d" "App Tier"
+#execute_command "docker-compose -f ./docker/application.yml up --scale backend=1 --build -d" "App Tier"
 
 # Wait for app tier to be up
 wait_message "Waiting for app tier" 5
