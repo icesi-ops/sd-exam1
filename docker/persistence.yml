@@ -21,7 +21,10 @@ services:
     networks:
       - exam1
     environment:
-      USER: "sambau;root"
+      USER: "samba;root"
+      SHARE: "share;/share;yes;no"
+      PERMISSIONS: true
+    command: '-S'
 
 networks:
   exam1:
