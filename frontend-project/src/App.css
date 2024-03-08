@@ -1,0 +1,110 @@
+#root {
+  
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-family: 'Arial', sans-serif;
+  position: relative; /* Agrega posición relativa al contenedor principal */
+
+  /* Fondo */
+  background-image: image("/assets/imagenFondo.jpg");
+  background-size: cover;
+  background-position: center;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.7); /* Ajusta el color y opacidad del overlay */
+    z-index: -1; /* Coloca el overlay detrás del contenido */
+  }
+}
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+h1 {
+  color: #333; /* Cambia el color del título a tu preferencia */
+  font-size: 2em; /* Ajusta el tamaño de la fuente según sea necesario */
+}
+
+p {
+  color: #555; /* Cambia el color del texto a tu preferencia */
+}
+
+button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1em;
+  margin-top: 15px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+
+.separation-text {
+  margin-top: 20px; /* Ajusta el margen superior del texto separador según sea necesario */
+  color: #777; /* Cambia el color del texto separador a tu preferencia */
+}
+
+ul {
+  list-style-type: none; /* Elimina los puntos de la lista */
+  padding: 0;
+}
+
+li {
+  color: #333; /* Cambia el color del texto de la lista a tu preferencia */
+}

@@ -208,9 +208,11 @@ if __name__ == '__main__':
 import os
 from flask import Flask, request, jsonify
 from smb.SMBConnection import SMBConnection
+from flask_cors import CORS
 
 app = Flask(__name__)
 
+CORS(app)
 
 # Configuración del servidor Samba
 
@@ -259,7 +261,17 @@ def save_file_locally(file_stream, local_file_path):
         print(f"Error saving the file locally: {str(e)}")
         return False    
 
-
+@app.route('/get_pdf_list', methods=['GET'])
+def get_pdf_list():
+    try:
+        pdf_folder_path = '/home/dani/Distribuidos/storage_data_smb'
+        pdf_list = [pdf for pdf in os.listdir(pdf_folder_path) if pdf.endswith('.pdf')]
+        return jsonify({'pdfList': pdf_list}), 200
+    except Exception as e:
+        print(f"Error al obtener la lista de archivos PDF: {str(e)}")
+        return jsonify({'error': 'Error interno del servidor'}), 500
+    
+    
 @app.route('/upload', methods=['POST'])
 def upload_file():
     try:
@@ -271,6 +283,7 @@ def upload_file():
 
         # Sube el archivo directamente a Samba
         if upload_to_samba(file.stream, file.filename):
+            pdf_list = get_pdf_list()
             return jsonify({'message': 'Archivo cargado y almacenado en Samba exitosamente'}), 200
         else:
             return jsonify({'error': 'Error al cargar el archivo en Samba'}), 500

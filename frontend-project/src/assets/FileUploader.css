@@ -1,0 +1,16 @@
+/* Tu archivo de estilos */
+.file-upload-button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1em;
+    margin-top: 15px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .file-upload-button:hover {
+    background-color: #45a049;
+  }
+  
