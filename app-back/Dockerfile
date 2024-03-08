@@ -1,5 +1,5 @@
 # Utiliza la imagen base de Golang
-FROM golang:1.18.2 AS builder
+FROM golang:1.22 AS builder
 WORKDIR /usr/src/app
 
 ENV GO111MODULE=on
