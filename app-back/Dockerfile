@@ -3,7 +3,7 @@ FROM golang:1.22 AS builder
 WORKDIR /usr/src/app
 
 ENV GO111MODULE=on
-ENV SAMBAHOST=localhost
+ENV SAMBAHOST=my-samba-container
 ENV SAMBAPORT=445
 ENV SAMBAUSER=admin
 ENV SAMBAPASSWORD=password1
@@ -14,7 +14,7 @@ COPY . .
 RUN go mod tidy
 
 #RUN go mod download && go mod verify
-EXPOSE 8081
+EXPOSE 9000
 
 RUN go build -v -o /usr/local/bin/app .
 

@@ -31,6 +31,7 @@ type Book struct {
 
 var collection *mongo.Collection
 var clientMongo *mongo.Client
+var s *smb2.Session
 
 // Inicializa la conexión a MongoDB y Samba
 func init() {
