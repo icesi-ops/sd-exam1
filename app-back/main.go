@@ -32,7 +32,7 @@ type Book struct {
 var collection *mongo.Collection
 var clientMongo *mongo.Client
 
-// Inicializa la conexión a MongoDB
+// Inicializa la conexión a MongoDB y Samba
 func init() {
 
 	conn, err_samba := net.Dial("tcp", "my-samba-container:445")
@@ -43,8 +43,8 @@ func init() {
 
 	d := &smb2.Dialer{
 		Initiator: &smb2.NTLMInitiator{
-			User:     "admin",
-			Password: "password1",
+			User:     "SAMBAUSER",
+			Password: "SAMBAPASSWORD",
 		},
 	}
 
