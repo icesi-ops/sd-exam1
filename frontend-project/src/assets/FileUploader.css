@@ -1,6 +1,6 @@
 /* Tu archivo de estilos */
 .file-upload-button {
-    background-color: #4caf50;
+    background-color: #25bcff;
     color: white;
     padding: 10px 20px;
     font-size: 1em;
@@ -11,6 +11,6 @@
   }
   
   .file-upload-button:hover {
-    background-color: #45a049;
+    background-color: #25beff9c;
   }
   
