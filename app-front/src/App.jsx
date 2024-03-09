@@ -25,31 +25,34 @@ function App() {
       return;
     }
 
-    console.log('Archivo seleccionado:', selectedFile);
-    const newFile = {
-      name: selectedFile.name,
-      size: String(selectedFile.size),
-      type: selectedFile.type,
-    };
-    console.log('Archivo a enviar:', newFile)
-    console.log(JSON.stringify(newFile))
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    formData.append('name', selectedFile.name);
+    formData.append('size', String(selectedFile.size));
+    formData.append('type', selectedFile.type);
+
+    for (var pair of formData.entries()) {
+      console.log(pair[0]+ ', ' + pair[1]);
+    }
+
+
 
     try {
       const response = await fetch(`${API_URL}/api/upload`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': `multipart/form-data; boundary=--${Date.now().toString()}`,
         },
-        body: JSON.stringify(newFile),
+        body: formData,
       });
 
       console.log('Respuesta del servidor:', response);
 
       if (response.ok) {
-        console.log('Archivo enviado con éxito al servidor');
         fetchUploadedFiles();
+
       } else {
-        console.error('Error al enviar archivo al servidor');
+        alert('Error al enviar archivo al servidor');
       }
     } catch (error) {
       console.error('Error en la solicitud:', error);
@@ -58,7 +61,13 @@ function App() {
 
   const fetchUploadedFiles = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/books`);
+      const response = await fetch(`${API_URL}/api/books`,{
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+
+      });
       if (!response.ok) {
         console.error('Error al obtener archivos del servidor');
         return;
@@ -66,8 +75,6 @@ function App() {
       const data = await response.json();
       if (Array.isArray(data)){
         setUploadedFiles(data);
-      }else {
-        console.error('La respuesta de la API no es un arreglo:', data);
       }
 
     } catch (error) {

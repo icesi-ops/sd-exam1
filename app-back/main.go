@@ -88,36 +88,49 @@ func init() {
 func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	var book Book
 	log.Println("Recibiendo libro...")
-	log.Println(r)
-	log.Println(r.Body)
-	err := json.NewDecoder(r.Body).Decode(&book)
-	log.Println("Decodificando libro...")
+
+
+	// Guarda el archivo en el sistema de archivos
+    err := r.ParseMultipartForm(10 << 20) // 10 MB limit
+    if err != nil {
+        log.Println("Error parsing form: ", err)
+    	http.Error(w, "Error parsing form", http.StatusBadRequest)
+    	return
+    }
+    file, _, err := r.FormFile("file")
+    log.Println("File: ", file)
+
+    if err != nil {
+        log.Println("Error retrieving file: ", err)
+    	http.Error(w, "Error retrieving file", http.StatusBadRequest)
+    	return
+    }
+
+    log.Println("File: ", err)
+    defer file.Close()
+
+
+	// Obtener los valores de los campos del formulario
+    name := r.FormValue("name")
+    size := r.FormValue("size")
+    fileType := r.FormValue("type")
+
+    if name == "" || size == "" || fileType == "" {
+        log.Println("Missing required fields")
+        http.Error(w, "Missing required fields", http.StatusBadRequest)
+        return
+    }
+
+    // Crear la estructura Book
+    book = Book{Name: name, Size: size, Type: fileType}
 	log.Println(book)
 
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	log.Println("Recibido libro:")
-	log.Println(book)
-
+    //Guardar en la bd
 	_, err = collection.InsertOne(context.Background(), book)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = r.ParseMultipartForm(10 << 20) // 10 MB limit
-	if err != nil {
-		http.Error(w, "Error parsing form", http.StatusBadRequest)
-		return
-	}
-	file, _, err := r.FormFile("file")
-	if err != nil {
-		http.Error(w, "Error retrieving file", http.StatusBadRequest)
-		return
-	}
-	defer file.Close()
 
 }
 
@@ -163,7 +176,7 @@ func serviceRegistryWithConsul() {
 	serviceID := "server"
 	port, _ := strconv.Atoi(getPort()[1:len(getPort())])
 	log.Printf("port: %v", port)
-	address := getHostname()
+	address := getLocalIp()
 	log.Println("address: ", address)
 
 	registration := &consulapi.AgentServiceRegistration{
@@ -198,10 +211,19 @@ func getPort() (port string) {
 	return
 }
 
-func getHostname() (hostname string) {
-	hostname, _ = os.Hostname()
-	return
+func getLocalIp() string {
+    conn, err := net.Dial("udp", "8.8.8.8:80")
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer conn.Close()
+
+    localAddress := conn.LocalAddr().(*net.UDPAddr)
+    log.Println(localAddress.IP)
+
+    return localAddress.IP.String()
 }
+
 
 func main() {
 	// Registra el servicio con Consul

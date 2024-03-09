@@ -1,13 +1,34 @@
 version: "2"
 services:
-  samba:
-    image: lordpedal/samba
-    container_name: samba
-    volumes:
-      - '.:/lordpedal' #Ruta carpeta compartida
+
+  mongodb:
+    image: mongo:7.0.6
+    container_name: mongodb
     ports:
-      - "137:137" #Puerto protocolo NetBios
-      - "138:138" #Puerto protocolo NetBios
-      - "139:139" #Puerto protocolo SMB
-      - "445:445" #Puerto protocolo SMB
-    restart: always
+      - "27017:27017"
+    networks:
+      - parcial
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=dabo
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+    volumes:
+      - mongodb_data:/data/db
+
+#  samba:
+#    image: lordpedal/samba
+#    container_name: samba
+#    volumes:
+#      - '.:/lordpedal' #Ruta carpeta compartida
+#    ports:
+#      - "137:137" #Puerto protocolo NetBios
+#      - "138:138" #Puerto protocolo NetBios
+#      - "139:139" #Puerto protocolo SMB
+#      - "445:445" #Puerto protocolo SMB
+#    restart: always
+
+networks:
+  parcial:
+    external: true
+
+volumes:
+  mongodb_data:

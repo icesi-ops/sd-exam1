@@ -5,11 +5,11 @@ admin:
   host: localhost
 
 apiEndpoints:
-    appApi:
+  appapi:
     host: localhost
     paths: [ '/api','/api/*' ]
 serviceEndpoints:
-  appApi:
+  appapi:
     url: 'http://loadbalancer/api/'
 policies:
   - basic-auth
@@ -23,13 +23,13 @@ policies:
 pipelines:
   default:
     apiEndpoints:
-      - appApi
+      - appapi
     policies:
       # Uncomment `key-auth:` when instructed to in the Getting Started guide.
       - key-auth:
       - proxy:
           - action:
-              serviceEndpoint: appApi
+              serviceEndpoint: appapi
               changeOrigin: true
               prependPath: false
               ignorePath: false

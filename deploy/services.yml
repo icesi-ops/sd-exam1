@@ -1,19 +1,6 @@
 version: '3.8'
 services:
 
-  mongodb:
-    image: mongo:7.0.6
-    container_name: mongodb
-    ports:
-      - "27017:27017"
-    networks:
-      - parcial
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=dabo
-      - MONGO_INITDB_ROOT_PASSWORD=secret
-    volumes:
-      - mongodb_data:/data/db
-
   server:
     build: ../app-back
     container_name: server
@@ -24,8 +11,6 @@ services:
       - MONGODB_URL=mongodb://dabo:secret@mongodb:27017
     networks:
       - parcial
-    depends_on:
-      - mongodb
 
   frontend:
     build: ../app-front
@@ -46,8 +31,7 @@ services:
 
 networks:
   parcial:
-    driver: bridge
+    external: true
 
 
-volumes:
-  mongodb_data:
+

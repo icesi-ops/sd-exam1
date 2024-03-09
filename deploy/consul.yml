@@ -13,4 +13,4 @@ services:
 
 networks:
   parcial:
-    driver: bridge
+    external: true

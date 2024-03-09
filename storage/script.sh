@@ -1,6 +1,6 @@
 docker run -d \
     --name my-samba-container  \
-    --network deploy_parcial \
+    --network parcial \
     -e SAMBA_USER=admin \
     -e SAMBA_PASSWORD=password1 \
     -p 445:445 \
