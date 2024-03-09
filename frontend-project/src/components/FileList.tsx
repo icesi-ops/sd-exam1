@@ -1,14 +1,14 @@
 // src/components/FileList.tsx
 import React, { useState, useEffect } from 'react';
 import '../assets/FileList.css';  // Adjusted import path based on your project structure
-import FileUploader from './FileUploader';
+
 
 
 interface FileListProps {
   onFileSelected: (file: File) => void;
 }
 
-const FileList: React.FC<FileListProps> = ({ onFileSelected }) => {
+const FileList: React.FC<FileListProps> = ({ }) => {
   const [showList, setShowList] = useState(false);
   const [pdfList, setPdfList] = useState<string[]>([]);
 

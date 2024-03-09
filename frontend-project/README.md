@@ -1,30 +1,92 @@
-# React + TypeScript + Vite
+# Development and Production Environment Setup Guide
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This guide will help you set up and containerize the frontend of our application (Library App) using Docker. Make sure to follow each step carefully to achieve a stable development and production environment.
 
-Currently, two official plugins are available:
+## Development Environment Setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Prerequisites
 
-## Expanding the ESLint configuration
+- Docker installed on your VM (or WSL)
+- Docker desktop (if u have WSL)
+- Visual studio code 
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Steps to Follow
 
-- Configure the top-level `parserOptions` property like this:
+1. Clone the repository https://github.com/luis486/sd-exam1.git .
+2. Open a terminal and navigate to the frontend project directory.
+3. To view this app in localhost:
+  + Change directory to the library-app folder *cd/frontend-project/library-app*
+  + npm install (to install libraries to your project)
+  + npm run dev (to "deploy" locally)
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### Container Configuration
+
+1. Open the `Dockerfile` in a text editor.
+2. Ensure that the Dockerfile contains the following:
+
+   ```Dockerfile
+   # Use node.js image as the base image
+   FROM node:16 AS build
+   
+   # Set the working directory in the container
+   WORKDIR /app
+   
+   # Copy package.json and package-lock.json to the working directory
+   COPY package.json package-lock.json ./
+   
+   # Install dependencies
+   RUN npm install
+   
+   # Copy the rest of the application code to the working directory
+   COPY . .
+   
+   EXPOSE 5173
+   
+   # Build the application
+   RUN npm run build 
+   
+   #Stage 2
+   
+   # Use nginx image as the base image for serving static filesdocker
+   FROM nginx:alpine
+   
+   ADD ./config/default.conf /etc/nginx/conf.d/default.conf
+   
+   COPY --from=build /app/dist /var/www/app/
+   
+   EXPOSE 80
+   
+   CMD ["nginx","-g", "daemon off;"]
+   
+
+3. Save the Dockerfile.
+
+### Building and Running the Container
+
+1. Open a terminal in the frontend project directory.
+2. Run the following command to build the container image:
+   
+   docker build -t image_docker .
+   (if you have extension Docker in Visual Studio Code, right-click in Dockerfile and build image)
+
+   Replace `image_name` with the name you want to give to your Docker image.
+
+3. Once the image is successfully built, run the following command to run the container:
+
+   docker run -d -p 5173:5173 --network network_name --name container_name image_name 
+   
+    Replace `container_name` with the name you want to give to your Docker container.
+    Replace `image_name` with the name you want to give to your Docker image.
+    Replace `network_name` with the name of your network (you need tha netwkor to connect all containers)
+
+   This will run the container and make it accessible at `http://localhost:5173` in your web browser.
+
+You now have the development environment set up and running on your machine.
+
+## Production Environment Setup
+
+### Steps to Follow
+
+1. Follow the same container configuration steps as described in the development section.
+2. Make sure to use the built image for production (`image_name`) when running the container on your production server.

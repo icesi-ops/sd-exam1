@@ -5,11 +5,8 @@ import FileUploader from './components/FileUploader';
 import FileList from './components/FileList';
 
 const App: React.FC = () => {
-  const [showLibrary, setShowLibrary] = useState(false);
+  const [showLibrary] = useState(false);
 
-  const toggleLibrary = () => {
-    setShowLibrary(!showLibrary);
-  };
 
   const handleFileSelected = (file: File) => {
     // Lógica para manejar el archivo seleccionado, si es necesario
