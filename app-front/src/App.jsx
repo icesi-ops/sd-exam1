@@ -38,7 +38,7 @@ function App() {
 
 
     try {
-      const response = await fetch(`${API_URL}/api/upload`, {
+      const response = await fetch(`${API_URL}/upload`, {
         method: 'POST',
         headers: {
           'Content-Type': `multipart/form-data; boundary=--${Date.now().toString()}`,
@@ -61,7 +61,7 @@ function App() {
 
   const fetchUploadedFiles = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/books`,{
+      const response = await fetch(`${API_URL}/books`,{
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

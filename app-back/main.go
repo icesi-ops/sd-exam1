@@ -55,16 +55,6 @@ func init() {
 	}
 	defer s.Logoff()
 
-	fs, err_samba := s.Mount("shared")
-    if err_samba != nil {
-    	panic(err)
-    }
-
-    f, err_samba := fs.Create("hello.txt")
-	if err_samba != nil {
-		panic(err)
-	}
-
 	names, err_samba := s.ListSharenames()
 	if err_samba != nil {
 		panic(err_samba)
@@ -195,7 +185,7 @@ func serviceRegistryWithConsul() {
 		Port:    port,
 		Address: address,
 		Check: &consulapi.AgentServiceCheck{
-			HTTP:     fmt.Sprintf("http://%s:%v/api/health", address, port),
+			HTTP:     fmt.Sprintf("http://%s:%v/health", address, port),
 			Interval: "10s",
 			Timeout:  "30s",
 		},

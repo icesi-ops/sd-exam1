@@ -42,7 +42,7 @@ register_service() {
     payload='{
       "ID": "'"$service_name"'-'"$random_id"'",
       "Name": "'"$service_name"'",
-      "Tags": ["front-end", "ui],
+      "Tags": ["ui"],
       "Address": "'"$ip"'",
       "Port": 80,
       "Check": {
