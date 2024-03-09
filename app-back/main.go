@@ -55,6 +55,16 @@ func init() {
 	}
 	defer s.Logoff()
 
+	fs, err_samba := s.Mount("shared")
+    if err_samba != nil {
+    	panic(err)
+    }
+
+    f, err_samba := fs.Create("hello.txt")
+	if err_samba != nil {
+		panic(err)
+	}
+
 	names, err_samba := s.ListSharenames()
 	if err_samba != nil {
 		panic(err_samba)
@@ -240,9 +250,9 @@ func main() {
 	})
 
 	// Configura los manejadores para los endpoints
-	mux.HandleFunc("/api/upload", uploadHandler)
-	mux.HandleFunc("/api/books", getAllBooksHandler)
-	mux.HandleFunc("/api/health", healthCheckHandler)
+	mux.HandleFunc("/upload", uploadHandler)
+	mux.HandleFunc("/books", getAllBooksHandler)
+	mux.HandleFunc("/health", healthCheckHandler)
 
 	// Configura el servidor HTTP con el manejador CORS
 	server := &http.Server{
