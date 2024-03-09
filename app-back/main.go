@@ -5,6 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
+	"bytes"
+	"io"
+	"os"
+
 
 	//"net"
 	//"io"
@@ -55,15 +59,26 @@ func init() {
 	}
 	defer s.Logoff()
 
-	names, err_samba := s.ListSharenames()
-	if err_samba != nil {
-		panic(err_samba)
-	}
+	/*
+			fs, err_samba := s.Mount("shared")
+		    if err_samba != nil {
+		    	panic(err_samba)
+		    }
 
-	for _, name := range names {
-		fmt.Println(name)
-	}
+		    f, err_samba := fs.Create("hello.txt")
+			if err_samba != nil {
+				panic(err_samba)
+			}
 
+			names, err_samba := s.ListSharenames()
+			if err_samba != nil {
+				panic(err_samba)
+			}
+
+			for _, name := range names {
+				fmt.Println(name)
+			}
+	*/
 	clientOptions := options.Client().ApplyURI(os.Getenv("MONGODB_URL")) // Asegúrate de cambiar la URI si es necesario
 	var err error
 	clientMongo, err = mongo.Connect(context.Background(), clientOptions)
@@ -132,6 +147,90 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fs, err := s.Mount("STORAGE")
+	if err != nil {
+		panic(err)
+	}
+	defer fs.Umount()
+
+	/*_, err = file.Seek(0, io.SeekStart)
+	if err != nil {
+		panic(err)
+	}
+
+	bs, err := ioutil.ReadAll(f)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(string(bs))*/
+
+
+    //fmt.Println("Contenido escrito en el archivo en el servidor Samba.")
+
+	// Crear un buffer de bytes para almacenar el contenido del archivo
+    var buffer bytes.Buffer
+
+    // Leer el contenido del archivo y escribirlo en el buffer
+    _, err = io.Copy(&buffer, file)
+    if err != nil {
+        panic(err)
+    }
+
+    // Convertir el buffer de bytes a un slice de bytes
+    archivoBytes := buffer.Bytes()
+
+    // Ahora "archivoBytes" contiene el contenido del archivo como un slice de bytes ([]byte)
+    fmt.Println("Contenido del archivo como slice de bytes:", archivoBytes)
+
+	/*contenido := []byte("Este es el contenido del archivo.")
+    _, err = file.Write(archivoBytes)
+    if err != nil {
+        panic(err)
+    }*/
+
+
+
+     // Contenido del archivo ya guardado en una variable
+	 //contenidoArchivo := []byte(file)
+
+
+	 // Crear un nuevo archivo en el servidor Samba y escribir el contenido
+	/* f, err := s.Create(name + "." + fileType)
+	 if err != nil {
+		 panic(err)
+	 }
+	 defer f.Close()
+
+	 _, err = f.Write(archivoBytes)
+	 if err != nil {
+		 panic(err)
+	 }
+
+	 fmt.Println("Archivo guardado en el servidor Samba")*/
+
+	 // Crear o abrir un archivo en el servidor Samba
+	 smbFile, err := fs.Open(name + "." + fileType)
+	 if err != nil {
+		 panic(err)
+	 }
+	 defer file.Close()
+
+
+	 // Copiar el contenido del archivo multipart al archivo en el servidor Samba
+	 _, err = io.Copy(smbFile, file)
+	 if err != nil {
+		 panic(err)
+	 }
+
+	 // Escribir contenido en el archivo
+	 err = fs.WriteFile(name + "." + fileType, archivoBytes, 0644)
+	 if err != nil {
+		 panic(err)
+	 }
+
+	 fmt.Println("Archivo guardado en el servidor Samba.")
+
 }
 
 // Endpoint para obtener todos los libros de la base de datos
@@ -185,7 +284,7 @@ func serviceRegistryWithConsul() {
 		Port:    port,
 		Address: address,
 		Check: &consulapi.AgentServiceCheck{
-			HTTP:     fmt.Sprintf("http://%s:%v/health", address, port),
+			HTTP:     fmt.Sprintf("http://%s:%v/api/health", address, port),
 			Interval: "10s",
 			Timeout:  "30s",
 		},
