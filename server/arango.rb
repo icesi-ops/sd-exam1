@@ -64,15 +64,25 @@ class ArangoDB
         json['result']
     end
 
-    def getDocument(key)
+    def get_filename(key)
         payload = {
             "query": "FOR doc IN #{@collection_name} FILTER doc._key == @key RETURN { \"data\": doc.document, \"key\": doc._key }",
-            "bindVars": { "key": key }
+            "bindVars": { "key": key.to_s}
         }
-
+    
         get_response = RestClient.post(@cursorHost, payload.to_json, @headers)
         json = JSON.parse(get_response.body)
-        json['result']
+        
+        result = json['result']
+        
+        if result.empty?
+            raise StandardError, "Archivo no encontrado para la clave '#{key}'"
+        end
+        
+        data = result[0]['data']
+        name = data['name']
+        type = data['type']
+        "#{name + type}"
     end
 
     def getAllDocuments
@@ -87,20 +97,18 @@ class ArangoDB
 
     def deleteDocument(key)
         payload = {
-            "query": "REMOVE { _key: @key } IN #{@collection_name} RETURN OLD._key",
-            "bindVars": { "key": key }
+            "query": "REMOVE { _key: @key } IN #{@collection_name}",
+            "bindVars": { "key": key.to_s }
         }
 
-        get_response = RestClient.post(@cursorHost, payload.to_json, @headers)
-        json = JSON.parse(get_response.body)
-        json['result']
+        RestClient.post(@cursorHost, payload.to_json, @headers)
     end
 
     def updateDocument(key, name, type, size)
         payload = {
-            "query": "UPDATE { _key: @key } WITH { \"name\": @name, \"type\": @type, \"size\": @size } IN #{@collection_name} RETURN NEW._key",
+            "query": "UPDATE { _key: @key } WITH { \"document\": { \"name\": @name, \"type\": @type, \"size\": @size } } IN #{@collection_name} RETURN NEW._key",
             "bindVars": { 
-                "key": key,
+                "key": key.to_s,
                 "name": name,
                 "type": type,
                 "size": size 

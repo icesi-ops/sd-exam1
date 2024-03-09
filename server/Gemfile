@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'sinatra'
 gem 'rest-client'
 gem 'ruby_smb'
+gem 'smb-client'
 gem 'puma'
 gem 'json'
 

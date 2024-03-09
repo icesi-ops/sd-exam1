@@ -13,8 +13,8 @@ services:
       - ARANGO_COLLECTION=files
       - ARANGO_USER=root
       - ARANGO_PASS=root
-      - SAMBA_IP_ADDRESS=samba
-      - SAMBA_USERNAME=sambau
+      - SAMBA_IP=samba-server
+      - SAMBA_USERNAME=samba
       - SAMBA_PASSWORD=root
 
     networks:
