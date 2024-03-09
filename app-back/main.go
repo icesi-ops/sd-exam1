@@ -55,25 +55,26 @@ func init() {
 	}
 	defer s.Logoff()
 
-	fs, err_samba := s.Mount("shared")
-    if err_samba != nil {
-    	panic(err)
-    }
+	/*
+			fs, err_samba := s.Mount("shared")
+		    if err_samba != nil {
+		    	panic(err_samba)
+		    }
 
-    f, err_samba := fs.Create("hello.txt")
-	if err_samba != nil {
-		panic(err)
-	}
+		    f, err_samba := fs.Create("hello.txt")
+			if err_samba != nil {
+				panic(err_samba)
+			}
 
-	names, err_samba := s.ListSharenames()
-	if err_samba != nil {
-		panic(err_samba)
-	}
+			names, err_samba := s.ListSharenames()
+			if err_samba != nil {
+				panic(err_samba)
+			}
 
-	for _, name := range names {
-		fmt.Println(name)
-	}
-
+			for _, name := range names {
+				fmt.Println(name)
+			}
+	*/
 	clientOptions := options.Client().ApplyURI(os.Getenv("MONGODB_URL")) // Asegúrate de cambiar la URI si es necesario
 	var err error
 	clientMongo, err = mongo.Connect(context.Background(), clientOptions)
@@ -99,43 +100,41 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	var book Book
 	log.Println("Recibiendo libro...")
 
-
 	// Guarda el archivo en el sistema de archivos
-    err := r.ParseMultipartForm(10 << 20) // 10 MB limit
-    if err != nil {
-        log.Println("Error parsing form: ", err)
-    	http.Error(w, "Error parsing form", http.StatusBadRequest)
-    	return
-    }
-    file, _, err := r.FormFile("file")
-    log.Println("File: ", file)
+	err := r.ParseMultipartForm(10 << 20) // 10 MB limit
+	if err != nil {
+		log.Println("Error parsing form: ", err)
+		http.Error(w, "Error parsing form", http.StatusBadRequest)
+		return
+	}
+	file, _, err := r.FormFile("file")
+	log.Println("File: ", file)
 
-    if err != nil {
-        log.Println("Error retrieving file: ", err)
-    	http.Error(w, "Error retrieving file", http.StatusBadRequest)
-    	return
-    }
+	if err != nil {
+		log.Println("Error retrieving file: ", err)
+		http.Error(w, "Error retrieving file", http.StatusBadRequest)
+		return
+	}
 
-    log.Println("File: ", err)
-    defer file.Close()
-
+	log.Println("File: ", err)
+	defer file.Close()
 
 	// Obtener los valores de los campos del formulario
-    name := r.FormValue("name")
-    size := r.FormValue("size")
-    fileType := r.FormValue("type")
+	name := r.FormValue("name")
+	size := r.FormValue("size")
+	fileType := r.FormValue("type")
 
-    if name == "" || size == "" || fileType == "" {
-        log.Println("Missing required fields")
-        http.Error(w, "Missing required fields", http.StatusBadRequest)
-        return
-    }
+	if name == "" || size == "" || fileType == "" {
+		log.Println("Missing required fields")
+		http.Error(w, "Missing required fields", http.StatusBadRequest)
+		return
+	}
 
-    // Crear la estructura Book
-    book = Book{Name: name, Size: size, Type: fileType}
+	// Crear la estructura Book
+	book = Book{Name: name, Size: size, Type: fileType}
 	log.Println(book)
 
-    //Guardar en la bd
+	//Guardar en la bd
 	_, err = collection.InsertOne(context.Background(), book)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -222,18 +221,17 @@ func getPort() (port string) {
 }
 
 func getLocalIp() string {
-    conn, err := net.Dial("udp", "8.8.8.8:80")
-    if err != nil {
-        log.Fatal(err)
-    }
-    defer conn.Close()
+	conn, err := net.Dial("udp", "8.8.8.8:80")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer conn.Close()
 
-    localAddress := conn.LocalAddr().(*net.UDPAddr)
-    log.Println(localAddress.IP)
+	localAddress := conn.LocalAddr().(*net.UDPAddr)
+	log.Println(localAddress.IP)
 
-    return localAddress.IP.String()
+	return localAddress.IP.String()
 }
-
 
 func main() {
 	// Registra el servicio con Consul
