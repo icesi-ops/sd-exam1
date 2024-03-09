@@ -217,7 +217,7 @@ CORS(app)
 # Configuración del servidor Samba
 
 samba_config = {
-    'server_name': '127.0.0.1',  # Cambiado de 'server_name' a 'host'
+    'server_name': 'sambadb',  # Cambiado de 'server_name' a 'host'
     'share': 'centralized_storage',
     'username': 'backend_user',
     'password': 'password1',
@@ -264,11 +264,26 @@ def save_file_locally(file_stream, local_file_path):
 @app.route('/get_pdf_list', methods=['GET'])
 def get_pdf_list():
     try:
-        pdf_folder_path = '/home/dani/Distribuidos/storage_data_smb'
-        pdf_list = [pdf for pdf in os.listdir(pdf_folder_path) if pdf.endswith('.pdf')]
+        # Conexión al servidor Samba
+        conn = SMBConnection(samba_config['username'],
+                             samba_config['password'],
+                             'backend_user',
+                             samba_config['server_name'],
+                             use_ntlm_v2=True,
+                             domain=samba_config['domain_name'],
+                             is_direct_tcp=True)
+        conn.connect(samba_config['server_name'], 445)
+
+        # Listar archivos PDF en la carpeta compartida del servidor Samba
+        pdf_list = [file.filename for file in conn.listPath(samba_config['share'], '/')]
+        pdf_list = [pdf for pdf in pdf_list if pdf.endswith('.pdf')]
+
+        # Cierra la conexión
+        conn.close()
+
         return jsonify({'pdfList': pdf_list}), 200
     except Exception as e:
-        print(f"Error al obtener la lista de archivos PDF: {str(e)}")
+        print(f"Error al obtener la lista de archivos PDF desde Samba: {str(e)}")
         return jsonify({'error': 'Error interno del servidor'}), 500
     
     
@@ -303,4 +318,4 @@ def upload_file():
         return jsonify({'error': 'Error interno del servidorr'}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')

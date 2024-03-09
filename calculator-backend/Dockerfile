@@ -1,17 +1,16 @@
 # Usa una imagen base de Python
-FROM python:3.8
+FROM python:3.8-slim
 
-# Establece el directorio de trabajo en el contenedor
+# Establece el directorio de trabajo
 WORKDIR /app
 
-# Copia el código de tu aplicación al contenedor
-COPY . /app
+# Copia los archivos de la aplicación al contenedor
+COPY . .
 
 # Instala las dependencias
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Expone el puerto en el que se ejecutará la aplicación Flask
+# Exponer el puerto de la aplicación Flask
 EXPOSE 5000
 
 # Comando para ejecutar la aplicación Flask
