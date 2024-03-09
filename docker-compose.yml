@@ -21,7 +21,7 @@ services:
 
 
   apigateway:
-    build: ./apigateway
+    build: ./appgw
     image: your-api-gateway-image
     container_name: apigateway
     depends_on:
@@ -29,6 +29,7 @@ services:
 
 
   samba:
+    build: ./samba
     image: dperson/samba
     container_name: samba
     ports:
