@@ -25,8 +25,8 @@ def register_service(consul_url)
       "Check": {
         "DeregisterCriticalServiceAfter": "90m",
         "HTTP": "http://#{ip}:4567/health",
-        "Interval": "10s",
-        "Timeout": "1s"
+        "Interval": "60s",
+        "Timeout": "60s"
       }
     }
     RestClient.put(consul_url, payload.to_json, headers)

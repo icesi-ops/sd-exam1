@@ -42,6 +42,7 @@ GEM
       rack (~> 2.2, >= 2.2.4)
       rack-protection (= 3.2.0)
       tilt (~> 2.0)
+    smb-client (0.1.6)
     tilt (2.3.0)
     unf (0.1.4)
       unf_ext
@@ -57,6 +58,7 @@ DEPENDENCIES
   rest-client
   ruby_smb
   sinatra
+  smb-client
 
 BUNDLED WITH
    2.2.3
