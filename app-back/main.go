@@ -1,19 +1,19 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
-	"net"
-	"bytes"
 	"io"
+	"net"
 	"os"
-
 
 	//"net"
 	//"io"
 	"log"
 	"net/http"
+
 	//"os"
 	"strconv"
 
@@ -57,6 +57,9 @@ func init() {
 	if err_samba != nil {
 		panic(err_samba)
 	}
+	fmt.Println("para ver si da error ", err_samba)
+	log.Println("Conexión con el samba")
+
 	defer s.Logoff()
 
 	/*
@@ -104,61 +107,79 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	var book Book
 	log.Println("Recibiendo libro...")
 
-
 	// Guarda el archivo en el sistema de archivos
-    err := r.ParseMultipartForm(10 << 20) // 10 MB limit
-    if err != nil {
-        log.Println("Error parsing form: ", err)
-    	http.Error(w, "Error parsing form", http.StatusBadRequest)
-    	return
-    }
-    file, _, err := r.FormFile("file")
-    log.Println("File: ", file)
+	err := r.ParseMultipartForm(10 << 20) // 10 MB limit
+	if err != nil {
+		log.Println("Error parsing form: ", err)
+		http.Error(w, "Error parsing form", http.StatusBadRequest)
+		return
+	}
+	file, _, err := r.FormFile("file")
+	log.Println("File: ", file)
 
-    if err != nil {
-        log.Println("Error retrieving file: ", err)
-    	http.Error(w, "Error retrieving file", http.StatusBadRequest)
-    	return
-    }
+	if err != nil {
+		log.Println("Error retrieving file: ", err)
+		http.Error(w, "Error retrieving file", http.StatusBadRequest)
+		return
+	}
 
-    log.Println("File: ", err)
-    defer file.Close()
-
+	log.Println("File: ", err)
+	defer file.Close()
 
 	// Obtener los valores de los campos del formulario
-    name := r.FormValue("name")
-    size := r.FormValue("size")
-    fileType := r.FormValue("type")
+	name := r.FormValue("name")
+	size := r.FormValue("size")
+	fileType := r.FormValue("type")
 
-    if name == "" || size == "" || fileType == "" {
-        log.Println("Missing required fields")
-        http.Error(w, "Missing required fields", http.StatusBadRequest)
-        return
-    }
+	if name == "" || size == "" || fileType == "" {
+		log.Println("Missing required fields")
+		http.Error(w, "Missing required fields", http.StatusBadRequest)
+		return
+	}
 
-    // Crear la estructura Book
-    book = Book{Name: name, Size: size, Type: fileType}
+	// Crear la estructura Book
+	book = Book{Name: name, Size: size, Type: fileType}
 	log.Println(book)
 
-    //Guardar en la bd
+	//Guardar en la bd
 	_, err = collection.InsertOne(context.Background(), book)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-    log.Println("mount antes de : ")
-    if s == nil {
-        log.Println("s es nil")
-    }
 
-	fs, err := s.Mount(``)
+	conn, err_samba := net.Dial("tcp", "my-samba-container:445")
+	if err_samba != nil {
+		panic(err_samba)
+	}
+	defer conn.Close()
+
+	d := &smb2.Dialer{
+		Initiator: &smb2.NTLMInitiator{
+			User:     "myuser",
+			Password: "mypassword",
+		},
+	}
+
+	s, err_samba = d.Dial(conn)
+	if err_samba != nil {
+		panic(err_samba)
+	}
+	fmt.Println("para ver si da error ", err_samba)
+	log.Println("Conexión con el samba")
+
+	log.Println("mount antes de : ")
+	if s == nil {
+		log.Println("s es nil")
+	}
+
+	fs, err := s.Mount("\\\\my-samba-container\\shared")
 	log.Println("mount: ")
 	if err != nil {
 		panic(err)
 	}
 
 	log.Println("mount pasado el if ")
-	defer fs.Umount()
 
 	/*_, err = file.Seek(0, io.SeekStart)
 	if err != nil {
@@ -172,37 +193,33 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(string(bs))*/
 
-
-    //fmt.Println("Contenido escrito en el archivo en el servidor Samba.")
+	//fmt.Println("Contenido escrito en el archivo en el servidor Samba.")
 
 	// Crear un buffer de bytes para almacenar el contenido del archivo
-    var buffer bytes.Buffer
+	var buffer bytes.Buffer
 
-    // Leer el contenido del archivo y escribirlo en el buffer
-    _, err = io.Copy(&buffer, file)
-    if err != nil {
-        panic(err)
-    }
+	// Leer el contenido del archivo y escribirlo en el buffer
+	_, err = io.Copy(&buffer, file)
+	if err != nil {
+		panic(err)
+	}
 
-    // Convertir el buffer de bytes a un slice de bytes
-    archivoBytes := buffer.Bytes()
+	// Convertir el buffer de bytes a un slice de bytes
+	archivoBytes := buffer.Bytes()
 
-    // Ahora "archivoBytes" contiene el contenido del archivo como un slice de bytes ([]byte)
-    fmt.Println("Contenido del archivo como slice de bytes:", archivoBytes)
+	// Ahora "archivoBytes" contiene el contenido del archivo como un slice de bytes ([]byte)
+	fmt.Println("Contenido del archivo como slice de bytes:", archivoBytes)
 
 	/*contenido := []byte("Este es el contenido del archivo.")
-    _, err = file.Write(archivoBytes)
-    if err != nil {
-        panic(err)
-    }*/
+	  _, err = file.Write(archivoBytes)
+	  if err != nil {
+	      panic(err)
+	  }*/
 
+	// Contenido del archivo ya guardado en una variable
+	//contenidoArchivo := []byte(file)
 
-
-     // Contenido del archivo ya guardado en una variable
-	 //contenidoArchivo := []byte(file)
-
-
-	 // Crear un nuevo archivo en el servidor Samba y escribir el contenido
+	// Crear un nuevo archivo en el servidor Samba y escribir el contenido
 	/* f, err := s.Create(name + "." + fileType)
 	 if err != nil {
 		 panic(err)
@@ -216,28 +233,28 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 
 	 fmt.Println("Archivo guardado en el servidor Samba")*/
 
-	 // Crear o abrir un archivo en el servidor Samba
-	 smbFile, err := fs.Open(name + "." + fileType)
-	 if err != nil {
-		 panic(err)
-	 }
-	 defer file.Close()
+	// Crear o abrir un archivo en el servidor Samba
+	smbFile, err := fs.Open(name + "." + fileType)
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
 
+	// Copiar el contenido del archivo multipart al archivo en el servidor Samba
+	_, err = io.Copy(smbFile, file)
+	if err != nil {
+		panic(err)
+	}
 
-	 // Copiar el contenido del archivo multipart al archivo en el servidor Samba
-	 _, err = io.Copy(smbFile, file)
-	 if err != nil {
-		 panic(err)
-	 }
+	// Escribir contenido en el archivo
+	err = fs.WriteFile(name+"."+fileType, archivoBytes, 0644)
+	if err != nil {
+		panic(err)
+	}
 
-	 // Escribir contenido en el archivo
-	 err = fs.WriteFile(name + "." + fileType, archivoBytes, 0644)
-	 if err != nil {
-		 panic(err)
-	 }
-
-	 fmt.Println("Archivo guardado en el servidor Samba.")
-
+	fmt.Println("Archivo guardado en el servidor Samba.")
+	defer fs.Umount()
+	defer s.Logoff()
 }
 
 // Endpoint para obtener todos los libros de la base de datos
@@ -318,18 +335,17 @@ func getPort() (port string) {
 }
 
 func getLocalIp() string {
-    conn, err := net.Dial("udp", "8.8.8.8:80")
-    if err != nil {
-        log.Fatal(err)
-    }
-    defer conn.Close()
+	conn, err := net.Dial("udp", "8.8.8.8:80")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer conn.Close()
 
-    localAddress := conn.LocalAddr().(*net.UDPAddr)
-    log.Println(localAddress.IP)
+	localAddress := conn.LocalAddr().(*net.UDPAddr)
+	log.Println(localAddress.IP)
 
-    return localAddress.IP.String()
+	return localAddress.IP.String()
 }
-
 
 func main() {
 	// Registra el servicio con Consul

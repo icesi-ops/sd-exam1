@@ -1,8 +1,8 @@
 docker run -d \
     --name my-samba-container  \
     --network parcial \
-    -e SAMBA_USER=admin \
-    -e SAMBA_PASSWORD=password1 \
+    -e SAMBA_USER=myuser \
+    -e SAMBA_PASSWORD=mypassword \
     -p 445:445 \
     -v "$(pwd)/storage:/shared" \
     dperson/samba -p \
