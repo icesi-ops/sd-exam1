@@ -6,27 +6,32 @@ import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
 import Consul from 'consul';
 
-const serviceName = 'app-frontend';
-const servicePort = 4000;
+const frontendName = process.env.FRONTEND_NAME; // 'app-frontend'
+const frontendPort = process.env.FRONTEND_PORT; // 4000
+const backendName = process.env.BACKEND_NAME; // 'app-backend'
+const backendPort = process.env.BACKEND_PORT; // 3000
+const serverUrl = `http://${backendName}:${backendPort}`;
+const consulHost = process.env.CONSUL_HOST;
 
 console.log('Creating Consul client');
+console.log(`Consul host: ${consulHost}`);
 const consul = new Consul(
   {
-    host: '127.0.0.1',
+    host: consulHost,
     port: '8500',
     promisify: true,
   });
 
 console.log('Registering service with Consul');
 consul.agent.service.register({
-  name: serviceName,
-  port: servicePort,
+  name: frontendName,
+  port: Number(frontendPort),
   check: {
-    http: `http://127.0.0.1:${servicePort}/health`,
+    http: `http://${frontendName}:${frontendPort}/health`,
     interval: '10s'
   }
 }, () => {
-  console.log(`Service ${serviceName} registered`);
+  console.log(`Service ${frontendName} registered`);
 });
 
 // The Express app is exported so that it can be used by serverless Functions.
@@ -59,7 +64,9 @@ export function app(): express.Express {
         documentFilePath: indexHtml,
         url: `${protocol}://${headers.host}${originalUrl}`,
         publicPath: browserDistFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
+        providers: [
+          { provide: APP_BASE_HREF, useValue: baseUrl }
+        ],
       })
       .then((html) => res.send(html))
       .catch((err) => next(err));
@@ -67,6 +74,10 @@ export function app(): express.Express {
 
   server.get('/health', (req, res) => {
     res.status(200).send('OK');
+  });
+
+  server.get('/server-url', (req, res) => {
+    res.status(200).send(serverUrl);
   });
 
   return server;
@@ -78,7 +89,7 @@ function run(): void {
   // Start up the Node server
   const server = app();
   server.listen(port, () => {
-    console.log(`Node Express server listening on http://localhost:${port}`);
+    console.log(`Node Express server listening on ${frontendName}:${port}`);
   });
 }
 
