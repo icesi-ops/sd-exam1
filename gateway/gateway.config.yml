@@ -1,23 +1,34 @@
 http:
   port: 8080
+
 admin:
   port: 9876
   host: localhost
+
 apiEndpoints:
-  front:
+  frontend_service:
     host: localhost
-    paths: ['/front','/front/*']
+    paths: ['/', '/*']
+
 serviceEndpoints:
-  front:
-    url: 'http://loadbalancer/front/'
+  frontend_service:
+    url: 'http://loadbalancer/'
+
+policies:
+  - cors
+  - expression
+  - log
+  - proxy
+  - rate-limit
+
 pipelines:
   default:
     apiEndpoints:
-      - front
+      - frontend_service
     policies:
       - proxy:
           - action:
-              serviceEndpoint: front
+              serviceEndpoint: frontend_service
               changeOrigin: true
               prependPath:  false
               ignorePath:   false

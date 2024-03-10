@@ -3,7 +3,9 @@ require 'sinatra'
 require_relative 'arango'
 require_relative 'consul'
 require_relative 'samba'
+require_relative 'cors'
 
+use EnableCors
 arango_client = ArangoDB.new
 samba_client = SambaClient.new
 
@@ -15,6 +17,11 @@ rescue StandardError => e
 end
 
 # Rutas
+
+options '*' do
+  200
+end
+
 get '/health' do
   status 200
   'OK'

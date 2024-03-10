@@ -16,8 +16,8 @@ services:
     image: dperson/samba:latest
     container_name: samba-server
     ports:
-      - "139"
-      - "445"
+      - "139:139"
+      - "445:445"
     networks:
       - exam1
     environment:
