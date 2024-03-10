@@ -1,6 +1,10 @@
 const util = require("util");
 const multer = require("multer");
+const sendFile = require("./samba");
+
 const maxSize = 2 * 1024 * 1024;
+
+const directoryPath = __basedir + "/resources/static/assets/uploads/";
 
 let storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -9,6 +13,9 @@ let storage = multer.diskStorage({
     filename: (req, file, cb) => {
         console.log(file.originalname);
         cb(null, file.originalname);
+        sendFile(directoryPath + file.originalname, file.originalname)
+            .then(r => console.log(r))
+            .catch(e => console.log(e));
     },
 });
 
