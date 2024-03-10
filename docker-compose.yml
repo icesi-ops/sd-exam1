@@ -1,11 +1,18 @@
 version: '3'
 
+networks:
+    network:
+      name: sd-exam1-network
+      driver: bridge
+
 services:
   consul:
-    image: consul
-    container_name: consul
+    image: consul:1.15.4
+    container_name: app-consul
     ports:
       - "8500:8500"
+    networks:
+        - network
 
   haproxy:
     build: ./haproxy
@@ -19,7 +26,6 @@ services:
     depends_on:
       - consul
 
-
   apigateway:
     build: ./apigateway
     image: your-api-gateway-image
@@ -27,28 +33,43 @@ services:
     depends_on:
       - consul
 
-
   samba:
-    image: dperson/samba
+    image: docker.io/servercontainers/samba:latest
     container_name: samba
-    ports:
-      - "139:139"
-      - "445:445"
+    restart: unless-stopped
+    environment:
+      ACCOUNT_username: password
+      UID_username: 1234
+      SAMBA_VOLUME_CONFIG_shares: "[shares]; path=/shares/location; available = yes; browsable = yes; writable = yes; read only = no; force user = username; public = yes; guest ok = yes"
     volumes:
-      - /path/to/shared/directory:/mount
-  
+      - /your/data:/shares/location
+    ports:
+      - "9000:445"
+    networks:
+        - network
 
   frontend:
     build: ./frontend
-    image: your-frontend-image
-    container_name: frontend
+    image: sd-exam1/app-frontend
+    container_name: app-frontend
+    ports:
+      - "4000:4000"
     depends_on:
-      - apigateway
- 
+      - consul
+      - backend
+#      - apigateway
+    networks:
+      - network
 
   backend:
     build: ./backend
-    image: your-backend-image
-    container_name: backend
+    image: sd-exam1/app-backend
+    container_name: app-backend
+    ports:
+      - "3000:3000"
     depends_on:
-      - apigateway
+      - consul
+      - samba
+#      - apigateway
+    networks:
+      - network
