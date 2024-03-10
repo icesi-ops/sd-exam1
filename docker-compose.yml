@@ -27,7 +27,7 @@ services:
       - consul
 
   apigateway:
-    build: ./apigateway
+    build: ./appgw
     image: your-api-gateway-image
     container_name: apigateway
     depends_on:
@@ -57,7 +57,7 @@ services:
     depends_on:
       - consul
       - backend
-#      - apigateway
+      - apigateway
     networks:
       - network
 
@@ -70,6 +70,6 @@ services:
     depends_on:
       - consul
       - samba
-#      - apigateway
+      - apigateway
     networks:
       - network
