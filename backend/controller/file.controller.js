@@ -1,6 +1,9 @@
 const uploadFile = require("../middleware/upload");
 const fs = require("fs");
-const baseUrl = "http://localhost:3000/files/";
+
+const backendName = process.env.BACKEND_NAME; // app-backend
+const backendPort = process.env.BACKEND_PORT || 3000; // 3000
+const baseUrl = `http://${backendName}:${backendPort}/files/`;
 
 const upload = async (req, res) => {
     try {
