@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+
+  loadbalancer:
+    build:
+      context: ../loadbalancer
+      dockerfile: Dockerfile
+    container_name: loadbalancer
+    ports:
+      - "80"
+      - "1936"
+    networks:
+      - exam1
+    restart: always
+
+  express-gateway:
+    image: express-gateway
+    container_name: express-gateway
+    ports:
+      - "8080:8080"
+      - "9876:9876"
+    volumes:
+      - type: bind
+        source: ../gateway
+        target: /var/lib/eg
+    networks:
+      - exam1
+    restart: always
+
+networks:
+  exam1:
+    external: true

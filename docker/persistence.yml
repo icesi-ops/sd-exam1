@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+
+  aragodb:
+    image: arangodb:latest
+    container_name: aragodb
+    ports:
+      - "8529:8529"
+    networks:
+      - exam1
+    environment:
+      - ARANGO_ROOT_PASSWORD=root
+
+  samba-server:
+    image: dperson/samba:latest
+    container_name: samba-server
+    ports:
+      - "139:139"
+      - "445:445"
+    networks:
+      - exam1
+    environment:
+      USER: "samba;root"
+      SHARE: "share;/share;yes;no"
+      PERMISSIONS: true
+    command: '-S'
+
+networks:
+  exam1:
+    external: true

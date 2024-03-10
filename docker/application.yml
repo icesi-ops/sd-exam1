@@ -1,0 +1,37 @@
+version: "3"
+
+services:
+
+  frontend:
+    build:
+      context: ../my-app
+      dockerfile: Dockerfile
+    ports:
+      - "3000"
+    environment:
+      - CONSUL_URL=http://consul:8500
+      - API_URL=http://localhost:8080
+    networks:
+      - exam1  
+
+  backend:
+    build:
+      context: ../server
+      dockerfile: Dockerfile
+    ports:
+      - "4567"
+    environment:
+      - CONSUL_URL=http://consul:8500
+      - ARANGO_URL=http://aragodb:8529
+      - ARANGO_COLLECTION=files
+      - ARANGO_USER=root
+      - ARANGO_PASS=root
+      - SAMBA_IP=samba-server
+      - SAMBA_USERNAME=samba
+      - SAMBA_PASSWORD=root
+    networks:
+      - exam1
+
+networks:
+  exam1:
+    external: true
