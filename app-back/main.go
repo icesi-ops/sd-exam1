@@ -14,7 +14,7 @@ import (
 	//"io"
 	"log"
 	"net/http"
-	"os"
+	//"os"
 	"strconv"
 
 	consulapi "github.com/hashicorp/consul/api"
@@ -53,7 +53,7 @@ func init() {
 		},
 	}
 
-	s, err_samba := d.Dial(conn)
+	s, err_samba = d.Dial(conn)
 	if err_samba != nil {
 		panic(err_samba)
 	}
@@ -146,11 +146,18 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+    log.Println("mount antes de : ")
+    if s == nil {
+        log.Println("s es nil")
+    }
 
-	fs, err := s.Mount("STORAGE")
+	fs, err := s.Mount(``)
+	log.Println("mount: ")
 	if err != nil {
 		panic(err)
 	}
+
+	log.Println("mount pasado el if ")
 	defer fs.Umount()
 
 	/*_, err = file.Seek(0, io.SeekStart)
@@ -284,7 +291,7 @@ func serviceRegistryWithConsul() {
 		Port:    port,
 		Address: address,
 		Check: &consulapi.AgentServiceCheck{
-			HTTP:     fmt.Sprintf("http://%s:%v/api/health", address, port),
+			HTTP:     fmt.Sprintf("http://%s:%v/health", address, port),
 			Interval: "10s",
 			Timeout:  "30s",
 		},
