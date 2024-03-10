@@ -12,6 +12,7 @@ samba_client = SambaClient.new
 begin
   samba_client.connect
   puts "Conexión exitosa al servidor Samba."
+  samba_client.disconnect
 rescue StandardError => e
   puts "Error al conectar al servidor Samba: #{e.message}"
 end
@@ -35,7 +36,10 @@ post '/files' do
     filename = file[:filename]
     file_extension = File.extname(filename).downcase
     
+    samba_client.connect
     samba_client.create(filename, tempfile.path)
+    samba_client.disconnect
+
     result = arango_client.insertDocument(File.basename(filename, '.*'), file_extension, tempfile.size)
     
     if result
@@ -56,7 +60,9 @@ get '/files/:key' do
     key = params['key']
     filename = arango_client.get_filename(key)
 
+    samba_client.connect
     file_content = samba_client.get_file_by_name(filename)
+    samba_client.disconnect
 
     content_type 'application/octet-stream'
     headers['Content-Disposition'] = "attachment; filename=\"#{filename}\""
@@ -91,7 +97,9 @@ delete '/files/:key' do
     key = params['key']
     filename = arango_client.get_filename(key)
 
+    samba_client.connect
     samba_client.delete_file_by_name(filename)
+    samba_client.disconnect
     arango_client.deleteDocument(key)
 
     status 204
@@ -123,8 +131,10 @@ put '/files/:key' do
         raise StandardError, "La extensión del archivo no puede ser modificada"
       end
 
+      samba_client.connect
       samba_client.delete_file_by_name(filename)
       samba_client.create(filename, tempfile.path)
+      samba_client.disconnect
       result = arango_client.updateDocument(key, File.basename(filename, '.*'), new_file_extension, tempfile.size)
 
       if result

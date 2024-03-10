@@ -1,8 +1,10 @@
 # Use a Ruby runtime as base image
-FROM ruby:latest
+FROM ruby:2.7.6-alpine
 
 # Set the working directory in the container
 WORKDIR /app
+
+RUN apk add --no-cache build-base linux-headers ruby-dev
 
 # Copy the Gemfile and Gemfile.lock into the container
 COPY Gemfile Gemfile.lock ./

@@ -1,5 +1,5 @@
 require 'ruby_smb'
-require "openssl"
+#require "openssl"
 
 class SambaClient
   def initialize
@@ -19,6 +19,10 @@ class SambaClient
     @smb_client.authenticate
   end
 
+  def disconnect
+    puts "Desconectando de #{@ip_address}..."
+    @smb_client.disconnect!
+  end
 
   def create(remote_file_name, local_file_path)
     begin
@@ -51,6 +55,11 @@ class SambaClient
       file.close
     
       puts "Archivo '#{remote_file_name}' agregado exitosamente a #{@share_name}'"
+    rescue RubySMB::Error::IO => e
+      puts "Se rompió la tubería durante la creación del archivo: #{e.message}"
+      disconnect
+      connect
+      retry
     rescue StandardError => e
       puts "Error al agregar archivo a #{@share_name}: #{e.message}"
     end
@@ -101,7 +110,6 @@ class SambaClient
       file.delete
 
       file.close
-
       puts "Archivo '#{remote_file_name}' eliminado exitosamente de #{@share_name}"
     rescue StandardError => e
       puts "Error al eliminar archivo '#{remote_file_name}' de #{@share_name}: #{e.message}"
