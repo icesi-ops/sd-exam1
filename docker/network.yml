@@ -19,6 +19,7 @@ services:
     container_name: express-gateway
     ports:
       - "8080:8080"
+      - "9876:9876"
     volumes:
       - type: bind
         source: ../gateway

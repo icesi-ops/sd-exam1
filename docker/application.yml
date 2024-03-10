@@ -1,6 +1,19 @@
 version: "3"
 
 services:
+
+  frontend:
+    build:
+      context: ../my-app
+      dockerfile: Dockerfile
+    ports:
+      - "3000"
+    environment:
+      - CONSUL_URL=http://consul:8500
+      - API_URL=http://localhost:8080
+    networks:
+      - exam1  
+
   backend:
     build:
       context: ../server
@@ -16,7 +29,6 @@ services:
       - SAMBA_IP=samba-server
       - SAMBA_USERNAME=samba
       - SAMBA_PASSWORD=root
-
     networks:
       - exam1
 

@@ -19,14 +19,14 @@ def register_service(consul_url)
     payload = {
       "ID": service_name + "-" + random_id,
       "Name": service_name,
-      "Tags": ["api"],
+      "Tags": ["api", "v1", "ruby", "sinatra"],
       "Address":  ip,
       "Port": 4567,
       "Check": {
         "DeregisterCriticalServiceAfter": "90m",
         "HTTP": "http://#{ip}:4567/health",
-        "Interval": "60s",
-        "Timeout": "60s"
+        "Interval": "30s",
+        "Timeout": "30s"
       }
     }
     RestClient.put(consul_url, payload.to_json, headers)
