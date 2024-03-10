@@ -51,4 +51,6 @@ Para correr el ambiente de la app se cuenta con un script el cual corre el docke
 
 ### Problemas encontrados
 
+- Subir archivos al almacenamiento centralizado: Al momento de realizar la funcionalidad para que se subieran archivos al almacenamiemto centralizado (SAMBA) no se encontraba la ruta en la que tenía que guardar la información. Además, era incapaz de encontrar el archivo que queríamos guardar. Para solucionar esto, investigamos la forma correcta en Go para que el cliente SMB se conectara a la carpeta de Storage del almacenamiento centralizado y finalmente se pudo realizar. Por otro lado, no era posible pasar el archivo directamente al almacenamiento centralizado, si no que, había que crear primero un archivo vacío dentro del almacenamiento centralizado al cual posteriormente se llenaba con el contenido del archivo original 
+
 
