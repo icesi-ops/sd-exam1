@@ -208,7 +208,7 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	archivoBytes := buffer.Bytes()
 
 	// Ahora "archivoBytes" contiene el contenido del archivo como un slice de bytes ([]byte)
-	fmt.Println("Contenido del archivo como slice de bytes:", archivoBytes)
+	fmt.Println("Contenido del archivo como slice de bytes: No lo vamos a mostrar de nuevo")
 
 	/*contenido := []byte("Este es el contenido del archivo.")
 	  _, err = file.Write(archivoBytes)
@@ -231,14 +231,25 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 		 panic(err)
 	 }
 
-	 fmt.Println("Archivo guardado en el servidor Samba")*/
+	*/
 
 	// Crear o abrir un archivo en el servidor Samba
-	smbFile, err := fs.Open(name + "." + fileType)
+	//smbFile, err := fs.Open(name + "." + fileType)
+
+	f, err := fs.Create(name + ".pdf")
+	if err != nil {
+		panic(err)
+	}
+	defer fs.Remove(name + ".pdf")
+	defer f.Close()
+
+	smbFile, err := fs.Open(name + ".pdf")
 	if err != nil {
 		panic(err)
 	}
 	defer file.Close()
+
+	fmt.Println("Pasa del fs.Open")
 
 	// Copiar el contenido del archivo multipart al archivo en el servidor Samba
 	_, err = io.Copy(smbFile, file)
@@ -246,15 +257,20 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
+	fmt.Println("Pasa del io.Copy")
+
 	// Escribir contenido en el archivo
-	err = fs.WriteFile(name+"."+fileType, archivoBytes, 0644)
+	err = fs.WriteFile(name+".pdf", archivoBytes, 0644)
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println("Pasa del fs.WriteFile")
 
 	fmt.Println("Archivo guardado en el servidor Samba.")
 	defer fs.Umount()
 	defer s.Logoff()
+	w.WriteHeader(http.StatusOK)
+
 }
 
 // Endpoint para obtener todos los libros de la base de datos
