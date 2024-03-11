@@ -25,26 +25,30 @@ This guide will help you set up and containerize the frontend of our application
 1. Open the `Dockerfile` in a text editor.
 2. Ensure that the Dockerfile contains the following:
 
-// Use node.js image as the base image
+_Use node.js image as the base image_
 FROM node:18 AS build
-//Set the working directory in the container
+
+_Set the working directory in the container_
 WORKDIR /app
-//Copy package.json and package-lock.json to the working directory
+
+_Copy package.json and package-lock.json to the working directory_
 COPY package.json package-lock.json ./
-//Install dependencies
+
+_Install dependencies_
 RUN npm install
 
-// Copy the rest of the application code to the working directory
+_Copy the rest of the application code to the working directory_
 COPY . .
 
 EXPOSE 5173
 
-// Build the application
+_Build the application_
 RUN npm run build 
 
-// Stage 2
+_Stage 2_
 
-// Use nginx image as the base image for serving static files
+_Use nginx image as the base image for serving static files_
+
 FROM nginx:alpine
 ADD ./config/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /var/www/app/
@@ -54,7 +58,7 @@ EXPOSE 80
 
 CMD ["/consul.sh"]
 
-//The Bash script is designed so that as soon as a front-end instance is launched, it updates in Consul)
+_The Bash script is designed so that as soon as a front-end instance is launched, it updates in Consul_
    
 
 3. Save the Dockerfile.
