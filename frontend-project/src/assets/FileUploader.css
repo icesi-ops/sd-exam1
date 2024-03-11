@@ -1,4 +1,13 @@
 /* Tu archivo de estilos */
+
+.file-uploader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 20px; /* Ajusta según sea necesario */
+}
+
 .file-upload-button {
     background-color: #25bcff;
     color: white;
@@ -6,7 +15,6 @@
     font-size: 1em;
     margin-top: 15px;
     cursor: pointer;
-    border: none;
     border-radius: 5px;
   }
   

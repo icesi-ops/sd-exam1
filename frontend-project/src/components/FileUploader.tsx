@@ -6,6 +6,7 @@ interface FileUploaderProps {
 
 const FileUploader: React.FC<FileUploaderProps> = ({ onFileSelected }) => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -13,15 +14,25 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileSelected }) => {
     const file = event.target.files && event.target.files[0];
 
     if (file) {
-      onFileSelected(file);
-      setSelectedFile(file);
-      setFileName(file.name);
-      setShowSuccessMessage(true);
+      const allowedTypes = ['application/pdf'];
 
-      // Oculta automáticamente el mensaje después de 2 segundos
-      setTimeout(() => {
-        setShowSuccessMessage(false);
-      }, 2000);
+      if (allowedTypes.includes(file.type)) {
+        onFileSelected(file);
+        setSelectedFile(file);
+        setFileName(file.name);
+        setShowSuccessMessage(true);
+        setErrorMessage(null);
+
+        // Oculta automáticamente el mensaje después de 2 segundos
+        setTimeout(() => {
+          setShowSuccessMessage(false);
+        }, 2000);
+      } else {
+        // Mostrar mensaje de error si el archivo no es un PDF
+        setErrorMessage('Por favor, seleccione un archivo PDF válido.');
+        // Limpiar el archivo seleccionado
+        event.target.value = '';
+      }
     }
   };
 
@@ -62,7 +73,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileSelected }) => {
   };
 
   return (
-    <div>
+    <div className="file-uploader-container">
       <input
         id="file-input"
         type="file"
@@ -74,6 +85,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileSelected }) => {
         Seleccionar Archivo
       </button>
       {showSuccessMessage && <p>PDF seleccionado con éxito</p>}
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
       {fileName && (
         <div>
           <p>Archivo seleccionado: {fileName}</p>
