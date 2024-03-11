@@ -2,7 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import './consul';
+//import './consul';
 
 ReactDOM.render(
   <React.StrictMode>

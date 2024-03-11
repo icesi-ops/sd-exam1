@@ -1,14 +1,21 @@
 # Luchops & Danilops library
 
+# Explanation of the application
+
 ### Prerequisites
 
 - Docker installed on your VM (or WSL)
 - Docker desktop (if u have WSL)
 - Visual studio code
+- Clone the repository https://github.com/luis486/sd-exam1.git .
 
-### Steps to Follow
+# Branch Strategy
 
-1. Clone the repository https://github.com/luis486/sd-exam1.git .
+# Consul
+
+# Api Gateway
+
+# Load Balancer
 
 # SAMBA AND DOCKER VOLUME
 
@@ -23,16 +30,16 @@ This guide will help you set up and containerize the samba connected with a dock
 3. Ensure that the Dockerfile contains the following:
 
    ```Dockerfile
-    # Usa una imagen base de Samba
+    # Use here an image based on samba
     FROM dperson/samba:latest
 
-    # Copia el archivo de configuración de Samba al contenedor
+    # Copy the configuration file in samba container
     COPY smb.conf /etc/samba/smb.conf
 
-    # Comprueba si la carpeta compartida existe antes de crearla
+    # Check if the shared folder is existing before the creation
     RUN test -d /home/storage_data_smb || mkdir -p /home/storage_data_smb
 
-    # Expone el puerto de Samba
+    # Expose the samba port
     EXPOSE 139 445
 
     # Comando para ejecutar el servicio de Samba
@@ -134,21 +141,22 @@ This guide will help you set up and containerize the backend of our application 
 
    ```Dockerfile
     # Usa una imagen base de Python
+    # Use an image based in Python
     FROM python:3.8-slim
 
-    # Establece el directorio de trabajo
+    # Set the work dir
     WORKDIR /app
 
-    # Copia los archivos de la aplicación al contenedor
+    # Copy the files of the application in the container
     COPY . .
 
-    # Instala las dependencias
+    # Install the dependency
     RUN pip install --no-cache-dir -r requirements.txt
 
-    # Exponer el puerto de la aplicación Flask
+    # Expose the flask application port
     EXPOSE 5000
 
-    # Comando para ejecutar la aplicación Flask
+    # Command to execute the flask application
     CMD ["python", "app.py"]
    ```
 
@@ -290,3 +298,7 @@ You now have the development environment set up and running on your machine.
 
 1. Follow the same container configuration steps as described in the development section.
 2. Make sure to use the built image for production (`image_name`) when running the container on your production server.
+
+# Evidence of performance
+
+# Project Members
