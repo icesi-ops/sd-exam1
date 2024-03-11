@@ -6,12 +6,12 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 # Install dependencies
 RUN npm install
-# Install Axios
-RUN npm install axios
-RUN npm install koa2-cors --save-dev
+
 # Copy the rest of the application code to the working directory
 COPY . .
+
 EXPOSE 5173
+
 # Build the application
 RUN npm run build 
 
@@ -21,5 +21,9 @@ RUN npm run build
 FROM nginx:alpine
 ADD ./config/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /var/www/app/
+COPY consul.sh /consul.sh
+RUN chmod +x /consul.sh
 EXPOSE 80
-CMD ["nginx","-g", "daemon off;"]
+
+
+CMD ["/consul.sh"]
