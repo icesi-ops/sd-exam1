@@ -4,6 +4,7 @@
 * Carlos Arturo Diaz Artiaga - A00368987
 ### Deployment
 ![Deployment Diagram](https://i.ibb.co/hWyQCRp/midter1-drawio.png)  
+
 **Figure 1**. Deployment diagram
 
 #### Technologies used
@@ -21,7 +22,9 @@ In order to deploy this project into production, this will have to be migrated i
 
 ### Development branching strategies
 ![Diagram of GitFlow branching strategy](https://nvie.com/img/fb@2x.png)
+
 **Figure 2**. GitFlow branching strategy 
+
 During development, we used the GitFlow branching strategy. This allowed us to work on different features of this project simultaneously and then merge them. We used a development branch, and for each feature we developed, we created a new branch to work on that feature, that would later be merged onto the master branch when the assignment was ready. This can be evidenced in the repository [PR and Commit history](https://github.com/ArturoDiaz02/sd-exam1/pulls?q=is%3Apr+is%3Aclosed).
 
 ### Problems during development
