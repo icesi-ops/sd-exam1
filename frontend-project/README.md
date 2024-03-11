@@ -43,9 +43,13 @@ _Stage 2_
 
 FROM nginx:alpine
 ADD ./config/default.conf /etc/nginx/conf.d/default.conf
+
 COPY --from=build /app/dist /var/www/app/
+
 COPY consul.sh /consul.sh
+
 RUN chmod +x /consul.sh
+
 EXPOSE 80
 
 CMD ["/consul.sh"]
