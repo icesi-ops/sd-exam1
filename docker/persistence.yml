@@ -20,6 +20,9 @@ services:
       - "445"
     networks:
       - exam1
+    volumes:
+      - share:/share
+
     environment:
       USER: "samba;root"
       SHARE: "share;/share;yes;no"
@@ -29,3 +32,5 @@ services:
 networks:
   exam1:
     external: true
+volumes:
+  share:
