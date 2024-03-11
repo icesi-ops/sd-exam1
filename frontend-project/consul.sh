@@ -62,7 +62,6 @@ register_service() {
 register_service "$CONSUL_URL/v1/agent/service/register"
 
 
-
 echo "Starting Nginx..."
 
 nginx -g "daemon off;"
