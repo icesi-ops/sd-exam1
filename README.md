@@ -1,4 +1,8 @@
 # SD Exam 1 2024-1
+## File Management
+![Computer screenshot](front_screenshot.png)
+
+This application allows file upload, then allows the user to modify the file or delete it.
 ### Authors
 * Martin Perez Lopez - A00370027
 * Carlos Arturo Diaz Artiaga - A00368987
