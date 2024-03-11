@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+
+  consul:
+    image: consul:1.15.4
+    container_name: consul
+    ports:
+      - "8500:8500"
+      - "8600/udp"
+    networks:
+      - exam1
+    command: agent -server -bootstrap-expect 1 -ui -data-dir /tmp -client=0.0.0.0
+
+networks:
+  exam1:
+    external: true
