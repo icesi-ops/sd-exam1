@@ -130,96 +130,99 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	go func(){
 	// Conexión a Samba
-	conn, err_samba := net.Dial("tcp", "my-samba-container:445")
-	if err_samba != nil {
-		panic(err_samba)
-	}
-	defer conn.Close()
+    	conn, err_samba := net.Dial("tcp", "my-samba-container:445")
+    	if err_samba != nil {
+    		panic(err_samba)
+    	}
+    	defer conn.Close()
 
-	d := &smb2.Dialer{
-		Initiator: &smb2.NTLMInitiator{
-			User:     "myuser",
-			Password: "mypassword",
-		},
-	}
+    	d := &smb2.Dialer{
+    		Initiator: &smb2.NTLMInitiator{
+    			User:     "myuser",
+    			Password: "mypassword",
+    		},
+    	}
 
-	s, err_samba = d.Dial(conn)
-	if err_samba != nil {
-		panic(err_samba)
-	}
-	fmt.Println("para ver si da error ", err_samba)
-	log.Println("Conexión con el samba")
+    	s, err_samba = d.Dial(conn)
+    	if err_samba != nil {
+    		panic(err_samba)
+    	}
+    	fmt.Println("para ver si da error ", err_samba)
+    	log.Println("Conexión con el samba")
 
-	log.Println("mount antes de : ")
-	if s == nil {
-		log.Println("s es nil")
-	}
+    	log.Println("mount antes de : ")
+    	if s == nil {
+    		log.Println("s es nil")
+    	}
 
-	// Montar el recurso compartido
-	fs, err := s.Mount("\\\\my-samba-container\\shared")
-	log.Println("mount: ")
-	if err != nil {
-		panic(err)
-	}
+    	// Montar el recurso compartido
+    	fs, err := s.Mount("\\\\my-samba-container\\shared")
+    	log.Println("mount: ")
+    	if err != nil {
+    		panic(err)
+    	}
 
-	log.Println("mount pasado el if ")
+    	log.Println("mount pasado el if ")
 
-	// Crear un buffer de bytes para almacenar el contenido del archivo
-	var buffer bytes.Buffer
+    	// Crear un buffer de bytes para almacenar el contenido del archivo
+    	var buffer bytes.Buffer
 
-	// Leer el contenido del archivo y escribirlo en el buffer
-	_, err = io.Copy(&buffer, file)
-	if err != nil {
-		panic(err)
-	}
+    	// Leer el contenido del archivo y escribirlo en el buffer
+    	_, err = io.Copy(&buffer, file)
+    	if err != nil {
+    		panic(err)
+    	}
 
-	// Convertir el buffer de bytes a un slice de bytes
-	archivoBytes := buffer.Bytes()
+    	// Convertir el buffer de bytes a un slice de bytes
+    	archivoBytes := buffer.Bytes()
 
-	// Ahora "archivoBytes" contiene el contenido del archivo como un slice de bytes ([]byte)
-	fmt.Println("Contenido del archivo como slice de bytes: No lo vamos a mostrar de nuevo")
+    	// Ahora "archivoBytes" contiene el contenido del archivo como un slice de bytes ([]byte)
+    	fmt.Println("Contenido del archivo como slice de bytes: No lo vamos a mostrar de nuevo")
 
-	// Crear o abrir un archivo en el servidor Samba
-	f, err := fs.Create(name + fileType)
-	if err != nil {
-		panic(err)
-	}
-	defer fs.Remove(name + fileType)
-	defer f.Close()
+    	// Crear o abrir un archivo en el servidor Samba
+    	f, err := fs.Create(name + fileType)
+    	if err != nil {
+    		panic(err)
+    	}
+    	defer fs.Remove(name + fileType)
+    	defer f.Close()
 
-	smbFile, err := fs.Open(name + fileType)
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
+    	smbFile, err := fs.Open(name + fileType)
+    	if err != nil {
+    		panic(err)
+    	}
+    	defer file.Close()
 
-	fmt.Println("Pasa del fs.Open")
+    	fmt.Println("Pasa del fs.Open")
 
-	// Copiar el contenido del archivo multipart al archivo en el servidor Samba
-	_, err = io.Copy(smbFile, file)
-	if err != nil {
-		panic(err)
-	}
+    	// Copiar el contenido del archivo multipart al archivo en el servidor Samba
+    	_, err = io.Copy(smbFile, file)
+    	if err != nil {
+    		panic(err)
+    	}
 
-	fmt.Println("Pasa del io.Copy")
+    	fmt.Println("Pasa del io.Copy")
 
-	// Escribir contenido en el archivo
-	err = fs.WriteFile(name+fileType, archivoBytes, 0644)
-	if err != nil {
-		panic(err)
-	}
+    	// Escribir contenido en el archivo
+    	err = fs.WriteFile(name+fileType, archivoBytes, 0644)
+    	if err != nil {
+    		http.Error(w, err.Error(), http.StatusCreated)
+    	}
 
-	fmt.Println("Pasa del fs.WriteFile")
+    	fmt.Println("Pasa del fs.WriteFile")
 
-	w.WriteHeader(http.StatusOK)
-	fmt.Println("Archivo guardado en el servidor Samba.")
-	defer fs.Umount()
-	log.Println("Desmontado el recurso compartido")
-	defer s.Logoff()
-	//w.WriteHeader(http.StatusOK)
+    	w.WriteHeader(http.StatusOK)
+    	fmt.Println("Archivo guardado en el servidor Samba.")
+    	defer fs.Umount()
+    	log.Println("Desmontado el recurso compartido")
+    	defer s.Logoff()
+	}()
+
+	w.WriteHeader(http.StatusCreated)
 	log.Println("Desconectado del servidor Samba")
-	panic("terminate")
+
 }
 
 // Endpoint para obtener todos los libros de la base de datos
