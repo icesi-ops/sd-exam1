@@ -43,11 +43,20 @@ Figura 1. Diagrama de Despliegue
 Para correr el ambiente de la app se cuenta con un script el cual corre el docker compose y el script para levantar el almacenamiento centralizado.
 
 1. Ingresar a la carpeta del proyecto:
-  *cd deploy
+   ```bash
+   cd deploy
+   ```
+   
 2. Dar permisos para poder ejecutar el script de deploy:
-  *chmod +x ./deploy.sh
+   ```bash
+   chmod +x ./deploy.sh
+   ```
+   
 3. Ejecutar el script de deploy:
-  *sudo ./deploy.sh
+   ```bash
+   ./deploy.sh
+   ```
+  
 
 ### Problemas encontrados
 
