@@ -68,6 +68,46 @@ The branching strategy employed facilitates collaboration in the independent dev
 
 # API GATEWAY
 
+#### To authorization 
+
+This guide will walk you through the steps to set up an Express Gateway for a partial exam. 
+
+## Docker Commands
+
+### Step 1: Run Redis Container
+
+docker run --network libraryapp -d --name eg-data-store-parcial -p 6379:6379 redis:alpine
+This command starts a Redis container named eg-data-store-parcial on the libraryapp network, exposing port 6379.
+
+### Step 2: Run Express Gateway Container
+
+docker run -d --name eg-parcial --network libraryapp -v .:/var/lib/eg -p 8080:8080 -p 9876:9876 express-gateway
+
+This command starts an Express Gateway container named eg-parcial on the libraryapp network, mapping ports 8080 and 9876, and mounting the current directory as a volume.
+
+Gateway Configuration
+
+### Step 3: Create Users and Credentials
+
+docker exec -it eg-parcial sh
+
+eg users create
+
+eg credentials create -c danilops -t key-auth -q → 26uJ8uy9m4KVr5Xyk7AM71:1Shi9JNA3Uz8WC3yGdi3tB
+
+eg credentials create -c luchops -t key-auth -q → 19dPWIGxRLGpl0FpeMtdQw:0rrrJle54rPdNsuZAOniNS
+
+These commands are executed inside the eg-parcial container's shell. They create users and generate API key credentials for authentication.
+
+Testing the Gateway
+
+### Step 4: Make a Request
+
+curl -H "Authorization: apiKey 19dPWIGxRLGpl0FpeMtdQw:0rrrJle54rPdNsuZAOniNS" http://localhost:5173
+
+This command sends a curl request to the Express Gateway at http://localhost:5173 using the generated API key for authorization.
+
+
 # LOAD BALANCER
 
 # CONSUL
@@ -374,45 +414,6 @@ This guide will help you set up and containerize the frontend of our application
     This will run the container and make it accessible at `http://localhost:5173` in your web browser.
 
 You now have the development environment set up and running on your machine.
-
-# API GATEWAY 
-
-This guide will walk you through the steps to set up an Express Gateway for a partial exam. 
-
-## Docker Commands
-
-### Step 1: Run Redis Container
-
-docker run --network libraryapp -d --name eg-data-store-parcial -p 6379:6379 redis:alpine
-This command starts a Redis container named eg-data-store-parcial on the libraryapp network, exposing port 6379.
-
-### Step 2: Run Express Gateway Container
-
-docker run -d --name eg-parcial --network libraryapp -v .:/var/lib/eg -p 8080:8080 -p 9876:9876 express-gateway
-
-This command starts an Express Gateway container named eg-parcial on the libraryapp network, mapping ports 8080 and 9876, and mounting the current directory as a volume.
-
-Gateway Configuration
-
-### Step 3: Create Users and Credentials
-
-docker exec -it eg-parcial sh
-
-eg users create
-
-eg credentials create -c danilops -t key-auth -q → 26uJ8uy9m4KVr5Xyk7AM71:1Shi9JNA3Uz8WC3yGdi3tB
-
-eg credentials create -c luchops -t key-auth -q → 19dPWIGxRLGpl0FpeMtdQw:0rrrJle54rPdNsuZAOniNS
-
-These commands are executed inside the eg-parcial container's shell. They create users and generate API key credentials for authentication.
-
-Testing the Gateway
-
-### Step 4: Make a Request
-
-curl -H "Authorization: apiKey 19dPWIGxRLGpl0FpeMtdQw:0rrrJle54rPdNsuZAOniNS" http://localhost:5173
-
-This command sends a curl request to the Express Gateway at http://localhost:5173 using the generated API key for authorization.
 
 ## Production Environment Setup
 
