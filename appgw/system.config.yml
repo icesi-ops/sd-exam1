@@ -1,7 +1,7 @@
 # Core
 db:
   redis:
-    host: express-gateway-data-store
+    host: eg-data-store-parcial
     port: 6379
     namespace: EG
 
