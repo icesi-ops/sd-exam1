@@ -21,7 +21,7 @@ policies:
   - basic-auth
   - cors
   - expression
-  - key-auth
+  #- key-auth
   - log
   - oauth2
   - proxy
@@ -33,7 +33,7 @@ pipelines:
       - appfront
     policies:
       # Uncomment `key-auth:` when instructed to in the Getting Started guide.
-      - key-auth:
+      #  - key-auth:
       - proxy:
           - action:
               serviceEndpoint: appapi
