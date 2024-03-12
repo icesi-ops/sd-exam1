@@ -1,0 +1,15 @@
+version: '3'
+services:
+
+  samba:
+    container_name: sambaParcial
+    build: ../samba
+    ports:
+      - "139:139"
+      - "445:445"
+    networks:
+      - libraryapp
+      
+networks:
+  libraryapp:
+    external: true

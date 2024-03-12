@@ -1,0 +1,34 @@
+version: '3'
+services:
+
+  backend:
+    build: ../backend-project
+    container_name: backendParcial
+    ports:
+      - "5000:5000"
+    environment:
+      - CONSUL_HTTP_ADDR=consul:8500
+    networks:
+      - libraryapp
+
+  frontend:
+    build: ../frontend-project
+    container_name: frontendParcial
+    volumes:
+      - ./src:/app/src
+    environment:
+      - API_URL=http://localhost:5000
+      - API_CONSUL=http://localhost:8500
+    ports:
+      - "5173"
+    deploy:
+      mode: replicated
+      replicas: 2
+    networks:
+      - libraryapp
+    depends_on:
+      - backend
+
+networks:
+  libraryapp:
+    external: true
