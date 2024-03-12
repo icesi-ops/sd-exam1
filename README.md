@@ -59,6 +59,9 @@ This guide will help you set up and containerize the samba connected with a dock
 2.  Run the following command to build the container image:
 
     docker build -t image_docker .
+
+    example: docker build -t sambadb .
+
     (if you have extension Docker in Visual Studio Code, right-click in Dockerfile and build image)
 
     Replace `image_name` with the name you want to give to your Docker image.
@@ -67,11 +70,15 @@ This guide will help you set up and containerize the samba connected with a dock
 
         docker volume create name_volume
 
+        example: docker volume create sambaVolume
+
     Replace `name_volume` with the name you want to give to your Docker Volume
 
 4.  Once the image is successfully built, run the following command to run the container:
 
         docker run -dit -p 139:139 -p 445:445 --name container_name --network network_name -v name_volume:path_in_samba image_name
+
+        docker run -dit -p 445:445 --name sambadb --network libraryapp -v sambaVolume:/home/storage_data_smb sambadb
 
     Replace `container_name` with the name you want to give to your Docker container.
 
@@ -108,11 +115,19 @@ If you want to test you can do the next steps
 
         docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container_name
 
+        example: docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' sambadb
+
     Replace `container_name` with the name you want to give to your Docker container.
 
 2.  With the ip, you can use the next command
 
         smbclient //DOCKER_HOST_IP/centralized_storage -U user_name
+
+        example: smbclient //172.20.0.2/centralized_storage -U backend_user
+
+        If u dont have smbclient, install:
+        
+        sudo apt install smbclient
 
     Replace `user_name` with the username that you defined in the smb.conf.
 
@@ -183,6 +198,8 @@ This guide will help you set up and containerize the backend of our application 
 3.  Once the image is successfully built, run the following command to run the container:
 
         docker run -dit -p 5000:5000 --name container_name --network network_name image_name
+
+        example: docker run -d -p 5000:5000 --network libraryapp --name backendparcial backendparcial
 
     Replace `container_name` with the name you want to give to your Docker container.
 
@@ -273,6 +290,8 @@ This guide will help you set up and containerize the frontend of our application
 3. Once the image is successfully built, run the following command to run the container:
 
    docker run -d -p 5173:5173 --network network_name --name container_name image_name
+
+   example: docker run -d -p 5173:5173 --network libraryapp --name frontendparcial frontendparcial 
 
    Replace `container_name` with the name you want to give to your Docker container.
 
