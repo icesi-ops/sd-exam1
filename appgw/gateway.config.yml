@@ -15,7 +15,7 @@ serviceEndpoints:
   appapi:
     url: 'http://loadbalancer/api/'
   appfront:
-    url: 'http://loadbalancer/'
+    url: 'http://loadbalancer:5173/'
 
 policies:
   - basic-auth
