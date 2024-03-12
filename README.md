@@ -1,6 +1,13 @@
+## Members:
+
+-Daniel Ramirez
+-Luis Murcia
+
 # Luchops & Danilops library
 
 # Explanation of the application
+
+This is a full-stack application (front-end, back-end, and database) where we put all our knowledge about container deployment, microservice discovery like Consul, load balancing like HAProxy, and finally the API gateway for traffic redirection. The application consists of a simple library where clients can save and list PDF files. Development tools such as VS Code, a Windows subsystem based on Linux (WSL), and Docker Desktop, which provides the Docker daemon for analyzing current processes and images, were used. We also demonstrate knowledge in docker-compose and scripting for automatically deploying the environment, and of course, Linux expertise.
 
 ### Prerequisites
 
