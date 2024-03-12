@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+
+  server:
+    build: ../app-back
+    container_name: server
+    ports:
+      - "9000:9000"
+    environment:
+      - CONSUL_HTTP_ADDR=consul:8500
+      - MONGODB_URL=mongodb://dabo:secret@mongodb:27017
+    networks:
+      - parcial
+
+  frontend:
+    build: ../app-front
+    volumes:
+      - ./src:/app/src
+    environment:
+      - API_URL=http://localhost:9000
+      - API_CONSUL=http://localhost:8500
+    ports:
+      - "80"
+    deploy:
+      mode: replicated
+      replicas: 2
+    networks:
+      - parcial
+    depends_on:
+      - server
+
+networks:
+  parcial:
+    external: true
+
+
+
