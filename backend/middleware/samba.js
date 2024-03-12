@@ -6,16 +6,14 @@ let client = new SambaClient({
     username: 'username', // not required, defaults to guest
     password: 'password', // not required
 });
-const upload = async (localPath, remotePath) => {
 
+const sendFile = async (localPath, remotePath) => {
     try {
         await client.sendFile(localPath, remotePath);
         console.log('File transfer done');
     } catch (err) {
         console.error('File transfer failed:', err);
     }
-
 }
 
-let sendFileToSamba = util.promisify(upload);
-module.exports = sendFileToSamba;
+module.exports = sendFile;
