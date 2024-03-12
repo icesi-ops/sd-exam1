@@ -7,6 +7,9 @@ ENV BACKEND_PORT=3000
 ENV CONSUL_HOST='app-consul'
 ENV FRONTEND_HOST='app-frontend'
 ENV FRONTEND_PORT=4000
+ENV COUCHDB_HOST='app-couchdb'
+ENV COUCHDB_USER=admin
+ENV COUCHDB_PASS=admin
 
 # SMB Client
 FROM node as final
