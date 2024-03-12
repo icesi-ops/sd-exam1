@@ -14,6 +14,23 @@ services:
     networks:
         - network
 
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+        - network
+
+  express-gateway:
+    image: express-gateway
+    volumes:
+      - .:/var/lib/eg
+    ports:
+      - "8080:8080"
+      - "9876:9876" 
+    networks:
+        - network   
+
   haproxy:
     build: ./haproxy
     image: haproxy:latest
@@ -28,9 +45,10 @@ services:
 
   apigateway:
     build: ./appgw
-    image: your-api-gateway-image
+    image: express-gateway
     container_name: apigateway
     depends_on:
+      - redis
       - consul
 
   samba:
