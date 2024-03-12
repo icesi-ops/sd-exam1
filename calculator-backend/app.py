@@ -214,6 +214,10 @@ app = Flask(__name__)
 
 CORS(app)
 
+@app.route('/health')
+def health():
+    # Lógica de verificación de salud (puedes personalizar según tus necesidades)
+    return "OK", 200
 # Configuración del servidor Samba
 
 samba_config = {
@@ -318,4 +322,5 @@ def upload_file():
         return jsonify({'error': 'Error interno del servidorr'}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    os.environ['FLASK_ENV'] = 'production'
+    app.run(debug=True, port=5000 ,host='0.0.0.0')

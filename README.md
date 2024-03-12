@@ -9,13 +9,69 @@
 - Visual studio code
 - Clone the repository https://github.com/luis486/sd-exam1.git .
 
-# Branch Strategy
+# BRANCH STRATEGY
 
-# Consul
+## Summary
 
-# Api Gateway
+This part provides a detailed description of the integration tasks carried out during the project development, along with the branching strategy employed to manage different features and software versions.
 
-# Load Balancer
+## Branching Strategy
+
+1. Master Branch
+
+The master branch is considered the main and stable branch of the repository. It only contains verified versions ready for production. Updating this branch occurs only after comprehensive testing on the develop branch.
+
+2. Develop Branch
+
+The develop branch serves as the main integration branch. It is the consolidation branch for all features developed in feature branches. Each time a feature is completed and individually tested, it is merged into the develop branch.
+
+3. Feature Branches
+
+Feature branches (feature/\*) are created to develop new functionalities or enhance specific parts of the system. Each feature branch is derived from the develop branch and is merged back into develop once the functionality is completed and tested.
+
+## Integration Tasks
+
+1. Frontend Development (feature/frontend-improvements)
+
+Creation of the feature/frontend-improvements branch from develop.
+Development and testing of frontend improvements.
+Integration of feature/frontend-improvements into develop.
+
+2. Backend Development (feature/backend-updates)
+
+Creation of the feature/backend-updates branch from develop.
+Development and testing of backend updates.
+Integration of feature/backend-updates into develop.
+
+3. Containerization Integration (feature/containerization)
+
+Creation of the feature/containerization branch from develop.
+Development and testing of containerization integration.
+Integration of feature/containerization into develop.
+
+4. Production Deployment
+
+Final testing on the develop branch.
+Merge develop into master for production deployment.
+Evidence: Commit on the master branch showing the merge of develop.
+
+## Conclusion
+
+The branching strategy employed facilitates collaboration in the independent development, testing, and integration of features. The documentation and evidence ensure a clear tracking of tasks performed and decisions made during the development and integration process.
+
+# API GATEWAY
+
+# LOAD BALANCER
+
+# CONSUL
+
+1.  Open a terminal and enter the next command:
+
+        docker run -d -p 8500:8500 -p 8600:8600/udp --network network_name --name container_name  consul:1.15 agent -server -bootstrap-expect 1 -ui -data-dir /tmp -client=0.0.0.0
+
+    Replace `container_name` with the name you want to give to your Docker container.
+
+    Replace `network_name` with the name of your network (you need tha netwkor to connect all containers)
 
 # SAMBA AND DOCKER VOLUME
 
@@ -237,58 +293,57 @@ This guide will help you set up and containerize the frontend of our application
 2. Ensure that the Dockerfile contains the following:
 
    ```Dockerfile
-    # Use node.js image as the base image
-    FROM node:18 AS build
-    # Set the working directory in the container
-    WORKDIR /app
-    # Copy package.json and package-lock.json to the working directory
+    FROM node:18 AS build WORKDIR /app
+
     COPY package.json package-lock.json ./
-    # Install dependencies
+
     RUN npm install
-    # Install Axios
-    RUN npm install axios
-    RUN npm install koa2-cors --save-dev
-    # Copy the rest of the application code to the working directory
+
     COPY . .
+
     EXPOSE 5173
-    # Build the application
+
     RUN npm run build
 
+    Stage 2
 
-    # Stage 2
-    # Use nginx image as the base image for serving static files
-    FROM nginx:alpine
-    ADD ./config/default.conf /etc/nginx/conf.d/default.conf
+    FROM nginx:alpine ADD ./config/default.conf /etc/nginx/conf.d/default.conf
+
     COPY --from=build /app/dist /var/www/app/
+
+    COPY consul.sh /consul.sh
+
+    RUN chmod +x /consul.sh
+
     EXPOSE 80
-    CMD ["nginx","-g", "daemon off;"]
 
-
+    CMD ["/consul.sh"]
    ```
 
 3. Save the Dockerfile.
 
 ### Building and Running the Container
 
-1. Open a terminal in the frontend project directory.
-2. Run the following command to build the container image:
+1.  Open a terminal in the frontend project directory.
+2.  Run the following command to build the container image:
 
-   docker build -t image_docker .
-   (if you have extension Docker in Visual Studio Code, right-click in Dockerfile and build image)
+         docker build -t image_docker .
 
-   Replace `image_name` with the name you want to give to your Docker image.
+    (if you have extension Docker in Visual Studio Code, right-click in Dockerfile and build image)
 
-3. Once the image is successfully built, run the following command to run the container:
+    Replace `image_name` with the name you want to give to your Docker image.
 
-   docker run -d -p 5173:5173 --network network_name --name container_name image_name
+3.  Once the image is successfully built, run the following command to run the container:
 
-   Replace `container_name` with the name you want to give to your Docker container.
+         docker run -d -p 5173:5173 --network network_name --name container_name image_name
 
-   Replace `image_name` with the name you want to give to your Docker image.
+    Replace `container_name` with the name you want to give to your Docker container.
 
-   Replace `network_name` with the name of your network (you need tha netwkor to connect all containers)
+    Replace `image_name` with the name you want to give to your Docker image.
 
-   This will run the container and make it accessible at `http://localhost:5173` in your web browser.
+    Replace `network_name` with the name of your network (you need tha netwkor to connect all containers)
+
+    This will run the container and make it accessible at `http://localhost:5173` in your web browser.
 
 You now have the development environment set up and running on your machine.
 
