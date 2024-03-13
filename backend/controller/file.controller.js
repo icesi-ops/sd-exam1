@@ -1,11 +1,11 @@
-const sendToSamba = require("../middleware/samba");
+const samba = require("../middleware/samba");
 const couchdb = require("../middleware/couchdb");
 const fs = require("fs");
 
 const backendName = process.env.BACKEND_NAME; // app-backend
 const backendPort = process.env.BACKEND_PORT || 3000; // 3000
 const baseUrl = `http://${backendName}:${backendPort}/files/`;
-const directoryPath = "/tmp/";
+const directoryPath = __basedir + '/resources/static/assets/uploads/';
 
 const upload = async (req, res) => {
     try {
@@ -17,7 +17,7 @@ const upload = async (req, res) => {
 
         const dbName = 'files';
         await couchdb.insertDocument(dbName, file);
-        await sendToSamba(directoryPath + file.originalname, file.originalname);
+        await samba.sendFile(directoryPath + file.originalname, file.originalname);
 
         res.status(200).send({
             message: "Uploaded the file successfully: " + file.originalname,
@@ -69,8 +69,10 @@ const getListFiles = (req, res) => {
     )
 };
 
-const download = (req, res) => {
+const download = async (req, res) => {
     const fileName = req.params.name;
+
+    await samba.getFile(fileName, directoryPath + fileName);
 
     res.download(directoryPath + fileName, fileName, (err) => {
         if (err) {
@@ -81,8 +83,49 @@ const download = (req, res) => {
     });
 };
 
+const removeFile = (req, res) => {
+    const fileId = req.params.id;
+    const fileRev = req.params.rev;
+
+    const dbName = 'files';
+
+    couchdb.removeDocument(dbName, fileId, fileRev).then(() => {
+        res.status(200).send({
+            message: "File removed successfully",
+        });
+    }).catch(
+        (err) => {
+            if (err) {
+                res.status(500).send({
+                    message: "Unable to remove file!",
+                });
+            }
+        }
+    )
+}
+
+const updateFile = (req, res) => {
+    const dbName = 'files';
+    console.log(req.body);
+    couchdb.updateDocument(dbName, req.body).then(() => {
+        res.status(200).send({
+            message: "File updated successfully",
+        });
+    }).catch(
+        (err) => {
+            if (err) {
+                res.status(500).send({
+                    message: "Unable to update file!",
+                });
+            }
+        }
+    )
+}
+
 module.exports = {
     upload,
     getListFiles,
     download,
+    removeFile,
+    updateFile
 };
