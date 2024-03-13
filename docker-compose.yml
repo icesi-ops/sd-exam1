@@ -35,12 +35,14 @@ services:
     image: haproxy:2.3
     container_name: haproxy
     ports:
+      - "9000:80"
       - "1936:1936"
-      - "443:443"
     volumes:
       - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
     depends_on:
       - consul
+      - backend
+      - frontend
 
   apigateway:
     build: ./appgw
