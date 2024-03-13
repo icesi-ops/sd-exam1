@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "jsRKZx+ZwS87gngxvb5cbtFNGmh8X33QhpXlL1MFPz4=",
+  "Source": "backend-library-app",
+  "BasePath": "_content/backend-library-app",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

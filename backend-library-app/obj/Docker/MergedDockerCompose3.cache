@@ -1,0 +1,73 @@
+name: dockercompose9215985384931428582
+services:
+  backend-library-app:
+    build:
+      context: C:\Users\PC_WIN11\Documents\2024-1\SistemasDistribuidos\example\backend-library-app
+      dockerfile: backend-library-app/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ASPNETCORE_HTTPS_PORTS: "8081"
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: User ID=postgres; Password=postgres;Server=postgresdb;Port=5432;Database=LibraryDB; IntegratedSecurity=true;Pooling=true;
+    image: backendlibraryapp
+    networks:
+      exam: null
+    ports:
+      - mode: ingress
+        target: 8080
+        published: "8080"
+        protocol: tcp
+      - mode: ingress
+        target: 8081
+        published: "8081"
+        protocol: tcp
+      - mode: ingress
+        target: 8080
+        protocol: tcp
+      - mode: ingress
+        target: 8081
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: C:\Users\PC_WIN11\AppData\Roaming/Microsoft/UserSecrets
+        target: /home/app/.microsoft/usersecrets
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\PC_WIN11\AppData\Roaming/ASP.NET/Https
+        target: /home/app/.aspnet/https
+        read_only: true
+        bind:
+          create_host_path: true
+  postgres:
+    build:
+      context: C:\Users\PC_WIN11\Documents\2024-1\SistemasDistribuidos\example\backend-library-app\resources\postgres
+      dockerfile: Dockerfile
+    container_name: postgresdb
+    environment:
+      POSTGRES_DB: LibraryDB
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    image: postgres:latest
+    networks:
+      exam: null
+    ports:
+      - mode: ingress
+        target: 5432
+        published: "5433"
+        protocol: tcp
+    restart: always
+    volumes:
+      - type: volume
+        source: app_data
+        target: /var/lib/postgresql/data
+        volume: {}
+networks:
+  exam:
+    name: dockercompose9215985384931428582_exam
+    driver: bridge
+volumes:
+  app_data:
+    name: dockercompose9215985384931428582_app_data
