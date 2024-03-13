@@ -14,14 +14,14 @@
 
 ### Tecnologías sugeridas para el desarrollo del examen
 * Docker
-* Ansible
 * Docker compose
-* YML
 * .NET
 * REACT
-* Samba
+* Redis
+* Express-gateway
+* Firestore
 * Postgres SQL
-
+* Volúmenes de docker (Persistencia de datos)
 ### Estrategia de Branching
 
 * #### Gitflow:
@@ -34,11 +34,36 @@ La estrategia de rama por ambiente es una opción sólida para gestionar los dat
 * [Frontend](https://github.com/SGutierrez-11/backend-library-app.git)
 * [Backend](https://github.com/SGutierrez-11/frontend-library-app.git)
 
+#### Arquitectura del despliegue
+![alt text](/resources/img/image.png)
+````Por inconvenientes en el funcionamiento, e integración con .NET, el almacenamiento centralizado se manejó en nube usando los servicios de firestore````
+#### Arquitectura final:
+![alt text](/resources/img/arquitectura-nueva.jpg)
+
+
 ### Servicios Implementados:
-* Api Gateway:
-* Balanceador de carga:
-* Registro y descubrimiento:
-* Frontend:
-* Backend:
-* Base de datos:
-* Almacenamiento centralizado:    
+* Api Gateway 
+* Balanceador de carga
+* Registro y descubrimiento (Consul)
+* Frontend
+* Backend
+* Base de datos
+* Almacenamiento centralizado (en nube)    
+
+### Cosas por añadir
+
+* Parametrizar las tecnologías a utilizar en este tipo de esquemas en importante. Se desconocìa el framework web de .NET por lo que algunas herramientas e implementaciones no funcionaron por desconocer el tema de dependencias y librerías usadas por dicho framework.
+* De cierta manera, es importante el uso de herramientas que incluyan todo el sistema de comunicación y replicamiento, tales cómo kebernetes.
+* Mantener un control de direcciones y puertos, de cierta manera reglamentar los usos de la red, y la asignación de direcciones.
+* Usar herramientas de despliegue continuo para hacer correcciones de código eficientemente
+
+#### Para ejecutar los microservicios
+
+* Es necesario tener ````docker y docker compose```` instalado en el sistema
+* Dentro de la carpeta principal "sd-exam1" ejecutar el comando ````docker-compose up -d```` para levantar todos los servicios al mismo tiempo 
+
+#### En local
+
+Para correr el proyecto en local es necesario tener instalado:
+* Node.js
+* Visual Studio 2022

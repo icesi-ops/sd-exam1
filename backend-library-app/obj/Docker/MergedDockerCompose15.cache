@@ -1,0 +1,98 @@
+name: dockercompose5521537497405415872
+services:
+  backend-library-app:
+    build:
+      context: D:\Github_Repos\backend-library-app
+      dockerfile: backend-library-app/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ASPNETCORE_HTTPS_PORTS: "8081"
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: User ID=postgres; Password=postgres;Server=postgresdb;Port=5432;Database=LibraryDB; IntegratedSecurity=true;Pooling=true;
+    image: backendlibraryapp
+    networks:
+      exam: null
+    ports:
+      - mode: ingress
+        target: 8080
+        published: "8080"
+        protocol: tcp
+      - mode: ingress
+        target: 8081
+        published: "8081"
+        protocol: tcp
+      - mode: ingress
+        target: 8080
+        protocol: tcp
+      - mode: ingress
+        target: 8081
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: C:\Users\JHORMANMERA\AppData\Roaming/Microsoft/UserSecrets
+        target: /home/app/.microsoft/usersecrets
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\JHORMANMERA\AppData\Roaming/ASP.NET/Https
+        target: /home/app/.aspnet/https
+        read_only: true
+        bind:
+          create_host_path: true
+  postgres:
+    build:
+      context: D:\Github_Repos\backend-library-app\resources\postgres
+      dockerfile: Dockerfile
+    container_name: postgresdb
+    environment:
+      POSTGRES_DB: LibraryDB
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    image: postgres:latest
+    networks:
+      exam: null
+    ports:
+      - mode: ingress
+        target: 5432
+        published: "5433"
+        protocol: tcp
+    restart: always
+    volumes:
+      - type: volume
+        source: app_data
+        target: /var/lib/postgresql/data
+        volume: {}
+  samba:
+    command:
+      - -p
+      - -u
+      - user;1234
+    container_name: samba-container
+    environment:
+      SAMBA_PASSWORD: password1
+      SAMBA_USER: admin
+    image: dperson/samba
+    networks:
+      exam: null
+    ports:
+      - mode: ingress
+        target: 445
+        published: "1445"
+        protocol: tcp
+    restart: always
+    stdin_open: true
+    tty: true
+    volumes:
+      - type: volume
+        source: app_data
+        target: /mount
+        volume: {}
+networks:
+  exam:
+    name: dockercompose5521537497405415872_exam
+    driver: bridge
+volumes:
+  app_data:
+    name: dockercompose5521537497405415872_app_data

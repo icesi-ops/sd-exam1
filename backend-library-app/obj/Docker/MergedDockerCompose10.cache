@@ -1,0 +1,166 @@
+name: dockercompose9215985384931428582
+services:
+  backend-library-app:
+    build:
+      context: C:\Users\PC_WIN11\Documents\2024-1\SistemasDistribuidos\example\backend-library-app
+      dockerfile: backend-library-app/Dockerfile
+      args:
+        BUILD_CONFIGURATION: Debug
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: backend-library-app
+      target: base
+    container_name: backend-library-app_1
+    entrypoint:
+      - tail
+      - -f
+      - /dev/null
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ASPNETCORE_HTTPS_PORTS: "8081"
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: User ID=postgres; Password=postgres;Server=postgresdb;Port=5432;Database=LibraryDB; IntegratedSecurity=true;Pooling=true;
+      DOTNET_USE_POLLING_FILE_WATCHER: "1"
+      NUGET_FALLBACK_PACKAGES: ""
+    image: backendlibraryapp:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /.nuget/packages  "/app/bin/Debug/net8.0/backend-library-app.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    networks:
+      exam: null
+    ports:
+      - mode: ingress
+        target: 8080
+        published: "8080"
+        protocol: tcp
+      - mode: ingress
+        target: 8081
+        published: "8081"
+        protocol: tcp
+      - mode: ingress
+        target: 8080
+        protocol: tcp
+      - mode: ingress
+        target: 8081
+        protocol: tcp
+    tty: true
+    volumes:
+      - type: bind
+        source: C:\Users\PC_WIN11\AppData\Roaming/Microsoft/UserSecrets
+        target: /home/app/.microsoft/usersecrets
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\PC_WIN11\AppData\Roaming/ASP.NET/Https
+        target: /home/app/.aspnet/https
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\PC_WIN11\Documents\2024-1\SistemasDistribuidos\example\backend-library-app\backend-library-app
+        target: /app
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\PC_WIN11\Documents\2024-1\SistemasDistribuidos\example\backend-library-app
+        target: /src
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\PC_WIN11\vsdbg\vs2017u5
+        target: /remote_debugger
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\PC_WIN11\.nuget\packages\
+        target: /.nuget/packages
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\PC_WIN11\AppData\Roaming/ASP.NET/Https
+        target: /root/.aspnet/https
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\PC_WIN11\AppData\Roaming/Microsoft/UserSecrets
+        target: /root/.microsoft/usersecrets
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\TokenService.Proxy\linux-x64\net6.0
+        target: /TokenService.Proxy
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\HotReloadProxy\linux-x64\net8.0
+        target: /HotReloadProxy
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\HotReload
+        target: /HotReloadAgent
+        read_only: true
+        bind:
+          create_host_path: true
+  postgres:
+    build:
+      context: C:\Users\PC_WIN11\Documents\2024-1\SistemasDistribuidos\example\backend-library-app\resources\postgres
+      dockerfile: Dockerfile
+    container_name: postgresdb
+    environment:
+      POSTGRES_DB: LibraryDB
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    image: postgres:latest
+    networks:
+      exam: null
+    ports:
+      - mode: ingress
+        target: 5432
+        published: "5433"
+        protocol: tcp
+    restart: always
+    volumes:
+      - type: volume
+        source: app_data
+        target: /var/lib/postgresql/data
+        volume: {}
+  samba:
+    command:
+      - sh
+      - -c
+      - smbd --foreground --log-stdout --no-process-group -p -u 'myuser;mypassword' -s 'shared;/shared;yes;no;no;myuser'
+    container_name: samba-container
+    environment:
+      SAMBA_PASSWORD: password1
+      SAMBA_USER: admin
+    image: dperson/samba
+    networks:
+      exam: null
+    ports:
+      - mode: ingress
+        target: 445
+        published: "1445"
+        protocol: tcp
+    volumes:
+      - type: volume
+        source: app_data
+        target: /shared
+        volume: {}
+networks:
+  exam:
+    name: dockercompose9215985384931428582_exam
+    driver: bridge
+volumes:
+  app_data:
+    name: dockercompose9215985384931428582_app_data
