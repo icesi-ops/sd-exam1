@@ -1,5 +1,9 @@
 # 📖 Luchops & Danilops library 📖
 
+<p align="center">
+  <img src="images/gifinit.gif" alt="Logo">
+</p>
+
 # Explanation of the application 🤓
 
 This is a full-stack application (front-end, back-end, and database) where we put all our knowledge about container deployment, microservice discovery like Consul, load balancing like HAProxy, and finally the API gateway for traffic redirection. The application consists of a simple library where clients can save and list PDF files. Development tools such as VS Code, a Windows subsystem based on Linux (WSL), and Docker Desktop, which provides the Docker daemon for analyzing current processes and images, were used. We also demonstrate knowledge in docker-compose and scripting for automatically deploying the environment, and of course, Linux expertise.
@@ -479,6 +483,54 @@ You now have the development environment set up and running on your machine.
 2. Make sure to use the built image for production (`image_name`) when running the container on your production server.
 
 # Evidence of performance ✏️
+
+First, we can appreciate the web page designed with reac + vite.
+
+<p align="center">
+  <img src="images/Logo.png" alt="Logo">
+</p>
+
+If we click on the select file button, we can see that it loads the interface that the browser uses to upload a file, the program will check if it is a pdf and if it is, it will activate the save file button plus a button to send to the backend.
+
+<p align="center">
+  <img src="images/image1.png" alt="Image 1">
+</p>
+
+<p align="center">
+  <img src="images/image2.png" alt="Image 2">
+</p>
+
+Then, the file will be sent to the backend.
+
+<p align="center">
+  <img src="images/image3.png" alt="Image 3">
+</p>
+
+We can list the files that are in the docker volume and in samba.
+
+<p align="center">
+  <img src="images/image4.png" alt="Image 4">
+</p>
+
+We can see that this is added in samba and also in the docker volume.
+
+<p align="center">
+  <img src="images/image8.png" alt="Image 8">
+</p>
+
+<p align="center">
+  <img src="images/image7.png" alt="Image 7">
+</p>
+
+Finally, we can see the operation of the consul and the load balancer.
+
+<p align="center">
+  <img src="images/image5.png" alt="Image 5">
+</p>
+
+<p align="center">
+  <img src="images/image6.png" alt="Image 6">
+</p>
 
 # Problems in the development 💀
 
