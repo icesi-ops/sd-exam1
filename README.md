@@ -75,6 +75,8 @@ This guide will walk you through the steps to set up an Express Gateway for a pa
 
 ### Step 1: Run Redis Container
 
+You need first go to the appgw folder yo execute the next command
+
     docker run --network network_name -d --name container_name -p 6379:6379 redis:alpine
 
 Replace `container_name` with the name you want to give to your Docker container.
@@ -193,20 +195,21 @@ This guide will help you set up and containerize the samba connected with a dock
 3. Ensure that the Dockerfile contains the following:
 
    ```Dockerfile
-    # Use here an image based on samba
+
     FROM dperson/samba:latest
 
-    # Copy the configuration file in samba container
     COPY smb.conf /etc/samba/smb.conf
+    COPY entrypoint.sh /entrypoint.sh
 
-    # Check if the shared folder is existing before the creation
+    # Comprueba si la carpeta compartida existe antes de crearla
     RUN test -d /home/storage_data_smb || mkdir -p /home/storage_data_smb
+    RUN chmod -R 777 /home/storage_data_smb
 
-    # Expose the samba port
+    RUN chmod +x /entrypoint.sh
+
     EXPOSE 139 445
 
-    # Comando para ejecutar el servicio de Samba
-    CMD ["smbd", "--foreground", "--no-process-group"]
+    ENTRYPOINT ["/entrypoint.sh"]
 
    ```
 
