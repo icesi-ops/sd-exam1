@@ -35,7 +35,7 @@ services:
     image: haproxy:2.3
     container_name: haproxy
     ports:
-      - "9000:80"
+      - "8081:80"
       - "1936:1936"
     volumes:
       - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
