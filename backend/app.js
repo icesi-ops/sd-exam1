@@ -1,6 +1,7 @@
 const cors = require("cors");
 const express = require("express");
 const consul = require('consul');
+const bodyParser = require("body-parser");
 const app = express();
 
 const backendName = process.env.BACKEND_NAME; // app-backend
@@ -42,6 +43,7 @@ app.use(cors(corsOptions));
 
 const initRoutes = require("./routes/routes");
 
+app.use(bodyParser.json())
 app.use(express.urlencoded({ extended: true }));
 initRoutes(app);
 
