@@ -27,4 +27,16 @@ export class FileUploadService {
   public getFiles(): Observable<any> {
     return this.http.get(`${this.baseUrl}/files`);
   }
+
+  public downloadFile(fileName: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/files/${fileName}`);
+  }
+
+  public deleteFile(file: any): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/files/${file._id}/${file._rev}`)
+  }
+
+  public updateFile(file: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/files`, file)
+  }
 }
