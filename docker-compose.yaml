@@ -1,17 +1,14 @@
 version: "2"
 services:
-  samba:
-    image: dperson/samba
-    container_name: samba
-    volumes:
-      - '/home/docker/samba/compartido:/mount' # Ruta carpeta compartida
+  consul:
+    image: consul:1.15
+    container_name: consul
     ports:
-      - "139:139" # Puerto protocolo SMB
-      - "1445:445" # Puerto protocolo SMB
-    command: -p -u "user;1234"
-    stdin_open: true
-    tty: true
-    restart: always
+      - "8500:8500"
+      - "8600:8600/udp"
+    networks:
+      - exam
+    command: agent -server -bootstrap-expect 1 -ui -data-dir /tmp -client=0.0.0.0
 
   postgres:
     build:
@@ -25,7 +22,82 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: LibraryDB
     restart: always
+    volumes:
+      - library-storage:/var/lib/postgresql/data
+    networks:
+      - exam
+  
+  backend-library-app:
+    container_name: backend-library-app
+    image: ${DOCKER_REGISTRY-}backendlibraryapp
+    build:
+      context: ./backend-library-app
+      dockerfile: backend-library-app/Dockerfile
+    ports:
+      - "5087:5087"
+      - "8081:8081"
+    environment:
+      - ConnectionStrings__DefaultConnection=User ID=postgres; Password=postgres;Server=postgresdb;Port=5432;Database=LibraryDB;IntegratedSecurity=true;Pooling=true;
+      - ASPNETCORE_URLS=http://+:5087
+    networks:
+      - exam
+    depends_on:
+      - postgres
+      - consul
+    
+  frontend-library-app:
+    image: ${DOCKER_REGISTRY-}frontendlibraryapp
+    build:
+      context: ./frontend-library-app
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    deploy:
+      mode: replicated
+      replicas: 2
+    environment:
+      - VITE_BACKEND=http://localhost:5087
+    networks:
+      - exam
+    depends_on:
+      - consul
+      - backend-library-app
+  
+  loadbalancer:
+    container_name: loadbalancer
+    build:
+      context: ./resources/haproxy
+      dockerfile: Dockerfile
+    ports:
+      - "8000:80"
+      - "1936:1936"
+    networks:
+      - exam
+
+  express-gateway-data-store:
+    container_name: express-gateway-data-store
+    build: ./resources/appgw
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - exam
+
+  express-gateway:
+    container_name: express-gateway
+    image: express-gateway
+    ports:
+      - "8080:8080"
+      - "9876:9876"
+    volumes:
+      - type: bind
+        source: ./resources/appgw
+        target: /var/lib/eg
+    networks:
+      - exam
+volumes:
+  library-storage:
 
 networks:
-  my_network:
+  exam:
     driver: bridge
