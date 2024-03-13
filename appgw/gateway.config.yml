@@ -28,15 +28,23 @@ policies:
   - rate-limit
 
 pipelines:
-  pipeline1:
+  default:
     apiEndpoints:
+      - backend
       - frontend
     policies:
-      # - key-auth:   
+      # Uncomment key-auth: when instructed to in the Getting Started guide.
+      - key-auth:
       - proxy:
+          - action:
+              serviceEndpoint: backend
+              changeOrigin: true
+              prependPath: false
+              ignorePath: false
+              stripPath: false
           - action:
               serviceEndpoint: frontend
               changeOrigin: true
-              prependPath:  false
-              ignorePath:   false
-              stripPath:    false
+              prependPath: false
+              ignorePath: false
+              stripPath: false
