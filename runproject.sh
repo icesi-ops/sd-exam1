@@ -1,7 +1,7 @@
 #Creating the samba image
 
 cd samba
-docker build -t samba:v1 .
+docker build -t sambadb:v1 .
 cd ..
 
 #Creating the backend image
