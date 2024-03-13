@@ -39,10 +39,10 @@ docker run -dit -p 139:139 -p 445:445 --name sambadb --network projectnetwork -v
 docker run -d -p 5000:5000 --network projectnetwork --name backend backend:v1
 
 #Creating frontend container
-docker run -d -p 5173:5173 --network projectnetwork --name frontend1 frontend:v1
+docker run -d -p 5173:5173 --network projectnetwork --name frontend1 frontend2:v1
 
 #Creating second frontend container
-docker run -d -p 5174:5173  --network projectnetwork --name frontend2 frontend:v1
+#docker run -d -p 5174:5173  --network projectnetwork --name frontend2 frontend:v1
 
 #Creating loadbalancer container
 docker run -d -p 9000:80 -p 1936:1936 --network projectnetwork --name loadbalancer loadbalancer:v1
