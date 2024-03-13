@@ -68,8 +68,18 @@ services:
     ports:
       - "3000:3000"
     depends_on:
+      - couchdb
       - consul
       - samba
       - apigateway
+    networks:
+      - network
+
+  couchdb:
+    build: ./couchdb
+    image: sd-exam1/couchdb
+    container_name: app-couchdb
+    ports:
+      - "5984:5984"
     networks:
       - network
