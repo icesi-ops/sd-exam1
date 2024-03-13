@@ -7,15 +7,15 @@ admin:
 apiEndpoints:
   appapi:
     host: localhost
-    paths: [ '/api','/api/*' ]
+    paths: ["/api", "/api/*"]
   appfront:
     host: localhost
-    paths: [ '/','/*' ]
+    paths: ["/", "/*"]
 serviceEndpoints:
   appapi:
-    url: 'http://loadbalancer/api/'
+    url: "http://loadbalancer/api/"
   appfront:
-    url: 'http://loadbalancer:5173/'
+    url: "http://loadbalancer/"
 
 policies:
   - basic-auth

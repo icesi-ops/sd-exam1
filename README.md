@@ -1,11 +1,6 @@
-## Members:
+# 📖 Luchops & Danilops library 📖
 
--Daniel Ramirez
--Luis Murcia
-
-# Luchops & Danilops library
-
-# Explanation of the application
+# Explanation of the application 🤓
 
 This is a full-stack application (front-end, back-end, and database) where we put all our knowledge about container deployment, microservice discovery like Consul, load balancing like HAProxy, and finally the API gateway for traffic redirection. The application consists of a simple library where clients can save and list PDF files. Development tools such as VS Code, a Windows subsystem based on Linux (WSL), and Docker Desktop, which provides the Docker daemon for analyzing current processes and images, were used. We also demonstrate knowledge in docker-compose and scripting for automatically deploying the environment, and of course, Linux expertise.
 
@@ -16,7 +11,7 @@ This is a full-stack application (front-end, back-end, and database) where we pu
 - Visual studio code
 - Clone the repository https://github.com/luis486/sd-exam1.git .
 
-# BRANCH STRATEGY
+# BRANCH STRATEGY 🪵
 
 ## Summary
 
@@ -66,36 +61,51 @@ Evidence: Commit on the master branch showing the merge of develop.
 
 The branching strategy employed facilitates collaboration in the independent development, testing, and integration of features. The documentation and evidence ensure a clear tracking of tasks performed and decisions made during the development and integration process.
 
-# API GATEWAY
+# API GATEWAY 📞
 
-#### To authorization 
+#### To authorization
 
-This guide will walk you through the steps to set up an Express Gateway for a partial exam. 
+This guide will walk you through the steps to set up an Express Gateway for a partial exam.
 
 ## Docker Commands
 
 ### Step 1: Run Redis Container
 
-docker run --network libraryapp -d --name eg-data-store-parcial -p 6379:6379 redis:alpine
-This command starts a Redis container named eg-data-store-parcial on the libraryapp network, exposing port 6379.
+    docker run --network network_name -d --name container_name -p 6379:6379 redis:alpine
+
+Replace `container_name` with the name you want to give to your Docker container.
+
+Replace `network_name` with the name of your network (you need tha netwkor to connect all containers)
+
+This command starts a Redis container, and in our case, named eg-data-store-parcial on the libraryapp network, exposing port 6379.
 
 ### Step 2: Run Express Gateway Container
 
-docker run -d --name eg-parcial --network libraryapp -v .:/var/lib/eg -p 8080:8080 -p 9876:9876 express-gateway
+    docker run -d --name container_name --network network_name -v .:/var/lib/eg -p 8080:8080 -p 9876:9876 express-gateway
 
-This command starts an Express Gateway container named eg-parcial on the libraryapp network, mapping ports 8080 and 9876, and mounting the current directory as a volume.
+This command starts an Express Gateway container, in our case named eg-parcial on the libraryapp network, mapping ports 8080 and 9876, and mounting the current directory as a volume.
 
 Gateway Configuration
 
 ### Step 3: Create Users and Credentials
 
-docker exec -it eg-parcial sh
+Note: This step is optional, is juts with the purpose of adding security in your data searchs
 
-eg users create
+For that, you need to enter to the container and run the following commands
 
-eg credentials create -c danilops -t key-auth -q → 26uJ8uy9m4KVr5Xyk7AM71:1Shi9JNA3Uz8WC3yGdi3tB
+    docker exec -it container_name sh
 
-eg credentials create -c luchops -t key-auth -q → 19dPWIGxRLGpl0FpeMtdQw:0rrrJle54rPdNsuZAOniNS
+Replace `container_name` with the name that you give to your gateway container
+
+    eg users create
+
+This is going to ask you about some data, you need to fulfill that and then execute the next command to have the access token of your api gateway
+
+    eg credentials create -c username -t key-auth -q → 26uJ8uy9m4KVr5Xyk7AM71:1Shi9JNA3Uz8WC3yGdi3tB
+
+Example:
+
+    eg credentials create -c luchops -t key-auth -q → 19dPWIGxRLGpl0FpeMtdQw:0rrrJle54rPdNsuZAOniNS
 
 These commands are executed inside the eg-parcial container's shell. They create users and generate API key credentials for authentication.
 
@@ -103,14 +113,60 @@ Testing the Gateway
 
 ### Step 4: Make a Request
 
-curl -H "Authorization: apiKey 19dPWIGxRLGpl0FpeMtdQw:0rrrJle54rPdNsuZAOniNS" http://localhost:5173
+    curl -H "Authorization: apiKey 19dPWIGxRLGpl0FpeMtdQw:0rrrJle54rPdNsuZAOniNS" http://localhost:5173
 
 This command sends a curl request to the Express Gateway at http://localhost:5173 using the generated API key for authorization.
 
+# LOAD BALANCER ⚖️
 
-# LOAD BALANCER
+### Container Configuration
 
-# CONSUL
+1. Open a terminal and navigate to the haproxy directory.
+2. Open the `Dockerfile` in a text editor.
+3. Ensure that the Dockerfile contains the following:
+
+   ```Dockerfile
+    FROM haproxy:2.3
+    COPY haproxy.cfg /usr/local/etc/haproxy/haproxy.cfg
+   ```
+
+4. Save the Dockerfile.
+
+### Building and Running the Container
+
+1.  Execute the next command in the haproxy directory
+
+        docker build -t image_docker .
+
+    example: docker build -t loadbalancer .
+
+    Replace `image_name` with the name you want to give to your Docker image.
+
+2.  Execute the next command to build the container and run it
+
+        docker run -d -p 9000:80 -p 1936:1936 --network network_name --name container_name image_name
+
+    Replace `container_name` with the name you want to give to your Docker container.
+
+    Replace `image_name` with the name you want to give to your Docker image.
+
+    Replace `network_name` with the name of your network (you need tha netwkor to connect all containers)
+
+example:
+
+    docker run -d -p 9000:80 -p 1936:1936 --network libraryapp --name loadbalancer loadbalancer-parcial
+
+## Testing
+
+If you want to test you can do the next steps
+
+1.  Enter this url into your browser
+
+        http://localhost:1936
+
+    You are going yo see the statics report of the haproxy
+
+# CONSUL 🎯
 
 1.  Open a terminal and enter the next command:
 
@@ -120,7 +176,7 @@ This command sends a curl request to the Express Gateway at http://localhost:517
 
     Replace `network_name` with the name of your network (you need tha netwkor to connect all containers)
 
-# SAMBA AND DOCKER VOLUME
+# SAMBA AND DOCKER VOLUME 🗳️
 
 ### Development and Production Environment Setup Guide
 
@@ -236,7 +292,7 @@ If you want to test you can do the next steps
         example: smbclient //172.20.0.2/centralized_storage -U backend_user
 
         If u dont have smbclient, install:
-        
+
         sudo apt install smbclient
 
     Replace `user_name` with the username that you defined in the smb.conf.
@@ -245,7 +301,7 @@ If you want to test you can do the next steps
 
 3.  You need the password that you have been created in the container configuration, if is succesfull, you have access to the path of the samba and you can list or do what you want without access problems
 
-# BACKEND
+# BACKEND 🗿
 
 ### Development and Production Environment Setup Guide
 
@@ -336,7 +392,7 @@ In a cmd you can enter the next command.
 
      curl http://127.0.0.1:5000/get_pdf_list
 
-# FRONTEND
+# FRONTEND 🪟
 
 ## Development and Production Environment Setup Guide
 
@@ -399,11 +455,11 @@ This guide will help you set up and containerize the frontend of our application
 
 3.  Once the image is successfully built, run the following command to run the container:
 
-    docker run -d -p 5173:5173 --network network_name --name container_name image_name
+          docker run -d -p 5173:5173 --network network_name --name container_name image_name
 
-    example: docker run -d -p 5173:5173 --network libraryapp --name frontendparcial frontendparcial 
+    example: docker run -d -p 5173:5173 --network libraryapp --name frontendparcial frontendparcial
 
-   Replace `container_name` with the name you want to give to your Docker container.
+Replace `container_name` with the name you want to give to your Docker container.
 
     Replace `container_name` with the name you want to give to your Docker container.
 
@@ -422,6 +478,45 @@ You now have the development environment set up and running on your machine.
 1. Follow the same container configuration steps as described in the development section.
 2. Make sure to use the built image for production (`image_name`) when running the container on your production server.
 
-# Evidence of performance
+# Evidence of performance ✏️
 
-# Project Members
+# Problems in the development 💀
+
+## Problem # 1
+
+The user in samba did not have permissions to modify anything inside the folder in which it was stored in samba, as a result, when the user tried to save something inside samba, the system rejected the request.
+
+### Solution
+
+The backend user was given super permissions and the samba configuration was changed to store the passwords in a samba configuration file.
+
+## Problem # 2
+
+The consul was registering the consul but it was marking the backend health section as "x".
+
+### Solution
+
+At first we did not understand why this was happening, but then analyzing the frontend, we saw that it was using the 200 response that the frontend gave, which the backend did not have, so we proceeded to create an endpoint for the backend and it finally passed the test.
+
+## Problem # 3
+
+One of the members of the group could not upload the samba container because port 445 was being occupied by the native windows machine.
+
+### Solution
+
+Here there are two possible solutions found, change the samba port and map it to another port on the native system and the second one which is to find the service that uses the port and try to stop it but this gave us problems so we are still looking for more about this second solution.
+
+# Things to improve 🛠️
+
+One of the things to improve would be to add a DNS service to stop querying everything by localhost and to make use of the names of the services.
+
+If we had more time, we would invest in the front end, improving its graphical aspect mainly, the color palette, the way in which the user navigates in the front end, etc.
+
+And finally, as a team, we believe that this project lacks a database to have the records of what is stored in samba.
+
+# Project Members 😎
+
+- **Luis Murcia**
+  - GitHub: [Luchops](https://github.com/luis486)
+- **Daniel Ramirez**
+  - GitHub: [Danilops](https://github.com/DanielRamirez1901)
