@@ -26,10 +26,12 @@ services:
     volumes:
       - .:/var/lib/eg
     ports:
-      - "8080:8080"
+      - "8082:8080"
       - "9876:9876" 
     networks:
-        - network   
+      - network
+    depends_on:
+      - redis
 
   haproxy:
     build: ./haproxy
@@ -44,14 +46,8 @@ services:
       - consul
       - backend
       - frontend
-
-  apigateway:
-    build: ./appgw
-    image: express-gateway
-    container_name: apigateway
-    depends_on:
-      - redis
-      - consul
+    networks:
+      - network
 
   samba:
     image: docker.io/servercontainers/samba:latest
@@ -77,7 +73,7 @@ services:
     depends_on:
       - consul
       - backend
-      - apigateway
+      - express-gateway
     networks:
       - network
 
@@ -91,7 +87,7 @@ services:
       - couchdb
       - consul
       - samba
-      - apigateway
+      - express-gateway
     networks:
       - network
 
