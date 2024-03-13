@@ -1,0 +1,194 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Github_Repos\\backend-library-app\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{DFFCD48D-829B-4269-B85A-8CED7A030652}|backend-library-app\\backend-library-app.csproj|d:\\github_repos\\backend-library-app\\backend-library-app\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DFFCD48D-829B-4269-B85A-8CED7A030652}|backend-library-app\\backend-library-app.csproj|solutionrelative:backend-library-app\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DFFCD48D-829B-4269-B85A-8CED7A030652}|backend-library-app\\backend-library-app.csproj|d:\\github_repos\\backend-library-app\\backend-library-app\\controllers\\healthcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DFFCD48D-829B-4269-B85A-8CED7A030652}|backend-library-app\\backend-library-app.csproj|solutionrelative:backend-library-app\\controllers\\healthcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DFFCD48D-829B-4269-B85A-8CED7A030652}|backend-library-app\\backend-library-app.csproj|d:\\github_repos\\backend-library-app\\backend-library-app\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{DFFCD48D-829B-4269-B85A-8CED7A030652}|backend-library-app\\backend-library-app.csproj|solutionrelative:backend-library-app\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DFFCD48D-829B-4269-B85A-8CED7A030652}|backend-library-app\\backend-library-app.csproj|d:\\github_repos\\backend-library-app\\backend-library-app\\library-app-d3e16-firebase-adminsdk-a8fnv-a0fec7462e.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{DFFCD48D-829B-4269-B85A-8CED7A030652}|backend-library-app\\backend-library-app.csproj|solutionrelative:backend-library-app\\library-app-d3e16-firebase-adminsdk-a8fnv-a0fec7462e.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DFFCD48D-829B-4269-B85A-8CED7A030652}|backend-library-app\\backend-library-app.csproj|d:\\github_repos\\backend-library-app\\backend-library-app\\startup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DFFCD48D-829B-4269-B85A-8CED7A030652}|backend-library-app\\backend-library-app.csproj|solutionrelative:backend-library-app\\startup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{13C333C9-B68C-482B-AA3C-FF2E68AACCD8}|docker-compose.dcproj|d:\\github_repos\\backend-library-app\\docker-compose.override.yml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{13C333C9-B68C-482B-AA3C-FF2E68AACCD8}|docker-compose.dcproj|solutionrelative:docker-compose.override.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Github_Repos\\backend-library-app\\docker-compose.yaml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:docker-compose.yaml||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DFFCD48D-829B-4269-B85A-8CED7A030652}|backend-library-app\\backend-library-app.csproj|d:\\github_repos\\backend-library-app\\backend-library-app\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{DFFCD48D-829B-4269-B85A-8CED7A030652}|backend-library-app\\backend-library-app.csproj|solutionrelative:backend-library-app\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DFFCD48D-829B-4269-B85A-8CED7A030652}|backend-library-app\\backend-library-app.csproj|d:\\github_repos\\backend-library-app\\backend-library-app\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{DFFCD48D-829B-4269-B85A-8CED7A030652}|backend-library-app\\backend-library-app.csproj|solutionrelative:backend-library-app\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{13C333C9-B68C-482B-AA3C-FF2E68AACCD8}|docker-compose.dcproj|d:\\github_repos\\backend-library-app\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{13C333C9-B68C-482B-AA3C-FF2E68AACCD8}|docker-compose.dcproj|solutionrelative:launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "HealthController.cs",
+              "DocumentMoniker": "D:\\Github_Repos\\backend-library-app\\backend-library-app\\Controllers\\HealthController.cs",
+              "RelativeDocumentMoniker": "backend-library-app\\Controllers\\HealthController.cs",
+              "ToolTip": "D:\\Github_Repos\\backend-library-app\\backend-library-app\\Controllers\\HealthController.cs",
+              "RelativeToolTip": "backend-library-app\\Controllers\\HealthController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-13T20:35:35.48Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "docker-compose.override.yml",
+              "DocumentMoniker": "D:\\Github_Repos\\backend-library-app\\docker-compose.override.yml",
+              "RelativeDocumentMoniker": "docker-compose.override.yml",
+              "ToolTip": "D:\\Github_Repos\\backend-library-app\\docker-compose.override.yml",
+              "RelativeToolTip": "docker-compose.override.yml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
+              "WhenOpened": "2024-03-13T20:25:12.11Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "D:\\Github_Repos\\backend-library-app\\backend-library-app\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "backend-library-app\\Properties\\launchSettings.json",
+              "ToolTip": "D:\\Github_Repos\\backend-library-app\\backend-library-app\\Properties\\launchSettings.json",
+              "RelativeToolTip": "backend-library-app\\Properties\\launchSettings.json",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAAAAoAAAAvAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-03-13T19:51:04.377Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\Github_Repos\\backend-library-app\\backend-library-app\\appsettings.json",
+              "RelativeDocumentMoniker": "backend-library-app\\appsettings.json",
+              "ToolTip": "D:\\Github_Repos\\backend-library-app\\backend-library-app\\appsettings.json",
+              "RelativeToolTip": "backend-library-app\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAADAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-03-13T19:50:51.117Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "library-app-d3e16-firebase-adminsdk-a8fnv-a0fec7462e.json",
+              "DocumentMoniker": "D:\\Github_Repos\\backend-library-app\\backend-library-app\\library-app-d3e16-firebase-adminsdk-a8fnv-a0fec7462e.json",
+              "RelativeDocumentMoniker": "backend-library-app\\library-app-d3e16-firebase-adminsdk-a8fnv-a0fec7462e.json",
+              "ToolTip": "D:\\Github_Repos\\backend-library-app\\backend-library-app\\library-app-d3e16-firebase-adminsdk-a8fnv-a0fec7462e.json",
+              "RelativeToolTip": "backend-library-app\\library-app-d3e16-firebase-adminsdk-a8fnv-a0fec7462e.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-03-13T19:50:37.961Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Github_Repos\\backend-library-app\\backend-library-app\\Program.cs",
+              "RelativeDocumentMoniker": "backend-library-app\\Program.cs",
+              "ToolTip": "D:\\Github_Repos\\backend-library-app\\backend-library-app\\Program.cs",
+              "RelativeToolTip": "backend-library-app\\Program.cs",
+              "ViewState": "AQIAACYAAAAAAAAAAAAIwDMAAAAvAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-13T19:50:31.281Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Startup.cs",
+              "DocumentMoniker": "D:\\Github_Repos\\backend-library-app\\backend-library-app\\Startup.cs",
+              "RelativeDocumentMoniker": "backend-library-app\\Startup.cs",
+              "ToolTip": "D:\\Github_Repos\\backend-library-app\\backend-library-app\\Startup.cs",
+              "RelativeToolTip": "backend-library-app\\Startup.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-13T19:50:26.428Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Dockerfile",
+              "DocumentMoniker": "D:\\Github_Repos\\backend-library-app\\backend-library-app\\Dockerfile",
+              "RelativeDocumentMoniker": "backend-library-app\\Dockerfile",
+              "ToolTip": "D:\\Github_Repos\\backend-library-app\\backend-library-app\\Dockerfile",
+              "RelativeToolTip": "backend-library-app\\Dockerfile",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABoAAAAwAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-03-13T19:17:09.871Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "docker-compose.yaml",
+              "DocumentMoniker": "D:\\Github_Repos\\backend-library-app\\docker-compose.yaml",
+              "RelativeDocumentMoniker": "docker-compose.yaml",
+              "ToolTip": "D:\\Github_Repos\\backend-library-app\\docker-compose.yaml",
+              "RelativeToolTip": "docker-compose.yaml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAB0AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
+              "WhenOpened": "2024-03-13T19:15:47.005Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "D:\\Github_Repos\\backend-library-app\\launchSettings.json",
+              "RelativeDocumentMoniker": "launchSettings.json",
+              "ToolTip": "D:\\Github_Repos\\backend-library-app\\launchSettings.json",
+              "RelativeToolTip": "launchSettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-03-13T19:50:21.551Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
