@@ -32,7 +32,7 @@ services:
         - network   
 
   haproxy:
-    image: haproxy:2.3
+    image: haproxy:latest
     container_name: haproxy
     ports:
       - "8081:80"
