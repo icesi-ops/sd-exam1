@@ -7,10 +7,15 @@ apiEndpoints:
   frontend:
     host: localhost
     paths: ['/frontend','/frontend/*']
+  backend:
+    host: localhost
+    paths: ['/backend','/backend/*']
 
 serviceEndpoints:
   frontend:
     url: 'http://loadbalancer/frontend/'
+  backend:
+    url: 'http://loadbalancer/backend/'
 
 policies:
   - basic-auth

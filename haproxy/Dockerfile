@@ -1,2 +1,2 @@
-FROM haproxy:2.3
-COPY haproxy.cfg /usr/local/etc/haproxy/haproxy.cfg
+FROM haproxy:latest
+COPY ./haproxy/haproxy.cfg /usr/local/etc/haproxy/haproxy.cfg
