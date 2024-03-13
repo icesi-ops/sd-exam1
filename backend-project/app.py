@@ -290,6 +290,61 @@ def get_pdf_list():
         print(f"Error al obtener la lista de archivos PDF desde Samba: {str(e)}")
         return jsonify({'error': 'Error interno del servidor'}), 500
     
+
+@app.route('/delete', methods=['POST'])
+def delete_file():
+    try:
+        filename = request.json.get('filename')
+        
+        # Conexión al servidor Samba
+        conn = SMBConnection(samba_config['username'],
+                             samba_config['password'],
+                             'backend_user',
+                             samba_config['server_name'],
+                             use_ntlm_v2=True,
+                             domain=samba_config['domain_name'],
+                             is_direct_tcp=True)
+        conn.connect(samba_config['server_name'], 445)
+
+        # Eliminar el archivo del servidor Samba
+        conn.deleteFiles(samba_config['share'], filename)
+
+        # Cierra la conexión
+        conn.close()
+
+        return jsonify({'message': f'Archivo {filename} eliminado exitosamente'}), 200
+    except Exception as e:
+        print(f"Error al eliminar el archivo desde Samba: {str(e)}")
+        return jsonify({'error': 'Error interno del servidor'}), 500
+
+
+@app.route('/update', methods=['POST'])
+def update_filename():
+    try:
+        current_filename = request.json.get('current_filename')
+        new_filename = request.json.get('new_filename')
+
+        # Conexión al servidor Samba
+        conn = SMBConnection(samba_config['username'],
+                             samba_config['password'],
+                             'backend_user',
+                             samba_config['server_name'],
+                             use_ntlm_v2=True,
+                             domain=samba_config['domain_name'],
+                             is_direct_tcp=True)
+        conn.connect(samba_config['server_name'], 445)
+
+        # Renombrar el archivo en el servidor Samba
+        conn.rename(samba_config['share'], current_filename, new_filename)
+
+        # Cierra la conexión
+        conn.close()
+
+        return jsonify({'message': f'Archivo {current_filename} renombrado como {new_filename}'}), 200
+    except Exception as e:
+        print(f"Error al actualizar el nombre del archivo en Samba: {str(e)}")
+        return jsonify({'error': 'Error interno del servidor'}), 500
+
     
 @app.route('/upload', methods=['POST'])
 def upload_file():
