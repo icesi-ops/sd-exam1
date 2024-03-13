@@ -32,8 +32,7 @@ services:
         - network   
 
   haproxy:
-    build: ./haproxy
-    image: haproxy:latest
+    image: haproxy:2.3
     container_name: haproxy
     ports:
       - "1936:1936"
