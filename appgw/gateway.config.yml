@@ -1,0 +1,46 @@
+http:
+  port: 8080
+admin:
+  port: 9876
+  host: localhost
+
+apiEndpoints:
+  appapi:
+    host: localhost
+    paths: ["/api", "/api/*"]
+  appfront:
+    host: localhost
+    paths: ["/", "/*"]
+serviceEndpoints:
+  appapi:
+    url: "http://loadbalancer/api/"
+  appfront:
+    url: "http://loadbalancer/"
+
+policies:
+  - basic-auth
+  - cors
+  - expression
+  - log
+  - proxy
+  - rate-limit
+pipelines:
+  default:
+    apiEndpoints:
+      - appapi
+      - appfront
+    policies:
+      # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+      - proxy:
+          - action:
+              serviceEndpoint: appapi
+              changeOrigin: true
+              prependPath: false
+              ignorePath: false
+              stripPath: false
+          - action:
+              serviceEndpoint: appfront
+              changeOrigin: true
+              prependPath: false
+              ignorePath: false
+              stripPath: false
