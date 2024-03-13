@@ -16,4 +16,16 @@ const sendFile = async (localPath, remotePath) => {
     }
 }
 
-module.exports = sendFile;
+const getFile = async (remotePath, localPath) => {
+    try {
+        await client.getFile(remotePath, localPath);
+        console.log('File transfer done');
+    } catch (err) {
+        console.error('File transfer failed:', err);
+    }
+}
+
+module.exports = {
+    sendFile,
+    getFile
+};
