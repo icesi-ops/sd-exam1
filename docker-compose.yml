@@ -1,0 +1,101 @@
+version: '3'
+
+networks:
+    network:
+      name: sd-exam1-network
+      driver: bridge
+
+services:
+  consul:
+    image: consul:1.15.4
+    container_name: app-consul
+    ports:
+      - "8500:8500"
+    networks:
+        - network
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+        - network
+
+  express-gateway:
+    image: express-gateway
+    volumes:
+      - .:/var/lib/eg
+    ports:
+      - "8082:8080"
+      - "9876:9876" 
+    networks:
+      - network
+    depends_on:
+      - redis
+
+  haproxy:
+    build: ./haproxy
+    image: haproxy
+    container_name: haproxy
+    ports:
+      - "8081:80"
+      - "1936:1936"
+    #volumes:
+      #- ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    depends_on:
+      - consul
+      - backend
+      - frontend
+    networks:
+      - network
+
+  samba:
+    image: docker.io/servercontainers/samba:latest
+    container_name: samba
+    restart: unless-stopped
+    environment:
+      ACCOUNT_username: password
+      UID_username: 1234
+      SAMBA_VOLUME_CONFIG_shares: "[shares]; path=/shares/location; available = yes; browsable = yes; writable = yes; read only = no; force user = username; public = yes; guest ok = yes"
+    volumes:
+      - /your/data:/shares/location
+    ports:
+      - "9000:445"
+    networks:
+        - network
+
+  frontend:
+    build: ./frontend
+    image: sd-exam1/app-frontend
+    container_name: app-frontend
+    ports:
+      - "4000:4000"
+    depends_on:
+      - consul
+      - backend
+      - express-gateway
+    networks:
+      - network
+
+  backend:
+    build: ./backend
+    image: sd-exam1/app-backend
+    container_name: app-backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - couchdb
+      - consul
+      - samba
+      - express-gateway
+    networks:
+      - network
+
+  couchdb:
+    build: ./couchdb
+    image: sd-exam1/couchdb
+    container_name: app-couchdb
+    ports:
+      - "5984:5984"
+    networks:
+      - network
