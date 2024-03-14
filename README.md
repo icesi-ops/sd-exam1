@@ -571,7 +571,7 @@ And finally, as a team, we believe that this project lacks a database to have th
 
 # Project Members 😎
 
-- **Luis Murcia**
+- **Luis Murcia - A00369008**
   - GitHub: [Luchops](https://github.com/luis486)
-- **Daniel Ramirez**
+- **Daniel Ramirez - A00368788**
   - GitHub: [Danilops](https://github.com/DanielRamirez1901)
