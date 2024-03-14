@@ -34,7 +34,10 @@ Deberá desplegar una plataforma que cumpla con los siguientes requerimientos:
 
 13. Endpoint /health con información del sistema.
 
+###Bonus
+
 14. Script para lanzar todo el ambiente desde un solo comando. (Docker compose es valido)
+15. Se puede hacer update y delete de un archivo, tener db.
 
 
 ## Solución
