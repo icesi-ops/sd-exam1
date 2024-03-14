@@ -1,0 +1,50 @@
+http:
+  port: 8080
+admin:
+  port: 9876
+  host: localhost
+apiEndpoints:
+  frontend:
+    host: localhost
+    paths: ['/frontend','/frontend/*']
+  backend:
+    host: localhost
+    paths: ['/backend','/backend/*']
+
+serviceEndpoints:
+  frontend:
+    url: 'http://loadbalancer/frontend/'
+  backend:
+    url: 'http://loadbalancer/backend/'
+
+policies:
+  - basic-auth
+  - cors
+  - expression
+  - key-auth
+  - log
+  - oauth2
+  - proxy
+  - rate-limit
+
+pipelines:
+  default:
+    apiEndpoints:
+      - backend
+      - frontend
+    policies:
+      # Uncomment key-auth: when instructed to in the Getting Started guide.
+      - key-auth:
+      - proxy:
+          - action:
+              serviceEndpoint: backend
+              changeOrigin: true
+              prependPath: false
+              ignorePath: false
+              stripPath: false
+          - action:
+              serviceEndpoint: frontend
+              changeOrigin: true
+              prependPath: false
+              ignorePath: false
+              stripPath: false
